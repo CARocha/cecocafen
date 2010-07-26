@@ -1,0 +1,26 @@
+import os
+
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__)) 
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ADMINS = (
+    # ('admin', 'admin@simas.org.ni'),
+)
+
+MANAGERS = ADMINS
+
+TIME_ZONE = 'America/Managua'
+
+LANGUAGE_CODE = 'es-ni'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'db',                      # Or path to database file if using sqlite3.
+        'USER': 'user',                      # Not used with sqlite3.
+        'PASSWORD': 'userpass',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
