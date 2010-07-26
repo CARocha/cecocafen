@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{%block title%}.::.. SISTEMA DE INFORMACIÓN DE CECOCAFEN ..::.{%endblock%}</title> 
+    <link href="/archivos/css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="/archivos/js/menu.js"></script>
+    {%block extra_js%}{%endblock%}	
+</head>
+<body>
+
+ <div id="header">
+    <h1>CECOCAFEN</h1>
+ </div> <!-- fin header -->
+ <div id="menu">
+ 
+ {% block menu %}
+    <ul id="nav">
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Indicadores</a></li>
+        <li><a href="#">Gráficos</a></li>
+        <li><a href="#">Ayuda</a></li>
+    </ul>
+ {% endblock %}
+ 
+ </div> <!-- fin del menu -->
+
+{% load webdesign %}
+ <div id="cuerpo">
+    <div id="contenido">
+        <div id="dentro-contenido">
+			<h2>Reseña Historica</h2>
+			{% lorem 3 p %}
+        
+        </div> <!-- fin del div dentro-contenido -->
+    
+    </div><!-- fin div contenido   -->
+
+ <div id="lateral">
+    <div id="dentro-lateral">
+    <h3>Indicadores</h3>
+    <ul id="nav-lateral">
+		<li><a href="#">Fortalecimiento Org.</a></li>
+		<li><a href="#">Identidad Socio-Cultural</a></li>
+		<li><a href="#">Desarrollo Economico</a></li>
+		<li><a href="#">Salud Fisica</a></li>
+		<li><a href="#">Desarrollo Educativo</a></li>
+    </ul>
+    
+    </div>
+ </div> <!-- Fin lateral-->
+ 
+ </div> <!-- Fin del div cuerpo  -->
+
+ <div id="pie">
+ </div> <!-- Fin del pie de pagina -->
+</body>
+</html>

@@ -1,0 +1,173 @@
+/* CSS Mini Reset */
+
+html, body, div, form, fieldset, legend, label
+{
+ margin: 0;
+ padding: 0; 
+}
+
+table
+{
+ border-collapse: collapse;
+ border-spacing: 0;
+}
+
+th, td
+{
+ text-align: left;
+ vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6, th, td, caption { font-weight:normal; }
+
+img { border: 0; }
+
+body
+{
+    background-color: #19110A;
+    background-image: url(../imagen/bg-body.png);
+}
+
+#header
+{
+ margin: 0 auto 0 auto;
+ height: 106px;
+ width: 960px;
+}
+
+#header h1{
+ margin: 0 auto 0 auto;
+ font-size: 36px;
+ font-weight: bold;
+}
+
+
+/* --- COMIENZO DEL CSS MENU SUPERIOR --- */
+
+#menu 
+{
+ background-image:url(../imagen/menu.png);
+ background-repeat:no-repeat;
+ height:31px;
+ margin: 0 auto 0 auto;
+ width:960px;
+}
+
+#menu ul
+{
+ display: block;
+ float: left;
+ margin: 3px 4px 5px 7px;
+ padding: 2px 4px 7px 8px;
+ list-style:none;
+}
+
+#menu li
+{
+ float: left;
+ font-size: 16px;
+ padding-right: 20px;
+}
+
+#menu a
+{
+ text-decoration: none;
+ color: white;
+}
+
+#menu li:img
+{
+ width: 22px;
+ height: 22px;
+}
+
+#menu a:hover
+{
+ font: 22px;
+ background: rgba(104,104,104,0.95);
+ -webkit-border-radius: 5px 5px 5px 5px;
+ -moz-border-radius: 5px 5px 5px 5px;
+ padding: 5px;
+}
+
+/* --- FIN DEL CSS MENU SUPERIOR --- */
+
+/* --- COMIENZO DEL CUERPO DE LA PAGINA --- */
+
+#cuerpo
+{
+ 
+ margin: 0 auto 0 auto;
+ height: 700px;
+ width: 960px;
+ background: #EAEAEA;
+}
+
+#contenido
+{
+ float: left;
+ margin-top: 20px;
+ width: 660px;
+ padding: 0px 0px 0px 19px;
+}
+
+#dentro-contenido
+{
+ background-color: #FFFFFF;
+ border: 2px solid #D6D6D6;
+ padding: 15px;
+ width: 600px;
+ 
+}
+
+#dentro-contenido h1, h2, h3, h4, h5, h6, h7
+{
+ color: #A54A00;
+ font-size: 19px;
+}
+/* --- FIN DEL CUERPO DE LA PAGINA --- */
+
+/* --- INICIO DE BARRA LATERAL --- */
+
+#lateral
+{
+ float: left;
+ margin-top: 20px;
+ width: 250px;
+ padding: 0px 19px 0px 0px;
+}
+
+#dentro-lateral
+{
+ background-color: #FFFFFF;
+ border: 2px solid #D6D6D6;
+ float: left;
+ padding-bottom: 20px;
+ padding-left: 13px;
+ padding-right: 13px;
+ width: 234px;
+}
+
+#nav-lateral
+{
+ list-style-image: url('../imagen/64.png');
+ font-size: 14px;
+ font-weight: 2px;
+ margin: 2px 3px 4px 24px;
+ padding: 2px 3px 4px 5px;
+}
+
+#nav-lateral a:hover
+{
+ background: rgba(104,104,104,0.95);
+ -webkit-border-radius: 5px 5px 5px 5px;
+ -moz-border-radius: 5px 5px 5px 5px;
+}
+
+#nav-lateral a
+{
+ text-decoration: none;
+ color: #395208;
+}
+
+/* --- FIN DE LA BARRA LATERAL --- */
