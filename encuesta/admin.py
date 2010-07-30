@@ -1,6 +1,5 @@
 from django.contrib import admin
 from lugar.models import Municipio
-from encuesta.models import DatosGenerales, Organizacion, Migracion, CondicionesCampo, Tenencia, Tierra, Reforestacion, Conservacion, CultivosFinca, FincaAnimales, IngresoFamiliar, OtrosIngresos, TipoCasa, DetalleCasa, Propiedades, Herramientas, Transporte, Seguridad, Agua, Ahorro, Credito, Salud, Cancer, Mental, EducacionJovenes, Jovenes, Recolector, Encuesta
 from encuesta.models import *
 from django.contrib.contenttypes import generic
 

@@ -320,6 +320,8 @@ class ProductoAnimal(models.Model):
     unidad = models.CharField(max_length=100)
     class Meta:
         verbose_name_plural = "FincaProducto-Animal"
+    def __unicode__(self):
+        return self.nombre
 
 class FincaAnimales(models.Model):
     ''' 
@@ -670,7 +672,7 @@ CHOICE_AHORRO = ((1,"Si"),(2,"No"),(3,"Menos de 5 años"),(4,"Mas de 5 años"),(
 class DondeAhorro(models.Model):
     nombre = models.CharField(max_length=150)
     def __unicode__(self):
-        return nombre
+        return self.nombre
     
 class Ahorro(models.Model):
     '''
