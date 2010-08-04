@@ -25,7 +25,7 @@ img { border: 0; }
 body
 {
     background-color: #19110A;
-    background-image: url(../imagen/bck.jpg);
+    background-image: url(../imagen/cecocafen_bg.png);
 }
 
 #header
@@ -39,6 +39,7 @@ body
  margin: 0 auto 0 auto;
  font-size: 36px;
  font-weight: bold;
+ color: #6ACD53;
 }
 
 
@@ -171,3 +172,11 @@ body
 }
 
 /* --- FIN DE LA BARRA LATERAL --- */
+
+/* --- COMIENZA EL PIE DE LA PAGINA ---*/
+#pie_cuerpo {
+ margin: 0 auto 0 auto;
+ height: 70px;
+ width: 960px;
+ background: #3B3B3B;
+}

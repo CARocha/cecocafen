@@ -269,5 +269,8 @@ admin.site.register(BeneficioJoven)
 admin.site.register(MiembroJoven)
 #admin.site.register(Quedar)
 #admin.site.register(NoQuedar)
+admin.site.register(Cooperativa)
+admin.site.register(Meses)
+admin.site.register(AhorraPorque)
 
 

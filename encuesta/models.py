@@ -11,6 +11,23 @@ class Cooperativa(models.Model):
     nombre = models.CharField(max_length=200)
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "DatosGenerales-cooperativa"
+        
+class Tecnologia(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "DatosGenerales-Tipo-Tecnologia"
+            
+class Certificacion(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "DatosGenerales-Tipo-Certificacion"
+    
                 
 #Modelo 1. Datos Generales        
 class DatosGenerales(models.Model):
@@ -32,24 +49,34 @@ class DatosGenerales(models.Model):
     tipo1 = models.CharField('Tipo de tecnología productiva en café', max_length=200, null=True, blank=True)
     tipo2 = models.CharField('Tipo de certificación en café', max_length=200, null=True, blank=True)
     def __unicode__(self):
-        return self.nombre.nombre
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "DatosGenerales"
         
 #Modelo 2. Indicador de fortalecimiento organizativo (Organización)
 
 class Beneficios(models.Model):
     nombre = models.CharField(max_length=100)
-    class Meta:
-        verbose_name_plural = "Organizacion-Beneficios Socios"
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Organizacion-Beneficios-Socios"
+    
         
 class PorqueMiembro(models.Model):
     nombre = models.CharField(max_length=100)
-    class Meta:
-        verbose_name_plural = "Organizacion-Porque es Miembro"
     def __unicode__(self):
         return self.nombre
-            
+    class Meta:
+        verbose_name_plural = "Organizacion-Porque-Miembro"
+    
+class AdmonActual(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Organizacion-Consejo-Actual"
+     
 CHOICE_OPCION = ((1,"Si"),(2,"No"))
 CHOICE_DESDE = ((1,"Menos de 5 año"),(2,"Mas de 5 años"),(3,"Hombres"),(4,"Mujeres"),(5,"Jóvenes"))
 
@@ -61,7 +88,7 @@ class Organizacion(models.Model):
     content_object = generic.GenericForeignKey()
     socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION, null=True, blank=True)
     desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE,null=True, blank=True)
-    pertenecer = models.CharField('Cooperativa a la que pertenezco', max_length=200, null=True, blank=True)
+    #pertenecer = models.CharField('Cooperativa a la que pertenezco', max_length=200, null=True, blank=True)
     socio_cooperativa = models.IntegerField('Mi esposa/esposo es socio(a) de la cooperativa',
                                              choices=CHOICE_OPCION,null=True, blank=True)
     desde_socio_coop = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
@@ -72,8 +99,8 @@ class Organizacion(models.Model):
     miembro = models.IntegerField('Es miembro del consejo de administracion', 
                                    choices=CHOICE_OPCION, null=True, blank=True)
     desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
-    conformado = models.IntegerField('El consejo de admón actual esta conformado por', choices=CHOICE_DESDE, null=True, blank=True)
-    conformarse = models.IntegerField('Está de acuerdo que el consejo de Admón esté conformado por ', choices=CHOICE_DESDE, null=True, blank=True)
+    conformado = models.ManyToManyField(AdmonActual, verbose_name="El consejo Admon actual esta conformado por", null=True, blank=True, related_name='conformado')
+    conformarse = models.ManyToManyField(AdmonActual, verbose_name="Está de acuerdo que el consejo de Admón esté conformado por", null=True, blank=True)
     miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, null=True, blank=True)
     desde_trabajo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
     cargo = models.IntegerField('He recibido capacitación para desempeñar mi cargo', 
@@ -81,12 +108,16 @@ class Organizacion(models.Model):
     desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
     no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, null=True, blank=True)
     quiero_miembro_junta = models.ManyToManyField(PorqueMiembro, verbose_name="Por qué queire ser miembro consejo", null=True, blank=True)
+    class Meta:
+        verbose_name_plural = "Organizacion"
     
 #Modelo 3. Indicador de fortalecimiento de la identidad socio-cultural y recreativa de socios,socias y sus familias
 class RazonesMigracion(models.Model):
     razones = models.CharField(max_length=150)
     def __unicode__(self):
         return self.razones
+    class Meta:
+        verbose_name_plural = "Migracion-RazonesMigracion"
         
 CHOICE_MIGRACION = ((1,"Hombres adultos (18 años y más)"),(2,"Mujeres adultas (18 años y más)"),(3,"Adolecentes hombres (12 a 17 años)"), (4,"Adolecentes mujeres (12 a 17 años)"),(5,"Niños (menos de 12 años)"),(6,"Niñas (menos de 12 años)"))
 
@@ -102,11 +133,15 @@ class Migracion(models.Model):
     viven_comu = models.IntegerField('No. viven en la comunidad')
     viven_fuera = models.IntegerField('No. viven fuera de la comunidad')
     razones = models.ManyToManyField(RazonesMigracion, verbose_name="Razones por la que migra")
+    class Meta:
+        verbose_name_plural = "Migracion"
     
 class Campo(models.Model):
     afirmacion = models.CharField(max_length=200)
     def __unicode__(self):
         return self.afirmacion
+    class Meta:
+        verbose_name_plural = "CondicionCampo-Campo"
         
 CHOICE_CAMPO = ((1,'Buena'),(2,'Regular'),(3,'Mala'),(4,'Mejorado'),(6,'Igual'),(7,'empeorado'))
 
@@ -178,10 +213,11 @@ class Tenencia(models.Model):
     
 class UsoTierra(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
-    class Meta:
-        verbose_name_plural = "Tierra-Tipo de uso de Tierra"
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Tierra-Uso-de-Tierra"
+   
     
 class Tierra(models.Model):
     ''' Modelo uso de tierra 
@@ -193,14 +229,14 @@ class Tierra(models.Model):
     areas = models.IntegerField('Areas en Mz')
     
     class Meta:
-        verbose_name_plural = "Uso de Tierra"
+        verbose_name_plural = "Tierra"
         
 class Actividades(models.Model):
     ''' Actividades para la reforestacion
     '''
     nombre = models.CharField(max_length=100)
     class Meta:
-        verbose_name_plural = "Reforestación-Actividades"   
+        verbose_name_plural = "Reforestacion-Actividades"   
     def __unicode__(self):
         return self.nombre
 
@@ -212,6 +248,8 @@ class Reforestacion(models.Model):
     content_object = generic.GenericForeignKey()
     actividad = models.ForeignKey(Actividades)
     cantidad = models.IntegerField('Cantidad de árboles sembrados')
+    class Meta:
+        verbose_name_plural="Reforestacion"
     
 #Conservacion de suelo y agua en la finca
 
@@ -219,6 +257,15 @@ class Combustible(models.Model):
     nombre = models.CharField(max_length=200)
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Conservacion-combustible"
+        
+class ActividadConservacion(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Conservacion-ActividadConservacion"
 
 class Conservacion(models.Model):
     ''' Modelo conservacion de suelo y agua en la finca
@@ -228,7 +275,11 @@ class Conservacion(models.Model):
     content_object = generic.GenericForeignKey()
     cocinar = models.ManyToManyField(Combustible, verbose_name="¿Qué utiliza para cocinar")
     actividad = models.IntegerField('Ha hecho alguna actividad para la conservación de los suelos y agua en su finca?',choices=((1,'Si'),(2,'No')))
-    cuales = models.TextField('¿Cuáles y cuanto?')
+    cuales = models.ForeignKey(ActividadConservacion)
+    cuanto = models.IntegerField('Cuanto', help_text="En Metros")
+    class Meta:
+        verbose_name_plural = "Conservacion"
+    
     
 #Sobre uso de abono
 CHOICE_ABONO = ((1,'Si'),(2,'No'))
@@ -256,6 +307,8 @@ class Abono(models.Model):
     seis = models.IntegerField('18-6-12-4', choices=CHOICE_ABONO)
     urea = models.IntegerField('Urea-Nitrato', choices=CHOICE_ABONO)
     otros = models.TextField()
+    class Meta:
+        verbose_name_plural = "Sobre uso del abono"
     
 #Compra y aplicaciones de abonos
 CHOICE_ANO = ((1,'¿Cuánto hace?'),(2,'¿Cuánto compra?'),(3,'¿Cuánto aplica?'))
@@ -267,34 +320,39 @@ class Compra(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     cuanto = models.IntegerField('Al año', choices=CHOICE_ANO)
-    pulpa = models.IntegerField(choices=CHOICE_ABONO)
-    estiercol = models.IntegerField(choices=CHOICE_ABONO)
-    gallinaza = models.IntegerField(choices=CHOICE_ABONO)
-    composta = models.IntegerField(choices=CHOICE_ABONO)
-    lombrices = models.IntegerField(choices=CHOICE_ABONO)
-    bocachi = models.IntegerField(choices=CHOICE_ABONO)
-    foliar = models.IntegerField(choices=CHOICE_ABONO)
-    verde = models.IntegerField('Abono Verde qq', choices=CHOICE_ABONO)
-    quince = models.IntegerField('15-15-15', choices=CHOICE_ABONO)
-    veinte = models.IntegerField('20-20-20', choices=CHOICE_ABONO)
-    seis = models.IntegerField('18-6-12-4', choices=CHOICE_ABONO)
-    urea = models.IntegerField('Urea-Nitrato', choices=CHOICE_ABONO)
+    pulpa = models.IntegerField()
+    estiercol = models.IntegerField()
+    gallinaza = models.IntegerField()
+    composta = models.IntegerField()
+    lombrices = models.IntegerField()
+    bocachi = models.IntegerField()
+    foliar_org = models.IntegerField('Foliar Organico')
+    unidad_org = models.IntegerField('Unidad Organico',choices=((1,'Litro'),(2,'Kg')))
+    foliar_qui = models.IntegerField('Foliar Quimico')
+    unidad_qui = models.IntegerField('Unidad Quimico',choices=((1,'Litro'),(2,'Kg')))
+    verde = models.IntegerField('Abono Verde qq')
+    quince = models.IntegerField('15-15-15')
+    veinte = models.IntegerField('20-20-20')
+    seis = models.IntegerField('18-6-12-4')
+    urea = models.IntegerField('Urea-Nitrato')
     otros = models.TextField()
-       
+    class Meta:
+        verbose_name_plural = "Compra y aplicacion de abono"
     
 
 #produccion de la finca    
 class Cultivos(models.Model):
     nombre = models.CharField(max_length=50)
     unidad = models.CharField(max_length=50)
-    class Meta:
-        verbose_name_plural = "CultivosFinca-Cultivos"
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "CultivosFinca-Cultivos"
+    
     
 class CultivosFinca(models.Model):
     ''' 
-        indicador facil XD
+        indicador cultivos en la finca
     '''
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
@@ -305,7 +363,7 @@ class CultivosFinca(models.Model):
     venta_libre = models.IntegerField('Venta libre')
     venta_organizada = models.IntegerField('Venta organizada')
     class Meta:
-        verbose_name_plural = "Cultivos de la Finca"
+        verbose_name_plural = "Cultivos en la Finca"
 
 #Animales en la finca
 class Animales(models.Model):
@@ -342,6 +400,15 @@ class FincaAnimales(models.Model):
         
 #post cosecha, de los alimentos que produce cuanto almacena, como lo almacena, quien es el responsable
 
+CHOICE_COSECHA = ((1,'Hombre'),(2,'Mujer'),(3,'Hijos'))
+
+class TipoAlmacenaje(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Postcosecha-tipoAlmacenaje"
+
 class Postcosecha(models.Model):
     ''' 
         Modelo post cosecha
@@ -350,9 +417,26 @@ class Postcosecha(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     producto = models.ForeignKey(Cultivos)
-    responsable = models.CharField(max_length=200, null=True, blank=True)
+    responsable = models.IntegerField(choices=CHOICE_COSECHA, null=True, blank=True)
     cantidad = models.IntegerField('Cantidad almacenada qq/und')
-    tipo = models.CharField('Tipo de almacenaje', max_length=200, null=True, blank=True)
+    tipo = models.ForeignKey(TipoAlmacenaje, related_name='Tipo de almacenaje', null=True, blank=True)
+    class Meta:
+        verbose_name_plural = "Postcosecha"
+        
+#modelo caules son los principales problemas del almacenamiento
+class TipoProblema(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Problema-TipoProblema"
+        
+class Solucion(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Problema-Solucion"
 
 class Problema(models.Model):
     ''' 
@@ -361,13 +445,13 @@ class Problema(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    problema = models.CharField(max_length=200)
-    solucion = models.CharField(max_length=200)
+    problema = models.ForeignKey(TipoProblema)
+    solucion = models.ManyToManyField(Solucion)
        
         
 #Ingreso familiar
-CHOICE_VENDIO = ((1,"Comunidad"),(2,"Intermediario"),(3,"Ferias"),(4,"Cooperativa"))
-CHOICE_MANEJA = ((1,"Hombre"),(2,"Mujer"),(3,"Ambos"),(4,"Hijos/as"))
+CHOICE_VENDIO = ((1,"Comunidad"),(2,"Intermediario"),(3,"Ferias"),(4,"Cooperativa"),(5,'C-I'),(6,'I-F'),(7,'F-Coop'),(8,'Todos'))
+CHOICE_MANEJA = ((1,"Hombre"),(2,"Mujer"),(3,"Ambos"),(4,"Hijos/as"),(5,'Hombre-Hijos'),(6,'Mujer-Hijos'))
 class Rubros(models.Model):
     nombre = models.CharField(max_length=50)
     unidad = models.CharField(max_length=50)
@@ -398,7 +482,14 @@ class Fuentes(models.Model):
         verbose_name_plural = "OtrosIngresoFamiliar-Fuentes"
     def __unicode__(self):
         return self.nombre
-    
+        
+class TipoTrabajo(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "OtroIngreso-TipoTrabajo"
+           
 class OtrosIngresos(models.Model):
     '''
         Otros ingresos
@@ -407,7 +498,7 @@ class OtrosIngresos(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     fuente = models.ForeignKey(Fuentes)
-    tipo = models.CharField('Tipo de trabajo', max_length=100)
+    tipo = models.ForeignKey(TipoTrabajo)
     meses = models.IntegerField('Meses')
     ingreso = models.IntegerField('Ingreso por mes')
     tiene_ingreso = models.IntegerField(choices=CHOICE_MANEJA)
@@ -583,15 +674,19 @@ class Seguridad(models.Model):
     class Meta:
         verbose_name_plural = "Seguridad alimentaria"
         
-#otra gracias nueva hp
+#otra gracia nueva hp
 CHOICE_PREG1 = ((1,'Todos'),(2,'Más de la mitad'),(3,'Menos de la mitad'),(4,'Nada'))
 CHOICE_PREG2 = ((1,'Si'),(2,'No'))
 class Meses(models.Model):
     nombre = models.CharField(max_length=200)
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Consume-Meses"
+        
 CHOICE_PREG5 = ((1,'Busca alternativas de solución'),(2,'nada'),(3,'Espera que alguien busque una solución'))
 CHOICE_PREG7 = ((1,'1-2 semanas'),(2,'3-4 semanas'),(3,'2 meses'),(4,'mas de 2 meses'))
+CHOICE_MOTIVO = ((1,'Poca tierra para producir'),(2,'Falta de empleo'),(3,'Famailia numerosa'),(4,'Rendimientos productivos bajos'))
 
 class Consume(models.Model):
     ''' 
@@ -602,18 +697,30 @@ class Consume(models.Model):
     content_object = generic.GenericForeignKey()
     preg1 = models.IntegerField('¿Qué porcentaje de alimentos básicos que consume compra?', choices=CHOICE_PREG1, null=True, blank=True)
     preg2 = models.IntegerField('¿Siente que en alguna ocasión no ha podido Cubrir sus necesidades básicas de alimentación?', choices=CHOICE_PREG2, null=True, blank=True)
-    preg3 = models.CharField('Si la respuesta es si porque motivo', max_length=200, null=True, blank=True)
+    preg3 = models.IntegerField('Si la respuesta es si porque motivo', choices=CHOICE_PREG5, null=True, blank=True)
     preg4 = models.ManyToManyField(Meses, verbose_name="¿Cuáles son los meses más difíciles para la familia?",null=True, blank=True)
     preg5 = models.IntegerField('¿Qué hace cuando los precios del café bajan?', choices=CHOICE_PREG5, null=True, blank=True)
-    preg6 = models.CharField('¿Donde Consigue alimentos en la época de escasez? ', max_length=200, null=True, blank=True)
     preg7 = models.IntegerField('¿Por cuánto tiempo puede conseguir alimentos en ese sitio mientras dura la escasez? ', choices=CHOICE_PREG7, null=True, blank=True)
     preg8 = models.IntegerField('¿Utiliza riego en sus parcelas o huerto familiar?', choices=CHOICE_PREG2, null=True, blank=True)
+    class Meta: 
+        verbose_name_plural = "Consume"
+
+#**********************************************************************
+class SolucionEscasez(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Escasez-SolucionEscasez"
 
 class Escasez(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    preg1 = models.CharField('¿Qué soluciones y practicas implementa en los tiempos de escasez?', max_length=200)
+    preg1 = models.ManyToManyField(SolucionEscasez, verbose_name="¿Qué soluciones y practicas implementa en los tiempos de escasez?", null=True, blank=True)
+    preg2 = models.IntegerField(choices=((1,'credito en la pulperia mas cercana'),(2,'Donde un familiar'),(3,'Mercado local mas cercano')))
+    class Meta:
+        verbose_name_plural = "Escasez"
     
 
 #produccion maiz, frijol, sorgo
@@ -631,7 +738,7 @@ class ProduccionMaiz(models.Model):
     nueve = models.IntegerField('2009')
     diez = models.IntegerField('2010')
 
-CHOICE_RIEGO = ((1,'Huerta'),(2,'Patio'))    
+CHOICE_RIEGO = ((1,'Huerta'),(2,'Patio'),(3,'Vivero de café'))    
 class Riego(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
@@ -642,7 +749,9 @@ class Riego(models.Model):
     goteo = models.IntegerField(choices=CHOICE_PREG2)
     regadera = models.IntegerField(choices=CHOICE_PREG2)
     panada = models.IntegerField(choices=CHOICE_PREG2)
-    otro = models.CharField(max_length=200)
+    manguera = models.IntegerField(choices=CHOICE_PREG2)
+    class Meta:
+        verbose_name_plural = "Tecnica de Riego"
     
 
 #Modelo de agua
@@ -673,6 +782,15 @@ class DondeAhorro(models.Model):
     nombre = models.CharField(max_length=150)
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Ahorro-DondeAhorro"
+        
+class AhorraPorque(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Ahorro-Porque"
     
 class Ahorro(models.Model):
     '''
@@ -688,6 +806,7 @@ class Ahorro(models.Model):
     posee_ahorro = models.IntegerField('Posee una cuenta de ahorro', choices=CHOICE_AHORRO, null=True, blank=True)
     interes_ahorro = models.IntegerField('¿Si no tiene ahorro, está interesado en ahorrar en una cuenta de ahorro', choices=CHOICE_AHORRO, null=True, blank=True)
     donde = models.ManyToManyField(DondeAhorro, verbose_name="Donde prefereria hacer su ahorro", null=True,blank=True)
+    porque = models.ManyToManyField(AhorraPorque, verbose_name="Porque?", null=True,blank=True)
     
     class Meta:
         verbose_name_plural = "Ahorro"
@@ -732,7 +851,12 @@ class Credito(models.Model):
 CHOICE_LETRINA = ((1,'Letrina'),(2,'Campo Libre'),(3,'Otros'))
 CHOICE_LIMPIEZA = ((1,'Diario'),(2,'Semanal'),(3,'quincenal'),(4,'al mes'),(5,'semestral'),(6,'anual'))
 CHOICE_DESHACER = ((1,'Quema'),(2,'Entierra'),(3,'recolección comunitaria'),(4,'basurero clandestino'),(5,'otros'))
-CHOICE_AGROQUIMICO = ((1,'Para uso del hogar'),(2,'Quema'),(3,'Entierra'))
+CHOICE_AGROQUIMICO = ((1,'Para uso del hogar'),(2,'Quema'),(3,'Entierra'),(4,'Triple lavado'),(5,'Perfora y almacena'))
+
+class Tratamiento(models.Model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
 
 class Salud(models.Model):
     '''
@@ -742,7 +866,8 @@ class Salud(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     donde = models.IntegerField('Donde realiza sus necesidades usted y su familia?', choices=CHOICE_LETRINA)
-    tratamiento = models.CharField('Le da un tratamiento a los desechos humanos?', max_length=200, null=True, blank=True)
+    tratamiento = models.ManyToManyField(Tratamiento,verbose_name="Le da un tratamiento a los desechos humanos?",
+    null=True, blank=True)
     limpieza = models.IntegerField('Cada cuanto hace limpieza alredor de su vivienda?', choices=CHOICE_LIMPIEZA)
     deshacer = models.IntegerField('De que manera se deshacen de la basura?', choices=CHOICE_DESHACER)
     agroquimico = models.IntegerField('Que hace con los envases de agroquímicos?', choices=CHOICE_AGROQUIMICO)
@@ -819,6 +944,7 @@ class Cancer(models.Model):
     content_object = generic.GenericForeignKey()
     preguntas = models.ForeignKey(PreguntaCancer)
     resp = models.ForeignKey(RespuestasCancer)
+    cual = models.TextField('Cual?', null=True, blank=True)
     
 #CANCER_MUJERES = ((1,'Mujeres de 15 a 30 años'),(2,'Mujeres de 31 a 55 años'))
 #TRATA_CANCER = ((1,'Hospital'),(2,'Clinica privada'))
@@ -976,7 +1102,7 @@ class Encuesta(models.Model):
     organizacion = generic.GenericRelation(Organizacion)
     migracion = generic.GenericRelation(Migracion)
     campo = generic.GenericRelation(CondicionesCampo)
-    consevacion = generic.GenericRelation(Conservacion)
+    conservacion = generic.GenericRelation(Conservacion)
     abono = generic.GenericRelation(Abono)
     compra = generic.GenericRelation(Compra)
 #    vision = generic.GenericRelation(VisionFuturo)
@@ -984,7 +1110,7 @@ class Encuesta(models.Model):
     tenencia = generic.GenericRelation(Tenencia)
     tierra = generic.GenericRelation(Tierra)
     reforestacion = generic.GenericRelation(Reforestacion)
-    conservacion = generic.GenericRelation(Conservacion,related_name='nombre')
+    conservacion = generic.GenericRelation(Conservacion)
     cultivos = generic.GenericRelation(CultivosFinca)
     finca = generic.GenericRelation(FincaAnimales)
     postcosecha = generic.GenericRelation(Postcosecha)
@@ -1027,4 +1153,4 @@ class Encuesta(models.Model):
         return self.datos.all()[0].comunidad
     def municipios(self):
         return self.datos.all()[0].comunidad.municipio
-    
+
