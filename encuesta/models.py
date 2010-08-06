@@ -46,8 +46,8 @@ class DatosGenerales(models.Model):
     comunidad = models.ForeignKey(Comunidad)
     coor_lt = models.DecimalField('Coordenadas Latitud',max_digits=24,decimal_places=16, null=True, blank=True)
     coor_lg = models.DecimalField('Coordenadas Longitud',max_digits=24,decimal_places=16, null=True, blank=True)
-    tipo1 = models.CharField('Tipo de tecnología productiva en café', max_length=200, null=True, blank=True)
-    tipo2 = models.CharField('Tipo de certificación en café', max_length=200, null=True, blank=True)
+    tecnologia = models.ForeignKey(Tecnologia, null=True, blank=True)
+    certificacion = models.ManyToManyField(Certificacion,verbose_name="Tipo de certificación en café", null=True, blank=True)
     def __unicode__(self):
         return self.nombre
     class Meta:
@@ -516,6 +516,8 @@ class Aportar(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     persona = models.IntegerField('¿Cuántas persona aportan con trabajo en la finca o económicamente?', choices=CHOICE_APORTE)
+    class Meta:
+        verbose_name_plural = "Aportar"
 
 #De los ingresos obtenidos por usted. ¿Cuánto destina a  servicios básicos?
 CHOICE_DESTINAR = ((1,'Alimentos de consumo'),(2,'Producción de café'),(3,'Producción de (maíz,frijol...)'),(4,'Servicios basicos(agua,luz...)'),(5,'Educación'),(6,'Salud'))
@@ -528,6 +530,8 @@ class Destinar(models.Model):
     content_object = generic.GenericForeignKey()
     servicios = models.IntegerField(choices=CHOICE_DESTINAR)
     cuanto = models.IntegerField('Del 100% que percibe cuanto destina')
+    class Meta:
+        verbose_name_plural = "Destinar"
         
 #Modelo propiedades y bienes
 CHOICE_AMBIENTE = ((1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5"))
@@ -697,7 +701,7 @@ class Consume(models.Model):
     content_object = generic.GenericForeignKey()
     preg1 = models.IntegerField('¿Qué porcentaje de alimentos básicos que consume compra?', choices=CHOICE_PREG1, null=True, blank=True)
     preg2 = models.IntegerField('¿Siente que en alguna ocasión no ha podido Cubrir sus necesidades básicas de alimentación?', choices=CHOICE_PREG2, null=True, blank=True)
-    preg3 = models.IntegerField('Si la respuesta es si porque motivo', choices=CHOICE_PREG5, null=True, blank=True)
+    preg3 = models.IntegerField('Si la respuesta es si porque motivo', choices=CHOICE_MOTIVO, null=True, blank=True)
     preg4 = models.ManyToManyField(Meses, verbose_name="¿Cuáles son los meses más difíciles para la familia?",null=True, blank=True)
     preg5 = models.IntegerField('¿Qué hace cuando los precios del café bajan?', choices=CHOICE_PREG5, null=True, blank=True)
     preg7 = models.IntegerField('¿Por cuánto tiempo puede conseguir alimentos en ese sitio mientras dura la escasez? ', choices=CHOICE_PREG7, null=True, blank=True)
@@ -718,7 +722,7 @@ class Escasez(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     preg1 = models.ManyToManyField(SolucionEscasez, verbose_name="¿Qué soluciones y practicas implementa en los tiempos de escasez?", null=True, blank=True)
-    preg2 = models.IntegerField(choices=((1,'credito en la pulperia mas cercana'),(2,'Donde un familiar'),(3,'Mercado local mas cercano')))
+    preg2 = models.IntegerField('Si consigue alimentos en la epoca de escasez ¿Donde consigue alimentos en la epoca de escasez', choices=((1,'credito en la pulperia mas cercana'),(2,'Donde un familiar'),(3,'Mercado local mas cercano')))
     class Meta:
         verbose_name_plural = "Escasez"
     
@@ -850,13 +854,15 @@ class Credito(models.Model):
 #Indicador de salud fisica y psicologica de los socios, socias y sus familiares
 CHOICE_LETRINA = ((1,'Letrina'),(2,'Campo Libre'),(3,'Otros'))
 CHOICE_LIMPIEZA = ((1,'Diario'),(2,'Semanal'),(3,'quincenal'),(4,'al mes'),(5,'semestral'),(6,'anual'))
-CHOICE_DESHACER = ((1,'Quema'),(2,'Entierra'),(3,'recolección comunitaria'),(4,'basurero clandestino'),(5,'otros'))
-CHOICE_AGROQUIMICO = ((1,'Para uso del hogar'),(2,'Quema'),(3,'Entierra'),(4,'Triple lavado'),(5,'Perfora y almacena'))
+CHOICE_DESHACER = ((1,'Quema'),(2,'Entierra'),(3,'recolección comunitaria'),(4,'basurero clandestino'),(5,'La hecha en hoyos'))
+CHOICE_AGROQUIMICO = ((1,'Para uso del hogar'),(2,'Quema'),(3,'Entierra'),(4,'Triple lavado'),(5,'Perfora y almacena'),(6,'Lo tira en la parcela'))
 
 class Tratamiento(models.Model):
     nombre = models.CharField(max_length=200)
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Salud-Tratamiento"
 
 class Salud(models.Model):
     '''
@@ -871,6 +877,8 @@ class Salud(models.Model):
     limpieza = models.IntegerField('Cada cuanto hace limpieza alredor de su vivienda?', choices=CHOICE_LIMPIEZA)
     deshacer = models.IntegerField('De que manera se deshacen de la basura?', choices=CHOICE_DESHACER)
     agroquimico = models.IntegerField('Que hace con los envases de agroquímicos?', choices=CHOICE_AGROQUIMICO)
+    class Meta:
+        verbose_name_plural = "Salud"
 
 #modelo de enfermedades
 CHOICE_ENFERMEDADES = ((1,'Hipertensión'),(2,'Diabetes'),(3,'Enfermedades cardíacas'),(4,'Artritis'),(5,'Asma'),(6,'Enf. Reproductivas o Trasmisión sexual'))   
@@ -932,11 +940,15 @@ class PreguntaCancer(models.Model):
     pregunta = models.CharField(max_length=200)
     def __unicode__(self):
         return self.pregunta
+    class Meta:
+        verbose_name_plural = "Cancer-Pregunta"
         
 class RespuestasCancer(models.Model):
     respuesta = models.CharField(max_length=200)
     def __unicode__(self):
         return self.respuesta
+    class Meta:
+        verbose_name_plural = "Cancer-Respuesta"
         
 class Cancer(models.Model):
     content_type = models.ForeignKey(ContentType)
@@ -945,6 +957,8 @@ class Cancer(models.Model):
     preguntas = models.ForeignKey(PreguntaCancer)
     resp = models.ForeignKey(RespuestasCancer)
     cual = models.TextField('Cual?', null=True, blank=True)
+    class Meta:
+        verbose_name_plural = "Cancer"
     
 #CANCER_MUJERES = ((1,'Mujeres de 15 a 30 años'),(2,'Mujeres de 31 a 55 años'))
 #TRATA_CANCER = ((1,'Hospital'),(2,'Clinica privada'))
@@ -969,6 +983,9 @@ class PreguntaMental(models.Model):
     nombre = models.CharField(max_length=200)
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Mental"
+        
 REPUESTA_MENTAL = ((1,'Soltera'),(2,'Juntada'),(3,'Casada'),(4,'Viudad'),(5,'Juntada o casada luego separada'),(6,'Menos de 5 años'),(7,'Más de 5 años'),(8,'Más de 10 años'),(9,'Si'),(10,'No'),(11,'No se'))
 
 class Mental(models.Model):
@@ -980,6 +997,8 @@ class Mental(models.Model):
     content_object = generic.GenericForeignKey()
     pregunta = models.ForeignKey(PreguntaMental)
     respuesta = models.IntegerField(choices=REPUESTA_MENTAL)
+    class Meta:
+        verbose_name_plural = "Salud Mental mujeres"
     
 #Indicador de desarrollo educativo, particpativo e incidencia y comunicacion de las y los jovenes
 CHOICE_JOVEN_EDUCACION = ((1,'Hombre adultos más de 15 años'),(2,'Mujeres adultas más de 15 años'),(3,'Hombres jóvenes de 7 a 15 años'),(4,'Mujeres jóvenes más de quince años'),(5,'Niños de 1 a 6 años'),(6,'Niñas de 1 a 6 años'))
@@ -1006,20 +1025,24 @@ class EducacionJovenes(models.Model):
         verbose_name_plural = "Educación"
     
 #Modelo pregunta dirigidas a los y las jovenes de la familia
-class PreguntaJoven(models.Model):
-    pregunta = models.CharField(max_length=200)
-    def __unicode__(self):
-        return self.pregunta
+#class PreguntaJoven(models.Model):
+#    pregunta = models.CharField(max_length=200)
+#    def __unicode__(self):
+#        return self.pregunta
         
 class BeneficioJoven(models.Model):
     beneficio = models.CharField(max_length=200)
     def __unicode__(self):
         return self.beneficio
+    class Meta:
+        verbose_name_plural = "Jovenes-Beneficios"
         
 class MiembroJoven(models.Model):
     nombre = models.CharField(max_length=200)
     def __unicode__(self):
         return self.nombre
+    class Meta:
+        verbose_name_plural = "Jovenes-Miembro"
         
 class Jovenes(models.Model):
     '''
@@ -1044,6 +1067,8 @@ class Jovenes(models.Model):
     desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
     no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, null=True, blank=True)
     quiero_miembro_junta = models.ManyToManyField(MiembroJoven, verbose_name="Quiero ser miembro del consejo admin o comisión", null=True, blank=True)
+    class Meta:
+        verbose_name_plural = "Jovenes"
     
 #Vision del futuro
 #class Quedar(models.Model):
