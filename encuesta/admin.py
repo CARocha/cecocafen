@@ -23,7 +23,7 @@ class CampoInline(generic.GenericTabularInline):
     
 class ConservacionInline(generic.GenericStackedInline):
     model = Conservacion
-    max_num = 1
+    max_num = 8
 
 class AbonoInline(generic.GenericTabularInline):
     model = Abono
@@ -116,7 +116,7 @@ class DetalleCasaInline(generic.GenericTabularInline):
 class PropiedadesInline(generic.GenericTabularInline):
     model = Propiedades
     extra = 1
-    max_num = 8
+    max_num = None
     
 class HerramientasInline(generic.GenericTabularInline):
     model = Herramientas
@@ -184,7 +184,7 @@ class EnfermedadInline(generic.GenericTabularInline):
 class CancerInline(generic.GenericTabularInline):
     model = Cancer
     extra = 1
-    max_num = 2
+    max_num = None
     
 class MentalInline(generic.GenericTabularInline):
     model = Mental
@@ -223,7 +223,7 @@ class EncuestaAdmin(admin.ModelAdmin):
             RiegoInline,AguaInline,AhorroInline,CreditoInline,SaludInline,EnfermedadInline,CancerInline,
             MentalInline,EducacionInline,JovenesInlines
             ]
-    list_display = ['nombre_socios', 'comunidades', 'municipios']
+    list_display = ['nombre_socios', 'comunidades', 'municipios','recolector']
     list_filter = ['fecha']
     date_hierarchy = 'fecha'
     search_fields = ['datos__nombre','datos__comunidad__nombre']

@@ -46,7 +46,7 @@ class DatosGenerales(models.Model):
     comunidad = models.ForeignKey(Comunidad)
     coor_lt = models.DecimalField('Coordenadas Latitud',max_digits=24,decimal_places=16, null=True, blank=True)
     coor_lg = models.DecimalField('Coordenadas Longitud',max_digits=24,decimal_places=16, null=True, blank=True)
-    tecnologia = models.ForeignKey(Tecnologia, null=True, blank=True)
+    tecnologia = models.ManyToManyField(Tecnologia,verbose_name="Tecnologia productiva en café", null=True, blank=True)
     certificacion = models.ManyToManyField(Certificacion,verbose_name="Tipo de certificación en café", null=True, blank=True)
     def __unicode__(self):
         return self.nombre
@@ -132,7 +132,7 @@ class Migracion(models.Model):
     viven_casa = models.IntegerField('No. viven en la casa')
     viven_comu = models.IntegerField('No. viven en la comunidad')
     viven_fuera = models.IntegerField('No. viven fuera de la comunidad')
-    razones = models.ManyToManyField(RazonesMigracion, verbose_name="Razones por la que migra")
+    razones = models.ManyToManyField(RazonesMigracion, verbose_name="Razones por la que migra",null=True, blank=True)
     class Meta:
         verbose_name_plural = "Migracion"
     
@@ -153,43 +153,6 @@ class CondicionesCampo(models.Model):
     content_object = generic.GenericForeignKey()
     pregunta = models.ForeignKey(Campo)
     respuesta = models.IntegerField(choices=CHOICE_CAMPO)
-    
-#class Vision(models.Model):
-#    nombre = models.CharField(max_length=200)
-#    def __unicode__(self):
-#        return self.nombre
-        
-#class VisionRespuesta(models.Model):
-#    repuesta = models.CharField(max_length=200)
-#    def __unicode__(self):
-#        return self.repuesta
-        
-#class VisionFuturo(models.Model):
-#    '''
-#        Modelo vision de futuro para gente grande
-#    '''
-#    content_type = models.ForeignKey(ContentType)
-#    object_id = models.IntegerField(db_index=True)
-#    content_object = generic.GenericForeignKey()
-#    vision = models.ForeignKey(Vision)
-#    respuesta = models.ManyToManyField(VisionRespuesta)
-
-#EDAD_ACTIVIDAD = ((1,'Hombres adultos(18 años y mas)'),(2,'Mujeres adultas(18 y mas)'))
-#RESPUESTA_ACTIVDAD = ((1,'Si'),(2,'No'))
-    
-#class Actividades(models.Model):
-#    ''' Modelo actividades recreativas
-#    '''
-#    content_type = models.ForeignKey(ContentType)
-#    object_id = models.IntegerField(db_index=True)
-#    content_object = generic.GenericForeignKey()
-#    actividad = models.IntegerField(choices=EDAD_ACTIVIDAD)
-#    biblioteca = models.IntegerField('Acceso a biblioteca rural',choices=RESPUESTA_ACTIVDAD)
-#    deporte = models.IntegerField('Practicar deporte',choices=RESPUESTA_ACTIVDAD)
-#    eventos = models.IntegerField('Asistir a eventos recreativos',choices=RESPUESTA_ACTIVDAD)
-#    iglesia = models.IntegerField('Asistir a la iglesia',choices=RESPUESTA_ACTIVDAD)
-#    tele = models.IntegerField('Ver televisión y películas',choices=RESPUESTA_ACTIVDAD)
-#    internet = models.IntegerField('Utilizar Internet', choices=RESPUESTA_ACTIVDAD)
     
 #Modelo 4. Indicador de desarrollo economico productivo con enfoque ambiental y empresarial
 CHOICE_TENENCIA = ((1,"Propia con escritura pública"),(2,"Propia por herencia"),(3,"Propias con promesa de venta"),(4,"Propias con titulo de reforma agraria"),(5,"Arrendada"),(6,"Sin documento"))
@@ -226,7 +189,7 @@ class Tierra(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     uso_tierra = models.ForeignKey(UsoTierra)
-    areas = models.IntegerField('Areas en Mz')
+    areas = models.DecimalField('Areas en Mz',max_digits=10,decimal_places=2,null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Tierra"
@@ -247,7 +210,7 @@ class Reforestacion(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     actividad = models.ForeignKey(Actividades)
-    cantidad = models.IntegerField('Cantidad de árboles sembrados')
+    cantidad = models.DecimalField('Cantidad de árboles sembrados',max_digits=10,decimal_places=2,null=True, blank=True)
     class Meta:
         verbose_name_plural="Reforestacion"
     
@@ -275,8 +238,8 @@ class Conservacion(models.Model):
     content_object = generic.GenericForeignKey()
     cocinar = models.ManyToManyField(Combustible, verbose_name="¿Qué utiliza para cocinar")
     actividad = models.IntegerField('Ha hecho alguna actividad para la conservación de los suelos y agua en su finca?',choices=((1,'Si'),(2,'No')))
-    cuales = models.ForeignKey(ActividadConservacion)
-    cuanto = models.IntegerField('Cuanto', help_text="En Metros")
+    cuales = models.ManyToManyField(ActividadConservacion, verbose_name="Cuales?")
+    cuanto = models.DecimalField('Cuanto',max_digits=10,decimal_places=2, help_text="En Metros")
     class Meta:
         verbose_name_plural = "Conservacion"
     
@@ -291,22 +254,22 @@ class Abono(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    producto = models.IntegerField(choices=CHOICE_PROD_ABONO)
-    respuesta = models.IntegerField(choices=CHOICE_ABONO)
-    pulpa = models.IntegerField(choices=CHOICE_ABONO)
-    estiercol = models.IntegerField(choices=CHOICE_ABONO)
-    gallinaza = models.IntegerField(choices=CHOICE_ABONO)
-    composta = models.IntegerField(choices=CHOICE_ABONO)
-    lombrices = models.IntegerField(choices=CHOICE_ABONO)
-    bocachi = models.IntegerField(choices=CHOICE_ABONO)
-    foliar = models.IntegerField(choices=CHOICE_ABONO)
-    verde = models.IntegerField('Abo. Verde', choices=CHOICE_ABONO)
-    hojas = models.IntegerField('Hojas y rastrajos', choices=CHOICE_ABONO)
-    quince = models.IntegerField('15-15-15', choices=CHOICE_ABONO)
-    veinte = models.IntegerField('20-20-20', choices=CHOICE_ABONO)
-    seis = models.IntegerField('18-6-12-4', choices=CHOICE_ABONO)
-    urea = models.IntegerField('Urea-Nitrato', choices=CHOICE_ABONO)
-    otros = models.TextField()
+    producto = models.IntegerField(choices=CHOICE_PROD_ABONO,null=True, blank=True)
+    respuesta = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    pulpa = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    estiercol = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    gallinaza = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    composta = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    lombrices = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    bocachi = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    foliar = models.IntegerField(choices=CHOICE_ABONO,null=True, blank=True)
+    verde = models.IntegerField('Abo. Verde', choices=CHOICE_ABONO,null=True, blank=True)
+    hojas = models.IntegerField('Hojas y rastrajos', choices=CHOICE_ABONO,null=True, blank=True)
+    quince = models.IntegerField('15-15-15', choices=CHOICE_ABONO,null=True, blank=True)
+    veinte = models.IntegerField('20-20-20', choices=CHOICE_ABONO,null=True, blank=True)
+    seis = models.IntegerField('18-6-12-4', choices=CHOICE_ABONO,null=True, blank=True)
+    urea = models.IntegerField('Urea-Nitrato', choices=CHOICE_ABONO,null=True, blank=True)
+    otros = models.TextField(null=True, blank=True)
     class Meta:
         verbose_name_plural = "Sobre uso del abono"
     
@@ -319,23 +282,23 @@ class Compra(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    cuanto = models.IntegerField('Al año', choices=CHOICE_ANO)
-    pulpa = models.IntegerField()
-    estiercol = models.IntegerField()
-    gallinaza = models.IntegerField()
-    composta = models.IntegerField()
-    lombrices = models.IntegerField()
-    bocachi = models.IntegerField()
-    foliar_org = models.IntegerField('Foliar Organico')
-    unidad_org = models.IntegerField('Unidad Organico',choices=((1,'Litro'),(2,'Kg')))
-    foliar_qui = models.IntegerField('Foliar Quimico')
-    unidad_qui = models.IntegerField('Unidad Quimico',choices=((1,'Litro'),(2,'Kg')))
-    verde = models.IntegerField('Abono Verde qq')
-    quince = models.IntegerField('15-15-15')
-    veinte = models.IntegerField('20-20-20')
-    seis = models.IntegerField('18-6-12-4')
-    urea = models.IntegerField('Urea-Nitrato')
-    otros = models.TextField()
+    cuanto = models.IntegerField('Al año', choices=CHOICE_ANO,null=True, blank=True)
+    pulpa = models.DecimalField(max_digits=10,decimal_places=2,null=True, blank=True)
+    estiercol = models.DecimalField(max_digits=10,decimal_places=2,null=True, blank=True)
+    gallinaza = models.DecimalField(max_digits=10,decimal_places=2,null=True, blank=True)
+    composta = models.DecimalField(max_digits=10,decimal_places=2,null=True, blank=True)
+    lombrices = models.DecimalField(max_digits=10,decimal_places=2,null=True, blank=True)
+    bocachi = models.DecimalField(max_digits=10,decimal_places=2,null=True, blank=True)
+    foliar_org = models.DecimalField('Foliar Organico',max_digits=10,decimal_places=2,null=True, blank=True)
+    unidad_org = models.IntegerField('Unidad Organico',choices=((1,'Litro'),(2,'Kg')),null=True, blank=True)
+    foliar_qui = models.DecimalField('Foliar Quimico',max_digits=10,decimal_places=2,null=True, blank=True)
+    unidad_qui = models.IntegerField('Unidad Quimico',choices=((1,'Litro'),(2,'Kg')),null=True, blank=True)
+    verde = models.DecimalField('Abono Verde qq',max_digits=10,decimal_places=2,null=True, blank=True)
+    quince = models.DecimalField('15-15-15',max_digits=10,decimal_places=2,null=True, blank=True)
+    veinte = models.DecimalField('20-20-20',max_digits=10,decimal_places=2,null=True, blank=True)
+    seis = models.DecimalField('18-6-12-4',max_digits=10,decimal_places=2,null=True, blank=True)
+    urea = models.DecimalField('Urea-Nitrato',max_digits=10,decimal_places=2,null=True, blank=True)
+    otros = models.TextField(null=True, blank=True)
     class Meta:
         verbose_name_plural = "Compra y aplicacion de abono"
     
@@ -358,10 +321,10 @@ class CultivosFinca(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     cultivos = models.ForeignKey(Cultivos)
-    total =  models.IntegerField('Producción')
-    consumo = models.IntegerField('Consumo')
-    venta_libre = models.IntegerField('Venta libre')
-    venta_organizada = models.IntegerField('Venta organizada')
+    total =  models.DecimalField('Producción',max_digits=10,decimal_places=2,null=True, blank=True)
+    consumo = models.DecimalField('Consumo',max_digits=10,decimal_places=2,null=True, blank=True)
+    venta_libre = models.DecimalField('Venta libre',max_digits=10,decimal_places=2,null=True, blank=True)
+    venta_organizada = models.DecimalField('Venta organizada',max_digits=10,decimal_places=2,null=True, blank=True)
     class Meta:
         verbose_name_plural = "Cultivos en la Finca"
 
@@ -389,11 +352,11 @@ class FincaAnimales(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     animales = models.ForeignKey(Animales)
-    cantidad = models.IntegerField()
+    cantidad = models.DecimalField(max_digits=10,decimal_places=2,null=True, blank=True)
     produccion = models.ForeignKey(ProductoAnimal)
-    consumo = models.IntegerField('Consumo')
-    venta_libre = models.IntegerField('Venta libre')
-    venta_organizada = models.IntegerField('Venta organizada')
+    consumo = models.DecimalField('Consumo',max_digits=10,decimal_places=2,null=True, blank=True)
+    venta_libre = models.DecimalField('Venta libre',max_digits=10,decimal_places=2,null=True, blank=True)
+    venta_organizada = models.DecimalField('Venta organizada',max_digits=10,decimal_places=2,null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Finca y produccion"
@@ -418,7 +381,7 @@ class Postcosecha(models.Model):
     content_object = generic.GenericForeignKey()
     producto = models.ForeignKey(Cultivos)
     responsable = models.IntegerField(choices=CHOICE_COSECHA, null=True, blank=True)
-    cantidad = models.IntegerField('Cantidad almacenada qq/und')
+    cantidad = models.IntegerField('Cantidad almacenada qq/und',null=True, blank=True)
     tipo = models.ForeignKey(TipoAlmacenaje, related_name='Tipo de almacenaje', null=True, blank=True)
     class Meta:
         verbose_name_plural = "Postcosecha"
@@ -468,10 +431,10 @@ class IngresoFamiliar(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     rubro = models.ForeignKey(Rubros)
-    cantidad = models.IntegerField('Cantidad vendida')
-    precio = models.IntegerField('Precio de venta por unidad')
-    quien_vendio = models.IntegerField(choices=CHOICE_VENDIO)
-    maneja_negocio = models.IntegerField(choices=CHOICE_MANEJA)
+    cantidad = models.IntegerField('Cantidad vendida',null=True, blank=True)
+    precio = models.IntegerField('Precio de venta por unidad',null=True, blank=True)
+    quien_vendio = models.IntegerField(choices=CHOICE_VENDIO,null=True, blank=True)
+    maneja_negocio = models.IntegerField(choices=CHOICE_MANEJA,null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Ingreso Familiar"
@@ -499,9 +462,9 @@ class OtrosIngresos(models.Model):
     content_object = generic.GenericForeignKey()
     fuente = models.ForeignKey(Fuentes)
     tipo = models.ForeignKey(TipoTrabajo)
-    meses = models.IntegerField('Meses')
-    ingreso = models.IntegerField('Ingreso por mes')
-    tiene_ingreso = models.IntegerField(choices=CHOICE_MANEJA)
+    meses = models.IntegerField('Meses',null=True, blank=True)
+    ingreso = models.IntegerField('Ingreso por mes',null=True, blank=True)
+    tiene_ingreso = models.IntegerField(choices=CHOICE_MANEJA,null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Otros Ingresos"
@@ -528,8 +491,8 @@ class Destinar(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    servicios = models.IntegerField(choices=CHOICE_DESTINAR)
-    cuanto = models.IntegerField('Del 100% que percibe cuanto destina')
+    servicios = models.IntegerField(choices=CHOICE_DESTINAR,null=True, blank=True)
+    cuanto = models.IntegerField('Del 100% que percibe cuanto destina',null=True, blank=True)
     class Meta:
         verbose_name_plural = "Destinar"
         
@@ -570,10 +533,10 @@ class DetalleCasa(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    tamano = models.IntegerField('Tamaño en mt cuadrado')
-    ambientes = models.IntegerField(choices=CHOICE_AMBIENTE)
-    letrina = models.IntegerField(choices=CHOICE_OPCION)
-    lavadero = models.IntegerField(choices=CHOICE_OPCION)
+    tamano = models.IntegerField('Tamaño en mt cuadrado',null=True, blank=True)
+    ambientes = models.IntegerField(choices=CHOICE_AMBIENTE,null=True, blank=True)
+    letrina = models.IntegerField(choices=CHOICE_OPCION,null=True, blank=True)
+    lavadero = models.IntegerField(choices=CHOICE_OPCION,null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Detalles de la Casa"
@@ -626,7 +589,7 @@ class Herramientas(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     herramienta = models.ForeignKey(NombreHerramienta)
-    numero = models.IntegerField()
+    numero = models.IntegerField(null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Herramientas"
@@ -648,7 +611,7 @@ class Transporte(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     transporte = models.ForeignKey(NombreTransporte)
-    numero = models.IntegerField()
+    numero = models.IntegerField(null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Transporte"
@@ -737,23 +700,25 @@ class ProduccionMaiz(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     producto = models.IntegerField(choices=CHOICE_MAIZ)
-    siete = models.IntegerField('2007')
-    ocho = models.IntegerField('2008')
-    nueve = models.IntegerField('2009')
-    diez = models.IntegerField('2010')
+    siete = models.IntegerField('2007 en meses',null=True, blank=True)
+    ocho = models.IntegerField('2008 en meses',null=True, blank=True)
+    nueve = models.IntegerField('2009 en meses',null=True, blank=True)
+    diez = models.IntegerField('2010 en meses',null=True, blank=True)
+    class Meta:
+        verbose_name_plural = "¿Cuántos meses duraba lo que producia?"
 
 CHOICE_RIEGO = ((1,'Huerta'),(2,'Patio'),(3,'Vivero de café'))    
 class Riego(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    lugar = models.IntegerField(choices=CHOICE_RIEGO)
-    inundacion = models.IntegerField(choices=CHOICE_PREG2)
-    aspersion = models.IntegerField(choices=CHOICE_PREG2)
-    goteo = models.IntegerField(choices=CHOICE_PREG2)
-    regadera = models.IntegerField(choices=CHOICE_PREG2)
-    panada = models.IntegerField(choices=CHOICE_PREG2)
-    manguera = models.IntegerField(choices=CHOICE_PREG2)
+    lugar = models.IntegerField(choices=CHOICE_RIEGO,null=True, blank=True)
+    inundacion = models.IntegerField(choices=CHOICE_PREG2,null=True, blank=True)
+    aspersion = models.IntegerField(choices=CHOICE_PREG2,null=True, blank=True)
+    goteo = models.IntegerField(choices=CHOICE_PREG2,null=True, blank=True)
+    regadera = models.IntegerField(choices=CHOICE_PREG2,null=True, blank=True)
+    panada = models.IntegerField(choices=CHOICE_PREG2,null=True, blank=True)
+    manguera = models.IntegerField(choices=CHOICE_PREG2,null=True, blank=True)
     class Meta:
         verbose_name_plural = "Tecnica de Riego"
     
@@ -772,9 +737,9 @@ class Agua(models.Model):
     content_object = generic.GenericForeignKey()
     fuente = models.IntegerField(choices= CHOICE_FUENTE_AGUA)
     cantidad = models.IntegerField(null=True, blank=True)
-    distancia = models.IntegerField('La distancia de la fuente de la casa en VARAS')
-    diponibilidad = models.IntegerField('Disponibilidad de agua en tiempo', choices=CHOICE_DISPONIBILIDAD)
-    calidad = models.IntegerField('Calidad del agua', choices= CHOICE_CALIDAD_AGUA)
+    distancia = models.IntegerField('La distancia de la fuente de la casa en VARAS',null=True, blank=True)
+    diponibilidad = models.IntegerField('Disponibilidad de agua en tiempo', choices=CHOICE_DISPONIBILIDAD,null=True, blank=True)
+    calidad = models.IntegerField('Calidad del agua', choices= CHOICE_CALIDAD_AGUA,null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Agua"
@@ -855,7 +820,7 @@ class Credito(models.Model):
 CHOICE_LETRINA = ((1,'Letrina'),(2,'Campo Libre'),(3,'Otros'))
 CHOICE_LIMPIEZA = ((1,'Diario'),(2,'Semanal'),(3,'quincenal'),(4,'al mes'),(5,'semestral'),(6,'anual'))
 CHOICE_DESHACER = ((1,'Quema'),(2,'Entierra'),(3,'recolección comunitaria'),(4,'basurero clandestino'),(5,'La hecha en hoyos'))
-CHOICE_AGROQUIMICO = ((1,'Para uso del hogar'),(2,'Quema'),(3,'Entierra'),(4,'Triple lavado'),(5,'Perfora y almacena'),(6,'Lo tira en la parcela'))
+#CHOICE_AGROQUIMICO = ((1,'Para uso del hogar'),(2,'Quema'),(3,'Entierra'),(4,'Triple lavado'),(5,'Perfora y almacena'),(6,'Lo tira en la parcela'))
 
 class Tratamiento(models.Model):
     nombre = models.CharField(max_length=200)
@@ -864,6 +829,12 @@ class Tratamiento(models.Model):
     class Meta:
         verbose_name_plural = "Salud-Tratamiento"
 
+class Quimico(models.model):
+    nombre = models.CharField(max_length=200)
+    def __unicode__(self):
+        return self.nombre
+    class Meta:
+        verbose_name_plural = "Salud-Quimico"
 class Salud(models.Model):
     '''
         Modelos salud e higiene del hogar
@@ -874,9 +845,9 @@ class Salud(models.Model):
     donde = models.IntegerField('Donde realiza sus necesidades usted y su familia?', choices=CHOICE_LETRINA)
     tratamiento = models.ManyToManyField(Tratamiento,verbose_name="Le da un tratamiento a los desechos humanos?",
     null=True, blank=True)
-    limpieza = models.IntegerField('Cada cuanto hace limpieza alredor de su vivienda?', choices=CHOICE_LIMPIEZA)
-    deshacer = models.IntegerField('De que manera se deshacen de la basura?', choices=CHOICE_DESHACER)
-    agroquimico = models.IntegerField('Que hace con los envases de agroquímicos?', choices=CHOICE_AGROQUIMICO)
+    limpieza = models.IntegerField('Cada cuanto hace limpieza alredor de su vivienda?', choices=CHOICE_LIMPIEZA,null=True, blank=True)
+    deshacer = models.IntegerField('De que manera se deshacen de la basura?', choices=CHOICE_DESHACER,null=True, blank=True)
+    agroquimico = models.ManyToManyField(Quimico,verbose_name="Que hace con los envases de agroquímicos?", null=True, blank=True)
     class Meta:
         verbose_name_plural = "Salud"
 
