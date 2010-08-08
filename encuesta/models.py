@@ -829,7 +829,7 @@ class Tratamiento(models.Model):
     class Meta:
         verbose_name_plural = "Salud-Tratamiento"
 
-class Quimico(models.model):
+class Quimico(models.Model):
     nombre = models.CharField(max_length=200)
     def __unicode__(self):
         return self.nombre
