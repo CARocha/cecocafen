@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from django.db import models
+from django.conf import settings
 from lugar.models import Comunidad
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
@@ -414,7 +415,7 @@ class Problema(models.Model):
         
 #Ingreso familiar
 CHOICE_VENDIO = ((1,"Comunidad"),(2,"Intermediario"),(3,"Ferias"),(4,"Cooperativa"),(5,'C-I'),(6,'I-F'),(7,'F-Coop'),(8,'Todos'))
-CHOICE_MANEJA = ((1,"Hombre"),(2,"Mujer"),(3,"Ambos"),(4,"Hijos/as"),(5,'Hombre-Hijos'),(6,'Mujer-Hijos'))
+CHOICE_MANEJA = ((1,"Hombre"),(2,"Mujer"),(3,"Ambos"),(4,"Hijos/as"),(5,'Hombre-Hijos'),(6,'Mujer-Hijos'),(7,'Todos'))
 class Rubros(models.Model):
     nombre = models.CharField(max_length=50)
     unidad = models.CharField(max_length=50)
@@ -1102,7 +1103,7 @@ class Encuesta(models.Model):
     abono = generic.GenericRelation(Abono)
     compra = generic.GenericRelation(Compra)
 #    vision = generic.GenericRelation(VisionFuturo)
-    actividades = generic.GenericRelation(Actividades)
+#    actividades = generic.GenericRelation(Actividades)
     tenencia = generic.GenericRelation(Tenencia)
     tierra = generic.GenericRelation(Tierra)
     reforestacion = generic.GenericRelation(Reforestacion)
