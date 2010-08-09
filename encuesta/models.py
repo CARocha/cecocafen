@@ -1022,9 +1022,9 @@ class Jovenes(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION)
+    socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION,null=True, blank=True)
     desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE,null=True, blank=True)
-    promotor = models.IntegerField('Es promotor de su cooperativa?', choices=CHOICE_OPCION)
+    promotor = models.IntegerField('Es promotor de su cooperativa?', choices=CHOICE_OPCION,null=True, blank=True)
     beneficio = models.ManyToManyField(BeneficioJoven, verbose_name="Beneficios obtenidos", null=True, blank=True)
     miembro = models.IntegerField('Es miembro del consejo de administracion', 
                                    choices=CHOICE_OPCION, null=True, blank=True)
