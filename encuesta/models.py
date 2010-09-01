@@ -158,7 +158,7 @@ class CondicionesCampo(models.Model):
 #Modelo 4. Indicador de desarrollo economico productivo con enfoque ambiental y empresarial
 CHOICE_TENENCIA = ((1,"Propia con escritura pública"),(2,"Propia por herencia"),(3,"Propias con promesa de venta"),(4,"Propias con titulo de reforma agraria"),(5,"Arrendada"),(6,"Sin documento"))
 CHOICE_DUENO = ((1,"Hombre"),(2,"Mujer"),(3,"Mancomunado"),(4,"Parientes"),(5,"Colectivo"),(6,"No hay"))
-CHOICE_CANTIDAD_TENENCIA = ((1,'1'),(2,'2'),(3,'3'),(4,'4'))
+CHOICE_CANTIDAD_TENENCIA = ((1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'0'))
 
 class Tenencia(models.Model):
     ''' Modelo tipo de tenencia de la propiedad
