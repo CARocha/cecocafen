@@ -4,6 +4,8 @@ from django.conf import settings
 from models import Encuesta
 
 urlpatterns = patterns('encuesta.views',
-    (r'^index/$', 'index'),
+    (r'^index/$', 'inicio'),
+    (r'^index/ajax/municipio/(?P<departamento>\d+)/$', 'get_municipios'),
+    (r'^index/ajax/comunidad/(?P<municipio>\d+)/$', 'get_comunidad'),
    
 )

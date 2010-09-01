@@ -1,17 +1,17 @@
-jQuery.noConflict();
+
 function menu(){
-jQuery(" #nav ul ").css({display: "none"}); 
-jQuery(" #nav li").hover(function(){
-		jQuery(this).find('ul:first').css({visibility: "visible",display: "none"}).show(250);
-		jQuery(this).addClass('cblack');
+$(" #nav ul ").css({display: "none"}); 
+$(" #nav li").hover(function(){
+		$(this).find('ul:first').css({visibility: "visible",display: "none"}).show(250);
+		$(this).addClass('cblack');
 		},function(){
-		jQuery(this).find('ul:first').css({visibility: "hidden"});
-		jQuery(this).removeClass('cblack');
+		$(this).find('ul:first').css({visibility: "hidden"});
+		$(this).removeClass('cblack');
 		});
 }
 
  
  
- jQuery(document).ready(function(){					
+ $(document).ready(function(){					
 	menu();
 });
