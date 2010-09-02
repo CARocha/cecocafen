@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block title %}Las Familias(Migracion){% endblock %}
+{% block extra_header %}
+ <script type="text/javascript">
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/migrar/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+</script>
+{%endblock%}
+{% block contenido %}
+numero familia = {{num_familia}}
+<br></br>
+
+<a id="grafico1" href="#" onCLick="click_callback('razones')">Razones sobre Migracion</a>
+
+<div id="grafo"></div>
+<table>
+ <caption>Tabla Las Familias(Migración)</caption>
+ <thead>
+    <tr>
+        <th>EDADES</th>
+        <th>Número totales en la familia</th>
+        <th>Promedio persona en la familia</th>
+        <th>% viven en casa</th>
+        <th>% viven en la comunidad</th>
+        <th>% viven fuera comunidad</th>
+    </tr>
+  </thead>
+    {%for key, value in tabla.items%}
+    <tr>
+        <td>{{key|unslugify}}</td>
+        <td>{{value.totalv|floatformat}}</td>
+        <td>{{value.vive|floatformat}}</td>
+        <td>{{value.porcentaje_viven|floatformat}}</td>
+        <td>{{value.porcentaje_comu|floatformat}}</td>
+        <td>{{value.porcentaje_fuera|floatformat}}</td>
+    </tr>
+    {%endfor%}
+</table>
+
+
+{% endblock %}

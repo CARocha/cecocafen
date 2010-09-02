@@ -1107,7 +1107,7 @@ class Encuesta(models.Model):
     tenencia = generic.GenericRelation(Tenencia)
     tierra = generic.GenericRelation(Tierra)
     reforestacion = generic.GenericRelation(Reforestacion)
-    conservacion = generic.GenericRelation(Conservacion)
+    #conservacion = generic.GenericRelation(Conservacion)
     cultivos = generic.GenericRelation(CultivosFinca)
     finca = generic.GenericRelation(FincaAnimales)
     postcosecha = generic.GenericRelation(Postcosecha)
