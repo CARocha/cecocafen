@@ -537,7 +537,7 @@ def animales(request):
     for animal in Animales.objects.all():
         query = consulta.filter(finca__animales = animal)
         numero = query.distinct().count()
-        producto = FincaAnimales.objects.filter(animales = animal)[0].producto
+        producto = FincaAnimales.objects.filter(animales = animal)[0].produccion
         porcentaje_num = saca_porcentajes(numero, totales['numero'], False)
         animales = query.aggregate(cantidad = Sum('fincas__cantidad'),
                                    venta_libre = Sum('finca__venta'),
