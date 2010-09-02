@@ -1075,7 +1075,41 @@ def seguridad_alimentaria(request):
     return render_to_response('achuapa/seguridad.html',{'tabla':tabla,
                               'num_familias':num_familia},
                                context_instance=RequestContext(request))    
-    
+def riego(request):
+    consulta = _queryset_filtrado(request)
+    return render_to_response('achuapa/riego.html', 
+                              context_instance=RequestContext(request))
+
+def vulnerabilidad(request):
+    consulta = _queryset_filtrado(request)
+    return render_to_response('achuapa/riego.html', 
+                              context_instance=RequestContext(request))
+
+def condiciones(request):
+    pass
+
+def suelo(request):
+    pass
+
+def abono(request):
+    pass
+
+def post_cosecha(request):
+    pass
+
+def jovenes(request):
+    pass
+
+def abono(request):
+    pass
+
+def organizacion_jovenes(request):
+    pass
+
+def suelo(request):
+    pass
+
+
 #TODO: completar esto
 VALID_VIEWS = {
         'familia': familia,
