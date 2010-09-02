@@ -113,6 +113,8 @@ def inicio(request):
     dict = {'form': form,'user': request.user,'centinela':centinela}
     return render_to_response('encuesta/inicio.html', dict,
                               context_instance=RequestContext(request))
+                              
+
 #--------- indicador familia migracion -----------------
 @session_required
 def familia(request):
@@ -123,7 +125,7 @@ def familia(request):
     #**********************************
     tabla = {}
     totales = {}
-    totales['numero'] = a.aggregate(numero=Count('migracion__total_familia'))['numero'] 
+    totales['numero'] = a.aggregate(numero=Count('migracion__n_total'))['numero'] 
     totales['porcentaje_num'] = 100
     totales['viven'] = a.aggregate(viven=Sum('migracion__viven_casa'))['viven']
     totales['porcentaje_viven'] = 100
@@ -136,20 +138,23 @@ def familia(request):
         query = a.filter(migracion__edades = opcion[0])
         numero = query.count()
         porcentaje_num = saca_porcentajes(numero, totales['numero'])
-        totalv = query.aggregate(totalv=Sum('migracion__total_familia'))['totalv']
-        vive = query.aggregate(vive = Sum('migracion__viven_casa'))['vive']
-        porcentaje_viven = saca_porcentajes(vive, totalv)
+        totalv = query.aggregate(totalv=Sum('migracion__n_total'))['totalv']
+        vive = totalv / num_familia if totalv != None and num_familia != None else 0
+        vive_casa = query.aggregate(vive_casa = Sum('migracion__viven_casa'))['vive_casa']
+        porcentaje_viven = saca_porcentajes(vive_casa, totalv)
+        comunidad = query.aggregate(comunidad = Sum('migracion__viven_comu'))['comunidad']
+        porcentaje_comu = saca_porcentajes(comunidad, totalv)
         fuera = query.aggregate(fuera = Sum('migracion__viven_fuera'))['fuera']
         porcentaje_fuera = saca_porcentajes(fuera, totalv)
         tabla[key] = {'numero': numero, 'porcentaje_num': porcentaje_num,
                       'totalv':totalv,'vive': vive, 'porcentaje_viven': porcentaje_viven,
-                      'fuera':fuera,'porcentaje_fuera':porcentaje_fuera}
+                      'fuera':fuera,'porcentaje_comu':porcentaje_comu,'porcentaje_fuera':porcentaje_fuera}
     
-    return render_to_response('achuapa/familia.html',locals(),
+    return render_to_response('encuesta/familia.html',locals(),
                               context_instance=RequestContext(request))
 #------------------------graficos para la razon de migrar--------------------
 @session_required
-def grafo_migracion(request):
+def grafo_migracion(request, tipo):
     '''
         graficos de los tipos de migraciones en las familias
     '''
@@ -160,10 +165,59 @@ def grafo_migracion(request):
     if tipo == 'razones':
         for opcion in RazonesMigracion.objects.all():
             data.append(consulta.filter(migracion__razones=opcion).count())
-            legends.append(opcion.nombre)
+            legends.append(opcion.razones)
         return grafos.make_graph(data, legends, 
                 'Razones de las Migraciones', return_json = True,
                 type = grafos.PIE_CHART_3D)
+    elif tipo == 'cocina':
+        for opcion in Combustible.objects.all():
+            data.append(consulta.filter(conservacion__cocinar=opcion).count())
+            legends.append(opcion.nombre)
+        return grafos.make_graph(data, legends,
+                'Que utiliza para cocinar', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    elif tipo == 'actividad':
+        for opcion in Conservacion.objects.all():
+            data.append(consulta.filter(conservacion__actividad=opcion[0]).count())
+            legends.append(opcion[1])
+        return grafos.make_graph(data, legends,
+                'Hacen Actividades para conservacion?', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    elif tipo == 'conservacion':
+        for opcion in ActividadConservacion.objects.all():
+            data.append(consulta.filter(consevacion__cuales=opcion).count())
+            legends.append(opcion.nombre)
+        return grafos.make_graph(data, legends,
+                                 'Actividades para conservacion', return_json = True,
+                                 type = grafos.PIE_CHART_3D)
+    elif tipo == 'tipoproblema':
+        for opcion in TipoProblema.objects.all():
+            data.append(consulta.filter(problema__problema=opcion).count())
+            legends.append(opcion.nombre)
+        return grafos.make_graph(data, legends,
+                    'Tipos de Problemas', return_json = True,
+                    type = grafos.PIE_CHART_3D)
+    elif tipo == 'tiposolucion':
+        for opcion in Solucion.objects.all():
+            data.append(consulta.filter(problema__solucion=opcion).count())
+            legends.append(opcion.nombre)
+        return grafos.make_graph(data, legends,
+                'Tipos de soluciones', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    elif tipo == 'otrosingresos':
+        for opcion in Fuentes.objects.all():
+            data.append(consulta.filter(otrosingresos__fuente=opcion).count())
+            legends.append(opcion.nombre)
+        return grafos.make_graph(data, legends,
+                'Fuentes de Otros Salarios', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    elif tipo == 'aportar':
+        for opcion in CHOICE_APORTE:
+            data.append(consulta.filter(aporte__persona=opcion[0]).count())
+            legends.append(opcion[1])
+            message = "Aporte en la finca"
+        return grafos.make_graph(data, legends, message, multiline = True,
+                return_json = True, type = grafos.GROUPED_BAR_CHART_V)
     else:
         raise Http404
 
@@ -188,6 +242,7 @@ def organizacion(request):
                                       organizacion__desde_socio_coop__isnull = False,
                                       organizacion__desde_hijo__isnull = False).aggregate(
                                                          tiempo_hijo = Sum('organizacion__desde_hijo'),
+
                                                          tiempo_conyugue = Sum('organizacion__desde_socio_coop'),
                                                          num = Count('organizacion__socio'),
                                                          tiempo_socio = Sum('organizacion__desde_socio'))
@@ -526,12 +581,12 @@ def ingresos(request):
     for i in Rubros.objects.all():
         key = slugify(i.nombre).replace('-','_')
         key2 = slugify(i.unidad).replace('-','_')
-        query = a.filter(ingresofamiliar__rubro = i)
+        query = a.filter(ingreso__rubro = i)
         numero = query.count()
-        cantidad = query.aggregate(cantidad=Sum('ingresofamiliar__cantidad'))['cantidad']
-        precio = query.aggregate(precio=Avg('ingresofamiliar__precio'))['precio']
+        cantidad = query.aggregate(cantidad=Sum('ingreso__cantidad'))['cantidad']
+        precio = query.aggregate(precio=Avg('ingreso__precio'))['precio']
         ingreso = cantidad * precio if cantidad != None and precio != None else 0
-        respuesta['ingreso']= query.aggregate(cantidad=Sum('ingresofamiliar__cantidad'))['cantidad'] * query.aggregate(precio=Avg('ingresofamiliar__precio'))['precio'] if cantidad != None and precio != None else 0
+        respuesta['ingreso']= query.aggregate(cantidad=Sum('ingreso__cantidad'))['cantidad'] * query.aggregate(precio=Avg('ingreso__precio'))['precio'] if cantidad != None and precio != None else 0
         respuesta['ingreso_total'] +=  respuesta['ingreso']
         
         tabla[key] = {'key2':key2,'numero':numero,'cantidad':cantidad,
@@ -541,20 +596,20 @@ def ingresos(request):
     matriz = {}
     for j in Fuentes.objects.all():
         key = slugify(j.nombre).replace('-','_')
-        consulta = a.filter(otrosingreso__fuente = j)
+        consulta = a.filter(otrosingresos__fuente = j)
         frecuencia = consulta.count()
-        meses = consulta.aggregate(meses=Avg('otrosingreso__meses'))['meses']
-        ingreso = consulta.aggregate(ingreso=Avg('otrosingreso__ingreso'))['ingreso']
-        ingresototal = consulta.aggregate(meses=Avg('otrosingreso__meses'))['meses'] * consulta.aggregate(ingreso=Avg('otrosingreso__ingreso'))['ingreso'] if meses != None and ingreso != None else 0
+        meses = consulta.aggregate(meses=Avg('otrosingresos__meses'))['meses']
+        ingreso = consulta.aggregate(ingreso=Avg('otrosingresos__ingreso'))['ingreso']
+        ingresototal = consulta.aggregate(meses=Avg('otrosingresos__meses'))['meses'] * consulta.aggregate(ingreso=Avg('otrosingresos__ingreso'))['ingreso'] if meses != None and ingreso != None else 0
         respuesta['ingreso_otro'] +=  ingresototal
-        #ingresototal = consulta.aggregate(total=Avg('otrosingreso__ingreso_total'))['total']
+        #ingresototal = consulta.aggregate(total=Avg('otrosingresos__ingreso_total'))['total']
         matriz[key] = {'frecuencia':frecuencia,'meses':meses,
                        'ingreso':ingreso,'ingresototal':ingresototal}
                        
     respuesta['brutoo'] = round((respuesta['ingreso_total'] + respuesta['ingreso_otro']) / num_familias,2)
     respuesta['total_neto'] = round(respuesta['brutoo'] * 0.6,2)
         
-    return render_to_response('achuapa/ingresos.html',
+    return render_to_response('encuesta/ingreso.html',
                               {'tabla':tabla,'num_familias':num_familias,'matriz':matriz,
                               'respuesta':respuesta},
                               context_instance=RequestContext(request))
@@ -584,7 +639,7 @@ def grafos_ingreso(request, tipo):
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'ingreso':
         for opcion in CHOICE_MANEJA:
-            data.append(consulta.filter(otrosingreso__tiene_ingreso=opcion[0]).count())
+            data.append(consulta.filter(otrosingresos__tiene_ingreso=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
                 'Quien tiene los ingresos', return_json=True,
@@ -734,7 +789,7 @@ def equipos(request):
         transporte[key] = {'frecuencia':frecuencia,'por_frecuencia':por_frecuencia,
                            'trans':trans,'por_trans':por_trans}
            
-    return render_to_response('achuapa/equipos.html', {'tabla':tabla,'totales':totales,
+    return render_to_response('encuesta/equipos.html', {'tabla':tabla,'totales':totales,
                               'num_familias':num_familia,'tabla_infra':tabla_infra,
                               'herramienta':herramienta,'transporte':transporte},
                                context_instance=RequestContext(request))
@@ -1072,7 +1127,7 @@ def seguridad_alimentaria(request):
                       'por_invierno':por_invierno}
                      
                       
-    return render_to_response('achuapa/seguridad.html',{'tabla':tabla,
+    return render_to_response('encuesta/seguridad.html',{'tabla':tabla,
                               'num_familias':num_familia},
                                context_instance=RequestContext(request))    
     
