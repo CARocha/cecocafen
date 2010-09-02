@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block title %}JFPS - Educación{% endblock %}
+{%block titulo%}La Educación{%endblock%}
+{% block contenido %}
+<div id="contenedor_servicio">
+    <a href="/salud" class="salud">Salud</a>
+    <a href="/educacion" class="educacion">Educación</a>
+    <a href="/agua"class="agua">Agua</a>
+    <a href="/luz"class="luz">Luz</a>
+</div>
+
+<table>
+ <thead>
+    <tr>
+        <th></th>
+        <th>Número total</th>
+        <th>No sabe leer</th>
+        <th>Primaria incompleta</th>
+        <th>Primaria completa</th>
+        <th>Secundaria incompleta</th>
+        <th>Secundaria completa</th>
+        <th>estudiante técnico o universitario</th>
+        <th>Técnica o universidad completa</th>
+    </tr>
+ </thead>
+    {%for fila in tabla_educacion%}
+    <tr>
+        {%for celda in fila %}
+            <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+
+</table>
+
+{% endblock %}

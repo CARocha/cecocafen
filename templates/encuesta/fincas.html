@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block title %}JFPS - Fincas{% endblock %}
+{%block extra_header%}
+<script type="text/javascript">
+    //si activo es 0 el html interno esta vacio
+    //caso si activo es otro num sustituir grafico
+    //si activo es el mismo id, esconder grafico
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/fincas/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+    $(document).ready(function() {
+    $("#grafico1").click(function(){
+        $("#grafico1").addClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+    });
+    
+    $("#grafico2").click(function(){
+        $("#grafico2").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+    });
+
+    $("#grafico3").click(function(){
+        $("#grafico3").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+    });
+});
+
+</script>
+{%endblock%}
+{%block titulo%}Las Fincas{%endblock%}
+
+{% block contenido %}
+<div id="sidebar">
+    <div class="graficos_widget">
+        <h1>Gráficos</h1>
+        <a href="#" id="grafico1" onCLick="click_callback('tenencia')">Tenencia de las Parcelas</a>
+        <a href="#" id="grafico2" onCLick="click_callback('solares')">Tenencia de los solares</a>
+        <a href="#" id="grafico3" onCLick="click_callback('propietario')">Dueño de la Propiedad</a>
+    </div>
+</div>
+<div id="grafo"></div>
+<table>
+<caption>Las Fincas</caption>
+ <thead>
+    <tr>
+        <th></th>
+        <th>Número</th>
+        <th>%</th>
+        <th>Manzanas</th>
+        <th>%</th>
+    </tr>
+ </thead>
+    <tr>
+        <td>Area Total</td>
+        <td>{{totales.numero}}</td>
+        <td>{{totales.porcentaje_num}}</td>
+        <td>{{totales.manzanas}}</td>
+        <td>{{totales.porcentaje_mz}}</td>
+    </tr>
+    {%for key, value in tabla.items%}
+    <tr>
+        <td>{{key|unslugify}}</td>
+        <td>{{value.numero|floatformat}}</td>
+        <td>{{value.porcentaje_num|floatformat}}</td>
+        <td>{{value.manzanas|floatformat}}</td>
+        <td>{{value.porcentaje_mz|floatformat}}</td>
+    </tr>
+    {%endfor%}
+</table>
+
+
+{% endblock %}

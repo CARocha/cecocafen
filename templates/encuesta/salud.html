@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block title %}JFPS - Salud{% endblock %}
+{%block titulo%}La Salud{%endblock%}
+{%block extra_header%}
+<script type="text/javascript">
+    //si activo es 0 el html interno esta vacio
+    //caso si activo es otro num sustituir grafico
+    //si activo es el mismo id, esconder grafico
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/salud/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+$(document).ready(function() {
+    $("#grafico1").click(function(){
+        $("#grafico1").addClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+    });
+    
+    $("#grafico2").click(function(){
+        $("#grafico2").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+    });
+
+    $("#grafico3").click(function(){
+        $("#grafico3").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+    });
+    $("#grafico4").click(function(){
+        $("#grafico4").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+    });
+
+    $("#grafico5").click(function(){
+        $("#grafico5").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+    });
+
+    $("#grafico6").click(function(){
+        $("#grafico5").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+    });
+});
+</script>
+{%endblock%}
+{% block contenido %}
+<div id="contenedor_servicio">
+    <a href="/salud" class="salud">Salud</a>
+    <a href="/educacion" class="educacion">Educación</a>
+    <a href="/agua"class="agua">Agua</a>
+    <a href="/luz"class="luz">Luz</a>
+</div>
+    <div class="graficos_widget">
+        <h1>Graficos </h1>
+        <a id="grafico1" href="#" onCLick="click_callback(1)">Hombres de mas de 15 años</a>
+        <a id="grafico2" href="#" onCLick="click_callback(2)">Mujeres de mas de 15 años</a>
+        <a id="grafico3" href="#" onCLick="click_callback(3)">Hombres de 7 a 15 años</a>
+        <a id="grafico4" href="#" onCLick="click_callback(4)">Mujeres de 7 a 15 años</a>
+        <a id="grafico5" href="#" onCLick="click_callback(5)">Niños menor de 6 años</a>
+        <a id="grafico6" href="#" onCLick="click_callback(6)">Niñas menores de 6 años</a>
+    </div>
+<div id="grafo"></div>
+<table>
+ <thead>
+    <tr>
+        <th></th>
+        <th>Frecuencia de consulta por edad</th>
+        <th>%Buena Salud</th>
+        <th>%Salud Delicada</th>
+        <th>%Enfermedades Crónica</th>
+    </tr>
+ </thead>
+    {% for fila in tabla_estado%}
+    <tr>
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+</table>
+
+<table>
+ <thead>
+    <tr>
+        <th></th>
+        <th>Frecuencia de consulta por edad</th>
+        <th>%Visita Centro de Salud</th>
+        <th>%Visita Médico Privado</th>
+        <th>%Visita Clínica</th>
+        <th>Número de veces que no logra atención por año</th>
+    </tr>
+ </thead>
+    {% for fila in tabla_sitio%}
+    <tr>
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+</table>
+
+
+{% endblock %}
