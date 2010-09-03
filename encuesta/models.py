@@ -495,7 +495,7 @@ class Destinar(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     servicios = models.IntegerField(choices=CHOICE_DESTINAR,null=True, blank=True)
-    cuanto = models.IntegerField('Del 100% que percibe cuanto destina',null=True, blank=True)
+    cuanto = models.DecimalField('Del 100% que percibe cuanto destina',max_digits=10,decimal_places=2,null=True, blank=True)
     class Meta:
         verbose_name_plural = "Destinar"
         
