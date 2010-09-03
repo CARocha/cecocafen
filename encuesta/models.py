@@ -80,6 +80,7 @@ class AdmonActual(models.Model):
      
 CHOICE_OPCION = ((1,"Si"),(2,"No"))
 CHOICE_DESDE = ((1,"Menos de 5 año"),(2,"Mas de 5 años"),(3,"Hombres"),(4,"Mujeres"),(5,"Jóvenes"))
+CHOICE_DESDE_ORGA = ((1,"Menos de 5 año"),(2,"Mas de 5 años"))
 
 class Organizacion(models.Model):
     ''' parte de la Organizacion de la cooperativa de achuapa
@@ -88,25 +89,25 @@ class Organizacion(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION, null=True, blank=True)
-    desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE,null=True, blank=True)
+    desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA,null=True, blank=True)
     #pertenecer = models.CharField('Cooperativa a la que pertenezco', max_length=200, null=True, blank=True)
     socio_cooperativa = models.IntegerField('Mi esposa/esposo es socio(a) de la cooperativa',
                                              choices=CHOICE_OPCION,null=True, blank=True)
-    desde_socio_coop = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_socio_coop = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     hijos_socios = models.IntegerField('Mis Hijos/hijas son socio(as) de la cooperativa', 
                                         choices=CHOICE_OPCION, null=True, blank=True)
-    desde_hijo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_hijo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     beneficio = models.ManyToManyField(Beneficios, verbose_name="Beneficios obtenidos", null=True, blank=True)
     miembro = models.IntegerField('Es miembro del consejo de administracion', 
                                    choices=CHOICE_OPCION, null=True, blank=True)
-    desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     conformado = models.ManyToManyField(AdmonActual, verbose_name="El consejo Admon actual esta conformado por", null=True, blank=True, related_name='conformado')
     conformarse = models.ManyToManyField(AdmonActual, verbose_name="Está de acuerdo que el consejo de Admón esté conformado por", null=True, blank=True)
     miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, null=True, blank=True)
-    desde_trabajo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_trabajo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     cargo = models.IntegerField('He recibido capacitación para desempeñar mi cargo', 
                                  choices=CHOICE_OPCION, null=True, blank=True)
-    desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, null=True, blank=True)
     quiero_miembro_junta = models.ManyToManyField(PorqueMiembro, verbose_name="Por qué queire ser miembro consejo", null=True, blank=True)
     class Meta:
@@ -231,16 +232,17 @@ class ActividadConservacion(models.Model):
     class Meta:
         verbose_name_plural = "Conservacion-ActividadConservacion"
 
+CHOICE_CONSER = (((1,'Si'),(2,'No')))
 class Conservacion(models.Model):
     ''' Modelo conservacion de suelo y agua en la finca
     '''
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    cocinar = models.ManyToManyField(Combustible, verbose_name="¿Qué utiliza para cocinar")
-    actividad = models.IntegerField('Ha hecho alguna actividad para la conservación de los suelos y agua en su finca?',choices=((1,'Si'),(2,'No')))
-    cuales = models.ManyToManyField(ActividadConservacion, verbose_name="Cuales?")
-    cuanto = models.DecimalField('Cuanto',max_digits=10,decimal_places=2, help_text="En Metros")
+    cocinar = models.ManyToManyField(Combustible, verbose_name="¿Qué utiliza para cocinar",null=True, blank=True )
+    actividad = models.IntegerField('Ha hecho alguna actividad para la conservación de los suelos y agua en su finca?',choices=CHOICE_CONSER,null=True, blank=True)
+    cuales = models.ManyToManyField(ActividadConservacion, verbose_name="Cuales?",null=True, blank=True)
+    cuanto = models.DecimalField('Cuanto',max_digits=10,decimal_places=2, help_text="En Metros",null=True, blank=True)
     class Meta:
         verbose_name_plural = "Conservacion"
     
@@ -364,7 +366,7 @@ class FincaAnimales(models.Model):
         
 #post cosecha, de los alimentos que produce cuanto almacena, como lo almacena, quien es el responsable
 
-CHOICE_COSECHA = ((1,'Hombre'),(2,'Mujer'),(3,'Hijos'))
+CHOICE_COSECHA = ((1,'Hombre'),(2,'Mujer'),(3,'Hijos'),(4,'Hombre-Hijos'),(5,'Mujer-Hijos'),(6,'Hombre-Mujer'),(7,'Todos'))
 
 class TipoAlmacenaje(models.Model):
     nombre = models.CharField(max_length=200)
@@ -383,7 +385,7 @@ class Postcosecha(models.Model):
     producto = models.ForeignKey(Cultivos)
     responsable = models.IntegerField(choices=CHOICE_COSECHA, null=True, blank=True)
     cantidad = models.IntegerField('Cantidad almacenada qq/und',null=True, blank=True)
-    tipo = models.ForeignKey(TipoAlmacenaje, related_name='Tipo de almacenaje', null=True, blank=True)
+    tipo = models.ManyToManyField(TipoAlmacenaje, related_name='Tipo de almacenaje', null=True, blank=True)
     class Meta:
         verbose_name_plural = "Postcosecha"
         
@@ -414,7 +416,7 @@ class Problema(models.Model):
        
         
 #Ingreso familiar
-CHOICE_VENDIO = ((1,"Comunidad"),(2,"Intermediario"),(3,"Ferias"),(4,"Cooperativa"),(5,'C-I'),(6,'I-F'),(7,'F-Coop'),(8,'Todos'))
+CHOICE_VENDIO = ((1,"Comunidad"),(2,"Intermediario"),(3,"Ferias"),(4,"Cooperativa"),(5,'C-I'),(6,'I-F'),(7,'F-Coop'),(8,'Todos'),(9,'C-Coop'))
 CHOICE_MANEJA = ((1,"Hombre"),(2,"Mujer"),(3,"Ambos"),(4,"Hijos/as"),(5,'Hombre-Hijos'),(6,'Mujer-Hijos'),(7,'Todos'))
 class Rubros(models.Model):
     nombre = models.CharField(max_length=50)
@@ -863,50 +865,6 @@ class Enfermedades(models.Model):
     hijo = models.IntegerField('Hijos ó Hijas', choices=((1,'Si'),(2,'No')), null=True, blank=True)
     companero = models.IntegerField('Compañero ó compañera', choices=((1,'Si'),(2,'No')), null=True, blank=True)
     
-        
-#Modelo salud fisica
-#CHOICE_SALUD = ((1,"Semanal"),(2,"Quinsenal"),(3,"Mensual"),(4,"Semestral"),(5,"Trimestral"),(6,"Anual"))
-#CHOICE_VISITA = ((1,'Si'),(2,'No')) 
-#SEXO_CHOICES=((1,'Hombre mas de 15 años'),(2,'Mujeres mas de 15 años'),(3,'Hombres de 7 a 15 años'),(4,'Mujeres de 7 a 15 años'),(5,'Niños menos de 6 años'),(6,'Niñas menos de 6 años'))
-#       
-#class Salud(models.Model):
-#    ''' Modelo de salud fisica
-#    '''
-#    content_type = models.ForeignKey(ContentType)
-#    object_id = models.IntegerField(db_index=True)
-#    content_object = generic.GenericForeignKey()
-#    edad = models.IntegerField(choices=SEXO_CHOICES)
-#    buena_salud = models.IntegerField('# Tiene buena salud', null=True, blank=True)
-#    delicada_salud = models.IntegerField('# Tiene salud delicada', null=True, blank=True)
-#    cronica = models.IntegerField('# Tiene enfermedad cronica', null=True, blank=True)
-#    centro = models.IntegerField('Visita centro de salud', choices=CHOICE_VISITA, null=True, blank=True)
-#    medico = models.IntegerField('Visita medico privado', choices=CHOICE_VISITA, null=True, blank=True)
-#    clinica = models.IntegerField('Visita clinica de cooperativa', choices=CHOICE_VISITA, null=True, blank=True)
-#    nologra = models.IntegerField('# veces en año necesitaban algun servicio de salud y no lograron obtenerlo', null=True, blank=True)
-#    frecuencia = models.IntegerField('Con que frecuencia vista la medico', choices= CHOICE_SALUD, null=True ,blank=True)
-#    
-#    class Meta:
-#        verbose_name_plural = "Salud"
-#        
-##Modelo Salud reproductiva
-
-#CHOICE_REPRO = ((1,'Hombre más de 15 años'), (2,'Hombre de 7 a 15 años'),(3,'Mujeres más de 15 años'), (4,'Mujeres de 7 a 15 años'))
-
-#class Reproduccion(models.Model):
-#    '''
-#        Modelo salud reproductiva hombres y mujeres
-#    '''
-#    content_type = models.ForeignKey(ContentType)
-#    object_id = models.IntegerField(db_index=True)
-#    content_object = generic.GenericForeignKey()
-#    persona = models.IntegerField(choices=CHOICE_REPRO)
-#    buena_salud = models.IntegerField('# Tiene buena salud', null=True, blank=True)
-#    tuvo_ets = models.IntegerField('# que tuvo alguna enfermedad de trasmision sexual', null=True, blank=True)
-#    sufre_ets = models.IntegerField('# que actualmente sufre de alguna enfermedad de trasmision sexual', null=True, blank=True)
-#    centro = models.IntegerField('Visita centro de salud o Hospital', choices=CHOICE_VISITA, null=True, blank=True)
-#    medico = models.IntegerField('Visita medico privado', choices=CHOICE_VISITA, null=True, blank=True)
-#    automedica = models.IntegerField('Se medica solo con apoyo de farmacia o familiar', choices=CHOICE_VISITA, null=True, blank=True)
-    
 #Modelo Información para cáncer cervicouterino
 class PreguntaCancer(models.Model):
     pregunta = models.CharField(max_length=200)
@@ -932,24 +890,6 @@ class Cancer(models.Model):
     class Meta:
         verbose_name_plural = "Cancer"
     
-#CANCER_MUJERES = ((1,'Mujeres de 15 a 30 años'),(2,'Mujeres de 31 a 55 años'))
-#TRATA_CANCER = ((1,'Hospital'),(2,'Clinica privada'))
-
-#class Cancer(models.Model):
-#    '''
-#        Modelo cancer
-#    '''
-#    content_type = models.ForeignKey(ContentType)
-#    object_id = models.IntegerField(db_index=True)
-#    content_object = generic.GenericForeignKey()
-#    personas = models.IntegerField(choices= CANCER_MUJERES)
-#    buena_salud = models.IntegerField('# Tiene buena salud', null=True, blank=True)
-#    menstrual = models.IntegerField('# que tiene transtorno en ciclo menstrual sufriendo hemorragia y dolor',  null=True, blank=True)
-#    sospecha_cancer = models.IntegerField('# sospecha algun tipo de cancer(pecho o uterino)', null=True, blank=True)
-#    diagnotiscado = models.IntegerField('# Tiene diagnosticado algún tipo de cancer', null=True, blank=True)
-#    tratamiento = models.IntegerField('# Recibe tratamiento para algun tipo de cáncer', null=True, blank=True)
-#    donde_tratamiento = models.IntegerField('A donde esta recibiendo el tratamiento',choices=TRATA_CANCER, null=True, blank=True)
-    
 #Modelo salud mental para las mujeres
 class PreguntaMental(models.Model):
     nombre = models.CharField(max_length=200)
@@ -973,7 +913,7 @@ class Mental(models.Model):
         verbose_name_plural = "Salud Mental mujeres"
     
 #Indicador de desarrollo educativo, particpativo e incidencia y comunicacion de las y los jovenes
-CHOICE_JOVEN_EDUCACION = ((1,'Hombre adultos más de 15 años'),(2,'Mujeres adultas más de 15 años'),(3,'Hombres jóvenes de 7 a 15 años'),(4,'Mujeres jóvenes más de quince años'),(5,'Niños de 1 a 6 años'),(6,'Niñas de 1 a 6 años'))
+CHOICE_JOVEN_EDUCACION = ((1,'Hombre adultos más de 15 años'),(2,'Mujeres adultas más de 15 años'),(3,'Hombres jóvenes de 7 a 15 años'),(4,'Mujeres jóvenes de 7 a 15 años'),(5,'Niños de 1 a 6 años'),(6,'Niñas de 1 a 6 años'))
 
 class EducacionJovenes(models.Model):   
     '''
@@ -997,11 +937,7 @@ class EducacionJovenes(models.Model):
         verbose_name_plural = "Educación"
     
 #Modelo pregunta dirigidas a los y las jovenes de la familia
-#class PreguntaJoven(models.Model):
-#    pregunta = models.CharField(max_length=200)
-#    def __unicode__(self):
-#        return self.pregunta
-        
+
 class BeneficioJoven(models.Model):
     beneficio = models.CharField(max_length=200)
     def __unicode__(self):
@@ -1024,64 +960,25 @@ class Jovenes(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION,null=True, blank=True)
-    desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE,null=True, blank=True)
+    desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA,null=True, blank=True)
     promotor = models.IntegerField('Es promotor de su cooperativa?', choices=CHOICE_OPCION,null=True, blank=True)
     beneficio = models.ManyToManyField(BeneficioJoven, verbose_name="Beneficios obtenidos", null=True, blank=True)
     miembro = models.IntegerField('Es miembro del consejo de administracion', 
                                    choices=CHOICE_OPCION, null=True, blank=True)
-    desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE,null=True, blank=True)
-    conformado = models.IntegerField('El consejo de admón actual esta conformado por', choices=CHOICE_DESDE, null=True, blank=True)
-    conformarse = models.IntegerField('El consejo de admón debe conformarse por', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA,null=True, blank=True)
+    conformado = models.ManyToManyField(AdmonActual, verbose_name="El consejo Admon actual esta conformado por", null=True, blank=True, related_name='conformados')
+    conformarse = models.ManyToManyField(AdmonActual, verbose_name="El consejo de admón debe conformarse por", null=True, blank=True,related_name='conformarse')
     miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, null=True, blank=True)
-    desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     cargo = models.IntegerField('He recibido capacitación para desempeñar mi cargo', 
                                  choices=CHOICE_OPCION, null=True, blank=True)
-    desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE, null=True, blank=True)
+    desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, null=True, blank=True)
     quiero_miembro_junta = models.ManyToManyField(MiembroJoven, verbose_name="Quiero ser miembro del consejo admin o comisión", null=True, blank=True)
     class Meta:
         verbose_name_plural = "Jovenes"
     
-#Vision del futuro
-#class Quedar(models.Model):
-#    nombre = models.CharField(max_length=200)
-#    def __unicode__(self):
-#        return self.nombre
-#        
-#class NoQuedar(models.Model):
-#    nombre = models.CharField(max_length=200)
-#    def __unicode__(self):
-#        return self.nombre
-#CHOICE_FUTURO = ((1,'Si'),(2,'No'),(3,'No estoy seguro'))
 
-#class VisionFuturoJovenes(models.Model):
-#    '''
-#        Modelo visión del futuro
-#    '''
-#    content_type = models.ForeignKey(ContentType)
-#    object_id = models.IntegerField(db_index=True)
-#    content_object = generic.GenericForeignKey()
-#    viviendo = models.IntegerField('De aqui a 5 años los y las jóvenes de la familia todavia estarían viviendo en la finca', choices=CHOICE_FUTURO, null=True, blank=True)
-#    quedar = models.ManyToManyField(Quedar, verbose_name="Porque se van a quedar", null=True, blank=True)
-#    no_quedar = models.ManyToManyField(NoQuedar, verbose_name="Porque no se van a quedar", null=True, blank=True)
-#    
-##Actividades recreativas
-#CHOICE_JOVEN_ACTIVIDAD = ((1,'Adolecentes hombres(12 a 17 años)'),(2,'Adolecentes mujeres(12 a 17 años)'),(3,'Niños(menos de 12 años)'),(4,'Niñas(menos de 12 años)'))
-#ACTI_CHOICE =((1,'Si'),(2,'No'))
-#class ActividadesJovenes(models.Model):
-#    '''
-#        Modelo actividades recreativas 
-#    '''
-#    content_type = models.ForeignKey(ContentType)
-#    object_id = models.IntegerField(db_index=True)
-#    content_object = generic.GenericForeignKey()
-#    actividades = models.IntegerField(choices=CHOICE_JOVEN_ACTIVIDAD)
-#    biblioteca = models.IntegerField('Acceso a biblioteca rural',choices=ACTI_CHOICE, null=True, blank=True)
-#    deporte = models.IntegerField('Practicar deportes',choices=ACTI_CHOICE, null=True, blank=True)
-#    eventos = models.IntegerField('Asistir a eventos recreativos',choices=ACTI_CHOICE, null=True, blank=True)
-#    iglesia = models.IntegerField('Asistir a la iglesia',choices=ACTI_CHOICE, null=True, blank=True)
-#    television = models.IntegerField('Ver televisión y peliculas',choices=ACTI_CHOICE, null=True, blank=True)
-#    internet = models.IntegerField('Utilizar Internet',choices=ACTI_CHOICE, null=True, blank=True)
     
 # Inicio de la tabla que controla todos los indicadores
 
@@ -1102,12 +999,9 @@ class Encuesta(models.Model):
     conservacion = generic.GenericRelation(Conservacion)
     abono = generic.GenericRelation(Abono)
     compra = generic.GenericRelation(Compra)
-#    vision = generic.GenericRelation(VisionFuturo)
-#    actividades = generic.GenericRelation(Actividades)
     tenencia = generic.GenericRelation(Tenencia)
     tierra = generic.GenericRelation(Tierra)
     reforestacion = generic.GenericRelation(Reforestacion)
-    #conservacion = generic.GenericRelation(Conservacion)
     cultivos = generic.GenericRelation(CultivosFinca)
     finca = generic.GenericRelation(FincaAnimales)
     postcosecha = generic.GenericRelation(Postcosecha)
@@ -1130,14 +1024,11 @@ class Encuesta(models.Model):
     ahorro = generic.GenericRelation(Ahorro)
     credito = generic.GenericRelation(Credito)
     salud = generic.GenericRelation(Salud)
-#    reproduccion = generic.GenericRelation(Reproduccion)
     enfermedad = generic.GenericRelation(Enfermedades)
     cancer = generic.GenericRelation(Cancer)
     mental = generic.GenericRelation(Mental)
     educacion_jovenes = generic.GenericRelation(EducacionJovenes)
     jovenes = generic.GenericRelation(Jovenes)
-#    vision_jovenes = generic.GenericRelation(VisionFuturoJovenes)
-#    actividades_jovenes = generic.GenericRelation(ActividadesJovenes)
     
     def __unicode__(self):
         return self.datos.all()[0].nombre
