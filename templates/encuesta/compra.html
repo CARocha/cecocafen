@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block contenido %}
+    numero familia = {{num_familias}}
+<table border="1">
+<caption>Las Compra</caption>
+ <thead>
+    <tr>
+        <th>Tipo de abono</th>
+        <th>Unidad</th>
+        <th>¿Cuanto hace?</th>
+        <th>¿Cuanto compra?</th>
+        <th>¿cuanto aplica?</th>
+    </tr>
+  </thead>
+    {%for key, value in tabla.items%}
+    <tr>
+        <td>{{value.pulpa|floatformat}}</td>
+        
+    </tr>
+    {%endfor%}
+</table>
+{% endblock %}

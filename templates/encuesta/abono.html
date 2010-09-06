@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block contenido %}
+    numero familia = {{num_familias}}
+<table border="1">
+<caption>Los Abonos</caption>
+ <thead>
+    <tr>
+        <th></th>
+        <th>si</th>
+        <th>%</th>
+        <th>no</th>
+        <th>%</th>
+        <th>Pulpa %</th>
+        <th>Estiercole %</th>
+        <th>Gallinazo %</th>
+        <th>Composta %</th>
+        <th>Lombrice %</th>
+        <th>Bocachi %</th>
+        <th>Foliar %</th>
+        <th>Abono verde %</th>
+        <th>Hojas y rastrajos %</th>
+        <th>15 %</th>
+        <th>20 %</th>
+        <th>18 %</th>
+        <th>urea %</th>
+    </tr>
+  </thead>
+    {%for key, value in tabla.items%}
+    <tr>
+        <td>{{key|unslugify}}</td>
+        <td>{{value.si|floatformat}}</td>
+        <td>{{value.porcentaje_si|floatformat}}</td>
+        <td>{{value.no|floatformat}}</td>
+        <td>{{value.porcentaje_no|floatformat}}</td>
+        <td>{{value.porcentaje_pulpa|floatformat}}</td>
+        <td>{{value.porcentaje_estiercol|floatformat}}</td>
+        <td>{{value.porcentaje_gallinaza|floatformat}}</td>
+        <td>{{value.porcentaje_composta|floatformat}}</td>
+        <td>{{value.porcentaje_lombrices|floatformat}}</td>
+        <td>{{value.porcentaje_bocachi|floatformat}}</td>
+        <td>{{value.porcentaje_foliar|floatformat}}</td>
+        <td>{{value.porcentaje_verde|floatformat}}</td>
+        <td>{{value.porcentaje_hojas|floatformat}}</td>
+        <td>{{value.porcentaje_quince|floatformat}}</td>
+        <td>{{value.porcentaje_veinte|floatformat}}</td>
+        <td>{{value.porcentaje_seis|floatformat}}</td>
+        <td>{{value.porcentaje_urea|floatformat}}</td>
+    </tr>
+    {%endfor%}
+</table>
+{% endblock %}
