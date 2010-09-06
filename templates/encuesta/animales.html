@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block title %}JFPS - Fincas{% endblock %}
+{%block titulo%}Los Animales{%endblock%}
+{% block contenido %}
+<table>
+<caption>Los Animales</caption>
+ <thead>
+    <tr>
+        <th></th>
+        <th>Número</th>
+        <th>%</th>
+        <th>cantidad</th>
+        <th>Cantidad/Familia</th>
+    </tr>
+ </thead>
+    <tr>
+        <td>TOTAL</td>
+        <td>{{totales.numero}}</td>
+        <td>{{totales.porcentaje_num}}</td>
+        <td>{{totales.animales}}</td>
+        <td>{{totales.porcentaje_animal}}</td>
+    </tr>
+    {%for fila in tabla%}
+    <tr>
+        {%for celda in fila%}
+            <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+</table>
+
+<table>
+<caption>Los Animales y la Producción </caption>
+ <thead>
+    <tr>
+        <th>Animal</th>
+        <th>Cantidad</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Cantidad Producida</th>
+        <th>Consumo</th>
+        <th>Venta Libre</th>
+        <th>Venta organizada</th>
+    </tr>
+ </thead>
+    {%for fila in tabla_produccion%}
+    <tr>
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+</table>
+
+
+
+{% endblock %}

@@ -47,7 +47,7 @@ class DatosGenerales(models.Model):
     comunidad = models.ForeignKey(Comunidad)
     coor_lt = models.DecimalField('Coordenadas Latitud',max_digits=24,decimal_places=16, null=True, blank=True)
     coor_lg = models.DecimalField('Coordenadas Longitud',max_digits=24,decimal_places=16, null=True, blank=True)
-    tecnologia = models.ManyToManyField(Tecnologia,verbose_name="Tecnologia productiva en café", null=True, blank=True)
+    tecnologia = models.ManyToManyField(Tecnologia,verbose_name="Tecnología productiva en café", null=True, blank=True)
     certificacion = models.ManyToManyField(Certificacion,verbose_name="Tipo de certificación en café", null=True, blank=True)
     def __unicode__(self):
         return self.nombre

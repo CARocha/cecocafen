@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{%load unslugify %}
+{% block title %}JFPS - Luz{% endblock %}
+{%block titulo%}Luz{%endblock%}
+{% block contenido %}
+<div id="contenedor_servicio">
+    <a href="/salud" class="salud">Salud</a>
+    <a href="/educacion" class="educacion">Educación</a>
+    <a href="/agua"class="agua">Agua</a>
+    <a href="/luz"class="luz">Luz</a>
+</div>
+<table>
+ <thead>
+    <tr>
+        <th>Fuente</th>
+        <th>Frecuencia</th>
+        <th>%</th>
+    </tr>
+ </thead>
+    {% for fila in tabla%}
+    <tr>
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+</table>
+
+{% endblock %}

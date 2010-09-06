@@ -15,6 +15,7 @@ from forms import *
 from lugar.models import *
 from decimal import Decimal
 from utils import grafos
+from utils import *
 
 def _get_view(request, vista):
     if vista in VALID_VIEWS:
@@ -296,7 +297,7 @@ def organizacion(request):
             tabla_beneficio[sexo].append(calcular_negativos(hombres[llave], hombres['num'], False))
             tabla_beneficio[sexo].append(calcular_negativos(hombres[llave], hombres['num']))
     
-    return render_to_response('achuapa/organizacion.html', 
+    return render_to_response('encuesta/organizacion.html', 
                               {'tabla_socio': tabla_socio, 'num_familias': consulta.count(),
                                'tabla_beneficio': tabla_beneficio},
                               context_instance=RequestContext(request))
@@ -350,7 +351,7 @@ def fincas(request):
                       'manzanas': manzanas, 'porcentaje_mz': porcentaje_mz}
 
     
-    return render_to_response('achuapa/fincas.html', 
+    return render_to_response('encuesta/fincas.html', 
                               {'tabla':tabla, 'totales': totales},
                               context_instance=RequestContext(request))
 
@@ -438,7 +439,7 @@ def arboles(request):
                       'porcentaje_nonativos': porcentaje_nonativos,'nonativos':nonativos }
         
     
-    return  render_to_response('achuapa/arboles.html',
+    return  render_to_response('encuesta/arboles.html',
                               {'num_familias':num_familias,'maderable':maderable,
                                'forrajero':forrajero,'energetico':energetico,'frutal':frutal,
                                'pro_maderable':pro_maderable,'pro_forrajero':pro_forrajero,
@@ -517,7 +518,7 @@ def cultivos(request):
         organizada =query.aggregate(organizada=Sum('cultivosfinca__venta_organizada'))['organizada']
         tabla[key] = {'key2':key2,'totales':totales,'consumo':consumo,'libre':libre,'organizada':organizada}
     #*******************************************
-    return render_to_response('achuapa/cultivos.html',
+    return render_to_response('encuesta/cultivos.html',
                              {'tabla':tabla,'num_familias':num_familias},
                              context_instance=RequestContext(request))        
 
@@ -531,19 +532,23 @@ def animales(request):
 
     totales['numero'] = consulta.count() 
     totales['porcentaje_num'] = 100
-    totales['animales'] = consulta.aggregate(cantidad=Sum('fincaproduccion__cantidad'))['cantidad']
+    totales['animales'] = consulta.aggregate(cantidad=Sum('finca__cantidad'))['cantidad']
     totales['porcentaje_animal'] = 100
 
     for animal in Animales.objects.all():
-        query = consulta.filter(fincaproduccion__animales = animal)
+        query = consulta.filter(finca__animales = animal)
         numero = query.distinct().count()
-        producto = FincaProduccion.objects.filter(animales = animal)[0].producto
+        try:
+            producto = FincaAnimales.objects.filter(animales = animal)[0].produccion
+        except:
+            #el animal no tiene producto aún
+            continue
+
         porcentaje_num = saca_porcentajes(numero, totales['numero'], False)
-        animales = query.aggregate(cantidad = Sum('fincaproduccion__cantidad'),
-                                   venta_libre = Sum('fincaproduccion__venta'),
-                                   venta_organizada = Sum('fincaproduccion__venta_organizada'),
-                                   consumo = Sum('fincaproduccion__consumo'),
-                                   produccion = Sum('fincaproduccion__total_produccion'))
+        animales = query.aggregate(cantidad = Sum('finca__cantidad'),
+                                   venta_libre = Sum('finca__venta_libre'),
+                                   venta_organizada = Sum('finca__venta_organizada'),
+                                   consumo = Sum('finca__consumo'))
         try:
             animal_familia = animales['cantidad']/float(numero) 
         except:
@@ -553,10 +558,10 @@ def animales(request):
                       animales['cantidad'], animal_familia])
         tabla_produccion.append([animal.nombre, animales['cantidad'], 
                                  producto.nombre, producto.unidad, 
-                                 animales['produccion'], animales['consumo'], 
+                                 animales['consumo'], 
                                  animales['venta_libre'], animales['venta_organizada']])
 
-    return render_to_response('achuapa/animales.html', 
+    return render_to_response('encuesta/animales.html', 
                               {'tabla':tabla, 'totales': totales, 
                                'num_familias': consulta.count(),
                                'tabla_produccion': tabla_produccion},
@@ -799,15 +804,15 @@ def ahorro_credito(request):
     ''' ahorro y credito'''
     #ahorro
     consulta = _queryset_filtrado(request)
-    tabla_ahorro = []
-    totales_ahorro = {}
+    #tabla_ahorro = []
+    #totales_ahorro = {}
 
-    columnas_ahorro = ['Si', '%']
+    #columnas_ahorro = ['Si', '%']
 
-    for pregunta in AhorroPregunta.objects.exclude(id__in=[3, 5]):
-        #opciones solo si
-        subquery = consulta.filter(ahorro__ahorro = pregunta, ahorro__respuesta = 1).count()
-        tabla_ahorro.append([pregunta.nombre, subquery, saca_porcentajes(subquery, consulta.count(), False)])
+    #for pregunta in AhorroPregunta.objects.exclude(id__in=[3, 5]):
+    #    #opciones solo si
+    #    subquery = consulta.filter(ahorro__ahorro = pregunta, ahorro__respuesta = 1).count()
+    #    tabla_ahorro.append([pregunta.nombre, subquery, saca_porcentajes(subquery, consulta.count(), False)])
 
     #credito
     tabla_credito= {}
@@ -826,11 +831,10 @@ def ahorro_credito(request):
     tabla_credito['mas'] = [mas, saca_porcentajes(mas, totales_credito['numero'])] 
     tabla_credito['al_dia'] = [al_dia, saca_porcentajes(al_dia, totales_credito['numero'])] 
 
-    dicc = {'tabla_ahorro':tabla_ahorro, 'columnas_ahorro': columnas_ahorro, 
-            'totales_ahorro': totales_ahorro, 'tabla_credito': tabla_credito,
+    dicc = {'tabla_credito': tabla_credito,
             'num_familias': consulta.count()}
 
-    return render_to_response('achuapa/ahorro_credito.html', dicc,
+    return render_to_response('encuesta/ahorro_credito.html', dicc,
                               context_instance=RequestContext(request))
 
 @session_required
@@ -878,7 +882,7 @@ def ahorro_credito_grafos(request, tipo):
 def servicios(request):
     '''servicios: educacion, salud, agua, luz'''
     familias = _queryset_filtrado(request).count()
-    return render_to_response('achuapa/servicios.html',
+    return render_to_response('encuesta/servicios.html',
                               {'num_familias': familias}, 
                               context_instance=RequestContext(request))
     
@@ -892,25 +896,27 @@ def educacion(request):
     totales_educacion = {}
     totales_no = {}
 
-    totales_educacion['numero'] = consulta.aggregate(numero=Sum('educacion__num_total'))['numero'] 
+    totales_educacion['numero'] = consulta.aggregate(numero=Sum('educacion_jovenes__n_total'))['numero'] 
     totales_educacion['porcentaje_num'] = 100
-    totales_no['numero'] = consulta.aggregate(numero=Sum('noeducacion__numero'))['numero'] 
-    totales_no['porcentaje_num'] = 100
+    #totales_no['numero'] = consulta.aggregate(numero=Sum('noeducacion__numero'))['numero'] 
+    #totales_no['porcentaje_num'] = 100
     
-    for choice in CHOICE_NINOS_EDUCACION:
-        fila = [] #etiqueta, razon, porcentaje
-        fila.append(choice[1])
-        numero = consulta.filter(noeducacion__no_asisten=choice[0]).aggregate(numero=Sum('noeducacion__numero'))['numero']
-        fila.append(numero)
-        fila.append(saca_porcentajes(numero, totales_no['numero']))
-        tabla_no.append(fila)
+    #for choice in CHOICE_NINOS_EDUCACION:
+    #    fila = [] #etiqueta, razon, porcentaje
+    #    fila.append(choice[1])
+    #    numero = consulta.filter(noeducacion__no_asisten=choice[0]).aggregate(numero=Sum('noeducacion__numero'))['numero']
+    #    fila.append(numero)
+    #    fila.append(saca_porcentajes(numero, totales_no['numero']))
+    #    tabla_no.append(fila)
 
-    for choice in SEXO_CHOICES:
-        objeto = consulta.filter(educacion__sexo_edad = choice[0]).aggregate(num_total = Sum('educacion__num_total'),
-                no_lee = Sum('educacion__no_lee'), pri_incompleta = Sum('educacion__pri_incompleta'), 
-                pri_completa = Sum('educacion__pri_completa'), secun_incompleta = Sum('educacion__secun_incompleta'),
-                secun_completa = Sum('educacion__secun_completa'), universitario = Sum('educacion__estudiante_universitario'),
-                tecnico_graduado = Sum('educacion__tecnico_graduado'))
+    for choice in CHOICE_JOVEN_EDUCACION:
+        objeto = consulta.filter(educacion_jovenes__persona = choice[0]).aggregate(num_total = Sum('educacion_jovenes__n_total'),
+                no_lee = Sum('educacion_jovenes__no_leer'), pri_incompleta = Sum('educacion_jovenes__pri_incompleta'), 
+                pri_completa = Sum('educacion_jovenes__pri_completa'), 
+                secun_incompleta = Sum('educacion_jovenes__secu_incompleta'),
+                secun_completa = Sum('educacion_jovenes__secu_completa'), 
+                universitario = Sum('educacion_jovenes__actualmente'),
+                tecnico_graduado = Sum('educacion_jovenes__tecnico'))
         fila = [choice[1], objeto['num_total'],
                 saca_porcentajes(objeto['no_lee'], objeto['num_total'], False),
                 saca_porcentajes(objeto['pri_incompleta'], objeto['num_total'], False),
@@ -921,8 +927,8 @@ def educacion(request):
                 saca_porcentajes(objeto['tecnico_graduado'], objeto['num_total'], False)]
         tabla_educacion.append(fila)
     
-    return render_to_response('achuapa/educacion.html', 
-                              {'tabla_no':tabla_no, 'totales_no': totales_no,
+    return render_to_response('encuesta/educacion.html', 
+                              {#'tabla_no':tabla_no, 'totales_no': totales_no,
                                'tabla_educacion':tabla_educacion, 
                                'totales_educacion': totales_educacion,
                                'num_familias': consulta.count()},
@@ -936,7 +942,7 @@ def salud(request):
     tabla_estado = []
     tabla_sitio = []
 
-    for choice in SEXO_CHOICES:
+    for choice in CHOICE_SEX:
         query = consulta.filter(salud__edad=choice[0])
         casos = query.count()
         resultados = query.aggregate(bs = Sum('salud__buena_salud'),
@@ -981,7 +987,7 @@ def salud(request):
                       resultados['nologra']]
         tabla_sitio.append(fila_sitio)
 
-    return render_to_response('achuapa/salud.html', 
+    return render_to_response('encuesta/salud.html', 
                               {'tabla_estado':tabla_estado, 
                                'tabla_sitio': tabla_sitio,
                                'num_familias': numero},
@@ -993,11 +999,11 @@ def salud_grafos(request, tipo):
     consulta = _queryset_filtrado(request)
     data = [] 
     legends = []
-    if int(tipo) in [numero[0] for numero in SEXO_CHOICES]:
+    if int(tipo) in [numero[0] for numero in CHOICE_SEX]:
         for opcion in CHOICE_SALUD:
             data.append(consulta.filter(salud__frecuencia=opcion[0], salud__edad = int(tipo)).count())
             legends.append(opcion[1])
-        titulo = 'Disponibilidad del salud para %s' % SEXO_CHOICES[int(tipo)-1][1]
+        titulo = 'Disponibilidad del salud para %s' % CHOICE_SEX[int(tipo)-1][1]
         return grafos.make_graph(data, legends, 
                 titulo, return_json = True,
                 type = grafos.PIE_CHART_3D)
@@ -1029,7 +1035,7 @@ def agua(request):
 
     #totales = [total['total'], 100, total['cantidad'], 100]
     totales = [consulta.count(), 100, total['cantidad'], 100]
-    return render_to_response('achuapa/agua.html', 
+    return render_to_response('encuesta/agua.html', 
                               #{'tabla':tabla, 'totales':totales},
                               {'tabla':tabla, 'num_familias': consulta.count()},
                               context_instance=RequestContext(request))
@@ -1096,7 +1102,7 @@ def luz(request):
                     saca_porcentajes(resultados, total_tiene_luz, False)]
             tabla.append(fila)
 
-    return render_to_response('achuapa/luz.html', 
+    return render_to_response('encuesta/luz.html', 
                               {'tabla':tabla, 'num_familias': consulta.count()},
                               context_instance=RequestContext(request))
 
@@ -1129,70 +1135,70 @@ def seguridad_alimentaria(request):
                       
     return render_to_response('encuesta/seguridad.html',{'tabla':tabla,
                               'num_familias':num_familia},
-                               context_instance=RequestContext(request))
-def abono(request):
-    ''' sobre uso del abono
-    '''
-    #--------- variables globales ----
-    a = _queryset_filtrado(request)
-    num_familias = a.count()
-    #---------------------------------
-    tabla = {}
-    
-    for k in CHOICE_PROD_ABONO:
-        key = (k[1]).replace('-','_')
-        query = a.filter(abono__producto = k[0])
-        frecuencia = query.count()
-        si = query.filter(abono__respuesta=1).count()
-        no = query.filter(abono__respuesta=2).count()
-        suma_sino = si + no
-        porcentaje_si = saca_porcentajes(si,suma_sino)
-        porcentaje_no = saca_porcentajes(no,suma_sino)
-        pulpa = query.filter(abono__pulpa=1).count()
-        porcentaje_pulpa = saca_porcentajes(pulpa,si)
-        estiercol = query.filter(abono__estiercol=1).count()
-        porcentaje_estiercol = saca_porcentajes(estiercol,si)
-        gallinaza = query.filter(abono__gallinaza=1).count()
-        porcentaje_gallinaza = saca_porcentajes(gallinaza,si)
-        composta = query.filter(abono__composta=1).count()
-        porcentaje_composta = saca_porcentajes(composta, si)
-        lombrices = query.filter(abono__lombrices=1).count()
-        porcentaje_lombrices = saca_porcentajes(lombrices, si)
-        bocachi = query.filter(abono__bocachi=1).count()
-        porcentaje_bocachi = saca_porcentajes(bocachi, si)
-        foliar = query.filter(abono__foliar=1).count()
-        porcentaje_foliar = saca_porcentajes(foliar, si)
-        verde = query.filter(abono__verde=1).count()
-        porcentaje_verde = saca_porcentajes(verde, si)
-        hojas = query.filter(abono__hojas=1).count()
-        porcentaje_hojas = saca_porcentajes(hojas, si)
-        quince = query.filter(abono__quince=1).count()
-        porcentaje_quince = saca_porcentajes(quince, si)
-        veinte = query.filter(abono__veinte=1).count()
-        porcentaje_veinte = saca_porcentajes(veinte, si)
-        seis = query.filter(abono__seis=1).count()
-        porcentaje_seis = saca_porcentajes(seis, si)
-        urea = query.filter(abono__urea=1).count()
-        porcentaje_urea = saca_porcentajes(urea, si)
-        tabla[key] = {'frecuencia':frecuencia, 'si':si, 'porcentaje_si':porcentaje_si,
-                      'no':no,'porcentaje_no':porcentaje_no,'pulpa':pulpa, 
-                      'porcentaje_pulpa':porcentaje_pulpa, 'estiercol':estiercol,
-                      'porcentaje_estiercol':porcentaje_estiercol,'gallinaza':gallinaza,
-                      'porcentaje_gallinaza':porcentaje_gallinaza,'composta':composta,
-                      'porcentaje_composta':porcentaje_composta,'lombrices':lombrices,
-                      'porcentaje_lombrices':porcentaje_lombrices,'bocachi':bocachi,
-                      'porcentaje_bocachi':porcentaje_bocachi,'foliar':foliar,'porcentaje_foliar':
-                      porcentaje_foliar,'verde':verde,'porcentaje_verde':porcentaje_verde,
-                      'hojas':hojas,'porcentaje_hojas':porcentaje_hojas,'quince':quince,
-                      'porcentaje_quince':porcentaje_quince,'veinte':veinte,'porcentaje_veinte':
-                      porcentaje_veinte,'seis':seis,'porcentaje_seis':porcentaje_seis,'urea':urea,
-                      'porcentaje_urea':porcentaje_urea}
-                     
-                      
-    return render_to_response('encuesta/abono.html',{'tabla':tabla,
-                              'num_familias':num_familias},
-                               context_instance=RequestContext(request))
+                               context_instance=RequestContext(request))    
+def riego(request):
+    consulta = _queryset_filtrado(request)
+    return render_to_response('encuesta/riego.html', 
+                              context_instance=RequestContext(request))
 
+def condiciones(request):
+    pass
+
+def suelo(request):
+    '''Vista de manejo de suelo'''
+    pass
+
+def abono(request):
+    '''Vista del uso del abono'''
+    consulta = _queryset_filtrado(request)
+    familias = consulta.count()
+    tabla_abono = []
+
+    for abono in CHOICE_PROD_ABONO:
+        total_si = consulta.filter(abono__respuesta=1, abono__producto = abono[0]).count()
+        porcentaje_si  = saca_porcentajes(total_si, familias, False) 
+        total_no = familias - total_si  
+        porcentaje_no = 100 - float(porcentaje_si)
+        porcentaje_no = '%.2f' % porcentaje_no
+        query = consulta.aggregate(pulpa = Sum('abono__pulpa'),
+                                   estiercol = Sum('abono__estiercol'),
+                                   gallinaza = Sum('abono__gallinaza'),
+                                   composta = Sum('abono__composta'),
+                                   lombrices = Sum('abono__lombrices'),
+                                   bocachi = Sum('abono__bocachi'),
+                                   foliar = Sum('abono__foliar'),
+                                   verde = Sum('abono__verde'),
+                                   hojas = Sum('abono__hojas'),
+                                   quince = Sum('abono__quince'),
+                                   veinte = Sum('abono__veinte'),
+                                   urea = Sum('abono__urea'))
+
+        resultado = [abono[1], total_si, porcentaje_si, total_no, porcentaje_no,
+                     calcular_positivos(query['pulpa'], familias),
+                     calcular_positivos(query['estiercol'], familias),
+                     calcular_positivos(query['gallinaza'], familias),
+                     calcular_positivos(query['composta'], familias),
+                     calcular_positivos(query['lombrices'], familias),
+                     calcular_positivos(query['bocachi'], familias),
+                     calcular_positivos(query['foliar'], familias),
+                     calcular_positivos(query['verde'], familias),
+                     calcular_positivos(query['hojas'], familias),
+                     calcular_positivos(query['quince'], familias),
+                     calcular_positivos(query['veinte'], familias),
+                     calcular_positivos(query['urea'], familias)]
+        tabla_abono.append(resultado)
+
+    dicc = {'tabla': tabla_abono, 'num_familias': familias}
+    return render_to_response('encuesta/abono.html', dicc, 
+                              context_instance=RequestContext(request))
+def jovenes(request):
+    pass
+
+def organizacion_jovenes(request):
+    pass
+
+def suelo(request):
+    pass
 
 def compra(request):
     ''' sobre compra y aplicacion de abono
@@ -1399,7 +1405,6 @@ VALID_VIEWS = {
         'produccion': produccion,
         }    
     
-    
 # Vistas para obtener los municipios, comunidades, etc..
 
 def get_municipios(request, departamento):
@@ -1411,46 +1416,3 @@ def get_comunidad(request, municipio):
     comunidades = Comunidad.objects.filter(municipio = municipio )
     lista = [(comunidad.id, comunidad.nombre) for comunidad in comunidades]
     return HttpResponse(simplejson.dumps(lista), mimetype='application/javascript')
-    
-#----------------- funciones de utileria ---------------------------------------
-def saca_porcentajes(values):
-    """sumamos los valores y devolvemos una lista con su porcentaje"""
-    total = sum(values)
-    valores_cero = [] #lista para anotar los indices en los que da cero el porcentaje
-    for i in range(len(values)):
-        porcentaje = (float(values[i])/total)*100
-        values[i] = "%.2f" % porcentaje + '%' 
-    return values
-
-def saca_porcentajes(dato, total, formato=True):
-    '''Si formato es true devuelve float caso contrario es cadena'''
-    if dato != None:
-        try:
-            porcentaje = (dato/float(total)) * 100 if total != None or total != 0 else 0
-        except:
-            return 0
-        if formato:
-            return porcentaje
-        else:
-            return '%.2f' % porcentaje
-    else: 
-        return 0
-
-def calcular_positivos(suma, numero, porcentaje=True):
-    '''Retorna el porcentaje de positivos'''
-    try:
-        positivos = (numero * 2) - suma
-        if porcentaje:
-            return '%.2f' % saca_porcentajes(positivos, numero)
-        else:
-            return positivos
-    except:
-        return 0
-
-def calcular_negativos(suma, numero, porcentaje = True):
-    positivos = calcular_positivos(suma, numero, porcentaje)
-    if porcentaje:
-        return 100 - positivos
-    else:
-        return numero - positivos
-    
