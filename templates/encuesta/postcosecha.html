@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{%load unslugify %}
+
+{% block contenido %}
+
+<table border = "1">
+ <thead>
+    <tr>
+        <th>Producto</th>
+        <th>Cantidad Almacenada(qq)</th>
+        <th colspan="4">Responsable de Almacenamiento</th>
+        <th colspan="4">Tipo de almacenaje</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th></th>
+        <th>Hombres %</th>
+        <th>Mujeres %</th>
+        <th>Hijos/as %</th>
+        <th>Silo %</th>
+        <th>Troja Mejorado %</th>
+        <th>Troja Rustica %</th>
+        <th>Sacos %</th>
+        <th>Bolsa plastica %</th>
+        <th>Barril %</th>
+    </tr>
+ </thead>
+    <tr>
+        {%for key, value in tabla.items%}
+        <tr>
+        <td>{{key|unslugify}}</td>
+        <td></td>
+        <td>{{value.porcentaje_hombres|floatformat}}</td>
+        <td>{{value.porcentaje_mujeres|floatformat}}</td>
+        <td>{{value.porcentaje_hijos|floatformat}}</td>
+        <td>{{value.porcentaje_sm|floatformat}}</td>
+        <td>{{value.porcentaje_tm|floatformat}}</td>
+        <td>{{value.porcentaje_tr|floatformat}}</td>
+        <td>{{value.porcentaje_s|floatformat}}</td>
+        <td>{{value.porcentaje_bp|floatformat}}</td>
+        <td>{{value.porcentaje_b|floatformat}}</td>
+        <td>{{value.porcentaje_casa|floatformat}}</td>
+    </tr>
+        {%endfor%}
+
+</table>
+
+
+{% endblock %}

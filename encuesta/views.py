@@ -1141,11 +1141,6 @@ def riego(request):
     return render_to_response('encuesta/riego.html', 
                               context_instance=RequestContext(request))
 
-def vulnerabilidad(request):
-    consulta = _queryset_filtrado(request)
-    return render_to_response('encuesta/riego.html', 
-                              context_instance=RequestContext(request))
-
 def condiciones(request):
     pass
 
@@ -1178,7 +1173,7 @@ def abono(request):
                                    veinte = Sum('abono__veinte'),
                                    urea = Sum('abono__urea'))
 
-        resultado = [total_si, porcentaje_si, total_no, porcentaje_no,
+        resultado = [abono[1], total_si, porcentaje_si, total_no, porcentaje_no,
                      calcular_positivos(query['pulpa'], familias),
                      calcular_positivos(query['estiercol'], familias),
                      calcular_positivos(query['gallinaza'], familias),
@@ -1193,14 +1188,9 @@ def abono(request):
                      calcular_positivos(query['urea'], familias)]
         tabla_abono.append(resultado)
 
-    dicc = {'tabla': tabla_abono, 'familias': familias}
-    print tabla_abono
+    dicc = {'tabla': tabla_abono, 'num_familias': familias}
     return render_to_response('encuesta/abono.html', dicc, 
                               context_instance=RequestContext(request))
-
-def post_cosecha(request):
-    pass
-
 def jovenes(request):
     pass
 
@@ -1210,6 +1200,187 @@ def organizacion_jovenes(request):
 def suelo(request):
     pass
 
+def compra(request):
+    ''' sobre compra y aplicacion de abono
+    '''
+    #--------- variables globales ----
+    a = _queryset_filtrado(request)
+    num_familias = a.count()
+    #---------------------------------
+    tabla = {}
+    
+    for k in CHOICE_ANO:
+        key = (k[1]).replace('-','_')
+        query = a.filter(compra__cuanto = k[0])
+        frecuencia = query.count()
+        pulpa = query.aggregate(pulpa=Sum('compra__pulpa'))['pulpa']
+        estiercol = query.aggregate(estiercol=Sum('compra__estiercol'))['estiercol']
+        gallinaza = query.aggregate(gallinaza=Sum('compra__gallinaza'))['gallinaza']
+        composta = query.aggregate(composta=Sum('compra__composta'))['composta']
+        lombrices = query.aggregate(lombrices=Sum('compra__lombrices'))['lombrices']
+        bocachi = query.aggregate(bocachi=Sum('compra__bocachi'))['bocachi']
+        foliar_org = query.aggregate(foliar_org=Sum('compra__foliar_org'))['foliar_org']
+        foliar_qui = query.aggregate(foliar_qui=Sum('compra__foliar_qui'))['foliar_qui']
+        verde = query.aggregate(verde=Sum('compra__verde'))['verde']
+        quince = query.aggregate(quince=Sum('compra__quince'))['quince']
+        veinte = query.aggregate(veinte=Sum('compra__veinte'))['veinte']
+        seis = query.aggregate(seis=Sum('compra__seis'))['seis']
+        urea = query.aggregate(urea=Sum('compra__urea'))['urea']
+        tabla[key] = {'frecuencia':frecuencia,
+                      'pulpa':pulpa, 
+                      'estiercol':estiercol,
+                      'gallinaza':gallinaza,
+                      'composta':composta,
+                      'lombrices':lombrices,
+                      'bocachi':bocachi,
+                      'foliar':foliar_org,
+                      'foliar':foliar_qui,
+                      'verde':verde,
+                      'quince':quince,
+                      'veinte':veinte,
+                      'seis':seis,'urea':urea}                   
+    return render_to_response('encuesta/compra.html',{'tabla':tabla,
+                              'num_familias':num_familias},
+                               context_instance=RequestContext(request))
+                    
+def postcosecha(request):   
+    ''' sobre el modelo de post cosecha
+    '''
+    #--------- variables globales ----
+    a = _queryset_filtrado(request)
+    num_familias = a.count()
+    #---------------------------------
+    tabla = {}
+    
+    for u in Cultivos.objects.all():
+        key = slugify(u.nombre).replace('-','_')
+        key2 = slugify(u.unidad).replace('-','_')
+        query = a.filter(postcosecha__producto = u)
+        frecuencia = query.count()
+        hombres = query.filter(postcosecha__responsable=1).count()
+        mujeres = query.filter(postcosecha__responsable=2).count()
+        hijos = query.filter(postcosecha__responsable=3).count()
+        sumas = hombres + mujeres + hijos
+        porcentaje_hombres = saca_porcentajes(hombres,sumas)
+        porcentaje_mujeres = saca_porcentajes(mujeres,sumas)
+        porcentaje_hijos = saca_porcentajes(hijos,sumas)
+        sm = query.filter(postcosecha__tipo__id=1).count()
+        tm = query.filter(postcosecha__tipo__id=2).count()
+        tr = query.filter(postcosecha__tipo__id=3).count()
+        s = query.filter(postcosecha__tipo__id=4).count()
+        bp = query.filter(postcosecha__tipo__id=5).count()
+        b = query.filter(postcosecha__tipo__id=6).count()
+        casa = query.filter(postcosecha__tipo__id=7).count()
+        suma_tipo = sm + tm + tr + s + bp + b + casa
+        porcentaje_sm = saca_porcentajes(sm,suma_tipo)
+        porcentaje_tm = saca_porcentajes(tm, suma_tipo)
+        porcentaje_tr = saca_porcentajes(tr,suma_tipo)
+        porcentaje_s = saca_porcentajes(s,suma_tipo)
+        porcentaje_bp = saca_porcentajes(bp,suma_tipo)
+        porcentaje_b = saca_porcentajes(b,suma_tipo)
+        porcentaje_casa = saca_porcentajes(casa,suma_tipo)
+        tabla[key] = {'key2':key2,'frecuencia':frecuencia,'porcentaje_hombres':porcentaje_hombres,
+                       'porcentaje_mujeres':porcentaje_mujeres,'porcentaje_hijos':porcentaje_hijos,
+                       'porcentaje_sm':porcentaje_sm,'porcentaje_tm':porcentaje_tm,
+                       'porcentaje_tr':porcentaje_tr,'porcentaje_s':porcentaje_s,'porcentaje_bp':porcentaje_bp,
+                       'porcentaje_b':porcentaje_b,'porcentaje_casa':porcentaje_casa}
+    return render_to_response('encuesta/postcosecha.html',{'tabla':tabla,
+                              'num_familias':num_familias},
+                               context_instance=RequestContext(request))
+    
+def grafos_vulnerabilidad(request):
+    ''' sobre el modelo de vulnerabilidad
+    '''
+    #--------- variables globales ----
+    consulta = _queryset_filtrado(request)
+    num_familias = a.count()
+    #--------------------------------- 
+    data = [] 
+    legends = []
+    
+    if tipo == 'alimentosbasico':
+        for opcion in CHOICE_PREG1:
+            data.append(consulta.filter(consume__preg1=opcion[0]).count())
+            legends.append(opcion[1])
+        return grafos.make_graph(data, legends, 
+                'Alimentos basicos consume compra', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    elif tipo == 'necesidadbasica':
+        for opcion in CHOICE_PREG2:
+            data.append(consulta.filter(consume__preg2=opcion[0]).count())
+            legends.append(opcion[1])
+        return grafos.make_graph(data, legends,
+               'Cubre necesidades de alimentos basico', return_json = True,
+               type = grafos.PIE_CHART_3D)
+    elif tipo == 'razonesfalta':
+        for opcion in CHOICE_MOTIVO:
+            data.append(consulta.filter(consume__preg3=opcion[0]).count())
+            legends.append(opcion[1])
+        return grafos.make_graph(data, legends,
+                'Razones de falta de alimentos', return_json = True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'mesesdificil':
+        for opcion in Meses.objects.all():
+            data.append(consulta.filter(consume__preg4=opcion).count())
+            legends.append(opcion.nombre)
+        return grafos.make_graph(data, legends,
+                'Meses dificiles para conseguir alimentos', return_json = True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'cafeprecio':
+        for opcion in CHOICE_PREG5:
+            data.append(consulta.filter(consume__preg5=opcion[0]).count())
+            legends.append(opcion[1])
+        return grafos.make_graph(data, legends,
+                'Acciones cuando baja precio de cafe', return_json = True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'accionesescazes':
+        for opcion in SolucionesEscazes.objects.all():
+            data.append(consulta.filter(escasez__preg1=opcion).count())
+            legends.append(opcion.nombre)
+        return grafos.make_graph(data, legends,
+                'Acciones en tiempo de escazes', return_json = True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'conseguir':
+        for opcion in CHOICE_ESCASEZ:
+            data.append(consulta.filter(escasez__preg2=opcion[0]).count())
+            legends.append(opcion[1])
+        return grafos.make_graph(data, legends,
+                'Donde consigue alimento en la epoca de escazes', return_json = True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'portiempo':
+        for opcion in CHOICE_PREG7:
+            data.append(consulta.filter(consume__preg7=opcion[0]).count())
+            legends.append(opcion[1])
+        return grafos.make_graph(data, legends,
+                'Por cuánto tiempo puede conseguir alimentos', return_json = True,
+                type=grafos.PIE_CHART_3D)
+    else:
+        raise Http404
+
+def produccion(request):
+    ''' sobre el modelo de post cosecha
+    '''
+    #--------- variables globales ----
+    a = _queryset_filtrado(request)
+    num_familias = a.count()
+    #---------------------------------
+    tabla = {}
+    
+    for e in CHOICE_MAIZ:
+        key = slugify(e[1]).replace('-','_')
+        query = a.filter(produccion_maiz__producto = e[0])
+        frecuencia = query.count()
+        siete = query.aggregate(siete=Avg('produccion_maiz__siete'))['siete']
+        ocho = query.aggregate(ocho=Avg('produccion_maiz__ocho'))['ocho']
+        nueve = query.aggregate(nueve=Avg('produccion_maiz__nueve'))['nueve']
+        diez = query.aggregate(diez=Avg('produccion_maiz__diez'))['diez']
+        tabla[key] = {'frecuencia':frecuencia,'ocho':ocho,'nueve':nueve,
+                      'diez':diez}
+                      
+    return render_to_response('encuesta/produccion.html',{'tabla':tabla,
+                              'num_familias':num_familias},
+                               context_instance=RequestContext(request))
+        
 #TODO: completar esto
 VALID_VIEWS = {
         'familia': familia,
@@ -1229,9 +1400,12 @@ VALID_VIEWS = {
         'luz': luz,
         'organizacion': organizacion,
         'abono': abono,
+        'compra': compra,
+        'postcosecha': postcosecha,
+        'produccion': produccion,
         }    
     
-# Vistas para obtener los municipios, comunidades, socio, etc..
+# Vistas para obtener los municipios, comunidades, etc..
 
 def get_municipios(request, departamento):
     municipios = Municipio.objects.filter(departamento = departamento)
