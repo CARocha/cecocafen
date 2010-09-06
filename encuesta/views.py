@@ -15,6 +15,7 @@ from forms import *
 from lugar.models import *
 from decimal import Decimal
 from utils import grafos
+from utils import *
 
 def _get_view(request, vista):
     if vista in VALID_VIEWS:
@@ -1169,7 +1170,6 @@ def organizacion_jovenes(request):
 def suelo(request):
     pass
 
-
 #TODO: completar esto
 VALID_VIEWS = {
         'familia': familia,
@@ -1190,7 +1190,6 @@ VALID_VIEWS = {
         'organizacion': organizacion,
         }    
     
-    
 # Vistas para obtener los municipios, comunidades, socio, etc..
 
 def get_municipios(request, departamento):
@@ -1202,46 +1201,3 @@ def get_comunidad(request, municipio):
     comunidades = Comunidad.objects.filter(municipio = municipio )
     lista = [(comunidad.id, comunidad.nombre) for comunidad in comunidades]
     return HttpResponse(simplejson.dumps(lista), mimetype='application/javascript')
-    
-#----------------- funciones de utileria ---------------------------------------
-def saca_porcentajes(values):
-    """sumamos los valores y devolvemos una lista con su porcentaje"""
-    total = sum(values)
-    valores_cero = [] #lista para anotar los indices en los que da cero el porcentaje
-    for i in range(len(values)):
-        porcentaje = (float(values[i])/total)*100
-        values[i] = "%.2f" % porcentaje + '%' 
-    return values
-
-def saca_porcentajes(dato, total, formato=True):
-    '''Si formato es true devuelve float caso contrario es cadena'''
-    if dato != None:
-        try:
-            porcentaje = (dato/float(total)) * 100 if total != None or total != 0 else 0
-        except:
-            return 0
-        if formato:
-            return porcentaje
-        else:
-            return '%.2f' % porcentaje
-    else: 
-        return 0
-
-def calcular_positivos(suma, numero, porcentaje=True):
-    '''Retorna el porcentaje de positivos'''
-    try:
-        positivos = (numero * 2) - suma
-        if porcentaje:
-            return '%.2f' % saca_porcentajes(positivos, numero)
-        else:
-            return positivos
-    except:
-        return 0
-
-def calcular_negativos(suma, numero, porcentaje = True):
-    positivos = calcular_positivos(suma, numero, porcentaje)
-    if porcentaje:
-        return 100 - positivos
-    else:
-        return numero - positivos
-    
