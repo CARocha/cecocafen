@@ -537,13 +537,17 @@ def animales(request):
     for animal in Animales.objects.all():
         query = consulta.filter(finca__animales = animal)
         numero = query.distinct().count()
-        producto = FincaAnimales.objects.filter(animales = animal)[0].produccion
+        try:
+            producto = FincaAnimales.objects.filter(animales = animal)[0].produccion
+        except:
+            #el animal no tiene producto aún
+            continue
+
         porcentaje_num = saca_porcentajes(numero, totales['numero'], False)
-        animales = query.aggregate(cantidad = Sum('fincas__cantidad'),
-                                   venta_libre = Sum('finca__venta'),
+        animales = query.aggregate(cantidad = Sum('finca__cantidad'),
+                                   venta_libre = Sum('finca__venta_libre'),
                                    venta_organizada = Sum('finca__venta_organizada'),
-                                   consumo = Sum('finca__consumo'),
-                                   produccion = Sum('finca__total_produccion'))
+                                   consumo = Sum('finca__consumo'))
         try:
             animal_familia = animales['cantidad']/float(numero) 
         except:
@@ -553,7 +557,7 @@ def animales(request):
                       animales['cantidad'], animal_familia])
         tabla_produccion.append([animal.nombre, animales['cantidad'], 
                                  producto.nombre, producto.unidad, 
-                                 animales['produccion'], animales['consumo'], 
+                                 animales['consumo'], 
                                  animales['venta_libre'], animales['venta_organizada']])
 
     return render_to_response('encuesta/animales.html', 
