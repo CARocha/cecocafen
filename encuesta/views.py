@@ -803,15 +803,15 @@ def ahorro_credito(request):
     ''' ahorro y credito'''
     #ahorro
     consulta = _queryset_filtrado(request)
-    tabla_ahorro = []
-    totales_ahorro = {}
+    #tabla_ahorro = []
+    #totales_ahorro = {}
 
-    columnas_ahorro = ['Si', '%']
+    #columnas_ahorro = ['Si', '%']
 
-    for pregunta in AhorroPregunta.objects.exclude(id__in=[3, 5]):
-        #opciones solo si
-        subquery = consulta.filter(ahorro__ahorro = pregunta, ahorro__respuesta = 1).count()
-        tabla_ahorro.append([pregunta.nombre, subquery, saca_porcentajes(subquery, consulta.count(), False)])
+    #for pregunta in AhorroPregunta.objects.exclude(id__in=[3, 5]):
+    #    #opciones solo si
+    #    subquery = consulta.filter(ahorro__ahorro = pregunta, ahorro__respuesta = 1).count()
+    #    tabla_ahorro.append([pregunta.nombre, subquery, saca_porcentajes(subquery, consulta.count(), False)])
 
     #credito
     tabla_credito= {}
@@ -830,8 +830,7 @@ def ahorro_credito(request):
     tabla_credito['mas'] = [mas, saca_porcentajes(mas, totales_credito['numero'])] 
     tabla_credito['al_dia'] = [al_dia, saca_porcentajes(al_dia, totales_credito['numero'])] 
 
-    dicc = {'tabla_ahorro':tabla_ahorro, 'columnas_ahorro': columnas_ahorro, 
-            'totales_ahorro': totales_ahorro, 'tabla_credito': tabla_credito,
+    dicc = {'tabla_credito': tabla_credito,
             'num_familias': consulta.count()}
 
     return render_to_response('encuesta/ahorro_credito.html', dicc,
