@@ -1150,18 +1150,58 @@ def condiciones(request):
     pass
 
 def suelo(request):
+    '''Vista de manejo de suelo'''
     pass
 
 def abono(request):
-    pass
+    '''Vista del uso del abono'''
+    consulta = _queryset_filtrado(request)
+    familias = consulta.count()
+    tabla_abono = []
+
+    for abono in CHOICE_PROD_ABONO:
+        total_si = consulta.filter(abono__respuesta=1, abono__producto = abono[0]).count()
+        porcentaje_si  = saca_porcentajes(total_si, familias, False) 
+        total_no = familias - total_si  
+        porcentaje_no = 100 - float(porcentaje_si)
+        porcentaje_no = '%.2f' % porcentaje_no
+        query = consulta.aggregate(pulpa = Sum('abono__pulpa'),
+                                   estiercol = Sum('abono__estiercol'),
+                                   gallinaza = Sum('abono__gallinaza'),
+                                   composta = Sum('abono__composta'),
+                                   lombrices = Sum('abono__lombrices'),
+                                   bocachi = Sum('abono__bocachi'),
+                                   foliar = Sum('abono__foliar'),
+                                   verde = Sum('abono__verde'),
+                                   hojas = Sum('abono__hojas'),
+                                   quince = Sum('abono__quince'),
+                                   veinte = Sum('abono__veinte'),
+                                   urea = Sum('abono__urea'))
+
+        resultado = [total_si, porcentaje_si, total_no, porcentaje_no,
+                     calcular_positivos(query['pulpa'], familias),
+                     calcular_positivos(query['estiercol'], familias),
+                     calcular_positivos(query['gallinaza'], familias),
+                     calcular_positivos(query['composta'], familias),
+                     calcular_positivos(query['lombrices'], familias),
+                     calcular_positivos(query['bocachi'], familias),
+                     calcular_positivos(query['foliar'], familias),
+                     calcular_positivos(query['verde'], familias),
+                     calcular_positivos(query['hojas'], familias),
+                     calcular_positivos(query['quince'], familias),
+                     calcular_positivos(query['veinte'], familias),
+                     calcular_positivos(query['urea'], familias)]
+        tabla_abono.append(resultado)
+
+    dicc = {'tabla': tabla_abono, 'familias': familias}
+    print tabla_abono
+    return render_to_response('encuesta/abono.html', dicc, 
+                              context_instance=RequestContext(request))
 
 def post_cosecha(request):
     pass
 
 def jovenes(request):
-    pass
-
-def abono(request):
     pass
 
 def organizacion_jovenes(request):
@@ -1188,6 +1228,7 @@ VALID_VIEWS = {
         'agua': agua,
         'luz': luz,
         'organizacion': organizacion,
+        'abono': abono,
         }    
     
 # Vistas para obtener los municipios, comunidades, socio, etc..
