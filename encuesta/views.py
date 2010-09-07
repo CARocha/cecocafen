@@ -1021,16 +1021,19 @@ def agua(request):
         query = consulta.filter(agua__fuente=choice[0])
         numero = query.count()
         resultados = query.aggregate(cantidad=Sum('agua__cantidad'))
-        try:
-            prom = resultados['cantidad']/float(numero)
-        except:
-            prom = 0
+#        try:
+#            prom = resultados['cantidad']/float(numero)
+#        except:
+#            prom = 0
+        distancia = query.aggregate(distancia=Sum('agua__distancia'))['distancia']
+        pro_distancia = saca_porcentajes(distancia,numero)
         fila = [choice[1], numero,
                 #saca_porcentajes(numero, total['total'], False),
                 saca_porcentajes(numero, consulta.count(), False),
-                resultados['cantidad'],
+#                resultados['cantidad'],
                 #saca_porcentajes(resultados['cantidad'], total['cantidad'], False),
-                "%.2f" % prom]
+#                "%.2f" % prom,
+                "%.2f" % pro_distancia]
         tabla.append(fila)
 
     #totales = [total['total'], 100, total['cantidad'], 100]
@@ -1233,8 +1236,8 @@ def compra(request):
                       'composta':composta,
                       'lombrices':lombrices,
                       'bocachi':bocachi,
-                      'foliar':foliar_org,
-                      'foliar':foliar_qui,
+                      'foliar_org':foliar_org,
+                      'foliar_qui':foliar_qui,
                       'verde':verde,
                       'quince':quince,
                       'veinte':veinte,
