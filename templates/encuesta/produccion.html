@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{%load unslugify %}
+
+{% block contenido %}
+<table border = "1">
+<caption>La Produccion</caption>
+ <thead>
+    <tr>
+        <th>producto</th>
+        <th>2007</th>
+        <th>2008</th>
+        <th>2009</th>
+        <th>2010</th>
+    </tr>
+  </thead>
+    {%for key, value in tabla.items%}
+    <tr>
+        <td>{{key|unslugify}}</td>
+        <td>{{value.siete|floatformat}}</td>
+        <td>{{value.ocho|floatformat}}</td>
+        <td>{{value.nueve|floatformat}}</td>
+        <td>{{value.diez|floatformat}}</td>
+    </tr>
+    {%endfor%}
+</table>
+{%endblock%}
