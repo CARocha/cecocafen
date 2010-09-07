@@ -1383,6 +1383,24 @@ def produccion(request):
     return render_to_response('encuesta/produccion.html',{'tabla':tabla,
                               'num_familias':num_familias},
                                context_instance=RequestContext(request))
+
+def condiciones(request):
+    '''Condiciones del campo'''
+    consulta = _queryset_filtrado(request)
+    num_familias = consulta.count()
+    tabla = []
+
+    for pregunta in Campo.objects.all():
+        fila = [pregunta.afirmacion]
+        for condicion in CHOICE_CAMPO:
+            conteo = consulta.filter(campo__pregunta = pregunta, campo__respuesta = condicion[0]).count()
+            porcentaje = saca_porcentajes(conteo, num_familias, False)
+            fila.append(porcentaje)
+        tabla.append(fila)
+
+    dicc = {'tabla': tabla, 'num_familias': num_familias, 'columnas': CHOICE_CAMPO}
+    return render_to_response('encuesta/condiciones.html', dicc,
+                               context_instance=RequestContext(request))
         
 #TODO: completar esto
 VALID_VIEWS = {
@@ -1406,6 +1424,7 @@ VALID_VIEWS = {
         'compra': compra,
         'postcosecha': postcosecha,
         'produccion': produccion,
+        'condiciones': condiciones,
         }    
     
 # Vistas para obtener los municipios, comunidades, etc..
