@@ -495,7 +495,7 @@ class Destinar(models.Model):
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     servicios = models.IntegerField(choices=CHOICE_DESTINAR,null=True, blank=True)
-    cuanto = models.IntegerField('Del 100% que percibe cuanto destina',null=True, blank=True)
+    cuanto = models.DecimalField('Del 100% que percibe cuanto destina',max_digits=10,decimal_places=2,null=True, blank=True)
     class Meta:
         verbose_name_plural = "Destinar"
         
@@ -682,13 +682,13 @@ class SolucionEscasez(models.Model):
         return self.nombre
     class Meta:
         verbose_name_plural = "Escasez-SolucionEscasez"
-
+CHOICE_ESCASEZ = ((1,'credito en la pulperia mas cercana'),(2,'Donde un familiar'),(3,'Mercado local mas cercano'))
 class Escasez(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
     preg1 = models.ManyToManyField(SolucionEscasez, verbose_name="¿Qué soluciones y practicas implementa en los tiempos de escasez?", null=True, blank=True)
-    preg2 = models.IntegerField('Si consigue alimentos en la epoca de escasez ¿Donde consigue alimentos en la epoca de escasez', choices=((1,'credito en la pulperia mas cercana'),(2,'Donde un familiar'),(3,'Mercado local mas cercano')))
+    preg2 = models.IntegerField('Si consigue alimentos en la epoca de escasez ¿Donde consigue alimentos en la epoca de escasez', choices=CHOICE_ESCASEZ)
     class Meta:
         verbose_name_plural = "Escasez"
     
