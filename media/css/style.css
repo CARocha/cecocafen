@@ -23,8 +23,8 @@ ol, ul {
 /* --------------Comienza Generales-------------- */
 
 body {
-  background:#cdc099ff;
-  background-image: url(../imagen/bg.jpg);
+  background:#eaeaea;
+  /*background-image: url(../imagen/bg.jpg);*/
   font-family: 'Trebuchet MS', Helvetica, sans-serif;
   font-size:14px;
   padding:0;
@@ -33,24 +33,17 @@ body {
 
 h1 {
     font-size: 26px;
-    font-weight: bold;
-    color: white;
+    font-weight: none;
+    color: #ccd6b4;
     padding:-28px 5 5 5;
     margin: -16px 5px 5px 5px;
 
 }
-.jfps {
-    background-color: #92b74e;
-    border-radius: 5px 5px 5px 5px;
-    -webkit-border-radius: 5px 5px 5px 5px;
-    -moz-border-radius: 5px 5px 5px 5px;
-    padding-left:4px;
-    padding-right:4px;
-}
+
 
 #coop h2 {
-    color: #92b74e;
-    font-size: 17px;
+    color: #ccd6b4;
+    font-size: 15px;
     padding: 0px 0px 0px 0px;
 
     
@@ -85,8 +78,10 @@ p {
 #header {
 overflow: hidden;
 height: 70px;
-background-color:#8E451A;
-background-image: url(../imagen/bg_header.png);
+background-color:#691028;
+border-bottom:#fff 1px solid;
+/* ----------background-image: url(.);
+background-repeat:repeat-x;-- */
 
 }
 #header h1, h2 {
@@ -113,53 +108,36 @@ background-image: url(../imagen/bg_header.png);
 
 #nav a {
     color: #fff;
-    background: #2F1D0A;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
+
+    font-weight:bold;
 
 }
 
 #nav a:hover {
     color: #fff;
-    background: rgba(146,183,78,0.95);
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
+    background:#970c32;
+        border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
 
 }
 
 
 #header_contenedor{
-  width:960px;
+  width:890px;
+  _width:960px;
   height:70px;
   border-radius:7px;
   -moz-border-radius:7px; 
   -webkit-border-radius:7px;
   margin:0pt auto;
   padding:0pt;
+  background-image: url(../imagen/logo.jpg) ;
+  background-repeat:no-repeat;
+  padding-left:70px;
 }
 
-#logo{
-  width:750px;
-  font-size:22px;
-  font-weight:bold;
-  color:#385B1D;
-  text-shadow: 0 0 2px #4e4e4e;
-  padding-top:20px;
-  height:55px;
-}
-#imagen_logo{
-    width: 555px;
-    height: 61px;
-    margin:-8pt auto;
-    padding:0pt;
-}
-#imagen_header{
-  width:128px;
-  height:75px;
-  background-image: url(../imagen/gota.jpg);
-  background-repeat: no-repeat;
-}
+
 #contenedor{
   width:960px;
   margin-top:15px;
@@ -248,18 +226,20 @@ height:300px;
 /* --------------Comienza menu linea base*/
 
 #menu ul {
-    background:#92b74e;
+    /*background:#c7c7c7;*/
+
+border-bottom:#fff 1px solid;
     list-style: none;
     font-size: 14px;
     font-weight: bold;
     width: 950px;
-    height: 30px;
+    height: 60px;
     float: left;
-    padding:7px;
+    padding-bottom:1px;
     margin-bottom: 9px;
-    -moz-border-radius: 7px;
+    /*  -moz-border-radius: 7px;
     -khtml-border-radius: 7px;
-    -webkit-border-radius: 7px;
+    -webkit-border-radius: 7px;*/
 }
 
 #menu ul li {
@@ -268,14 +248,16 @@ display: inline;
 }
 #menu ul li a:link, #menu ul li a:visited {
 color:#fff;
-background: url(../imagen/fondo_menu.png) repeat-x;
+background: #ADADAD;
 padding: 9px 6px;
 float: left;
 text-decoration: none;
-border-radius:5px;
--moz-border-radius: 5px;
--khtml-border-radius: 5px;
--webkit-border-radius: 5px;
+   border-top-right-radius:5px;
+   border-top-left-radius:5px;
+   -moz-border-radius-topright:5px;
+   -moz-border-radius-topleft:5px;
+   -webkit-border-top-left-radius:5px;
+   -webkit-border-top-right-radius:5px;
 margin-right:6px;
 font-size:13px;
 
@@ -284,7 +266,7 @@ font-size:13px;
 }
 #menu ul li a:hover, #menu ul li a:active{
 color: #fff;
-background:#73903D ;
+background:#691028 ;
 }
 
 /* ---------------Termina menu linea base*/
@@ -331,8 +313,7 @@ background:#73903D ;
   margin-bottom:3px;
 }
 #titulo{
-   background:#f2f2f2;
-   background:#8a796f;
+   background:#c7c7c7 url(../imagen/fondo_titulo.jpg) repeat-x;
    font-size:20px;
    font-weight:bold;
    padding:7px;
@@ -351,15 +332,14 @@ background:#73903D ;
 #filtros{
     background: url(../imagen/fondofiltro.png) repeat-x;
     height:36px;
-    border-left:#a89b93 1px solid;
-    border-right:#a89b93 1px solid;
+
     border-bottom:#d6d1d1 1px solid;
-    width:960px;
+    width:962px;
 }
 
 .variables{
     float:left;
-    background:#ccc;
+    background:#fce795;
     width:85px;
     font-weight:bold;
     height:26px;
@@ -389,10 +369,10 @@ background:#73903D ;
   font-size:13px;
   font-weight:bold;
   text-decoration:none;
-  border:#94b957 1px solid;
-  text-shadow: 0px -1px 0px #4D6325;
-  -moz-text-shadow: 0px -1px 0px #4D6325;
-  -webkit-text-shadow: 0px -1px 0px #4D6325;
+  border:#d7ab32 1px solid;
+  text-shadow: 0px -1px 0px #d7ab32;
+  -moz-text-shadow: 0px -1px 0px #d7ab32;
+  -webkit-text-shadow: 0px -1px 0px #d7ab32;
   border-radius:100px;
   -moz-border-radius:100px; 
   -webkit-border-radius:100px;
@@ -402,24 +382,22 @@ background:#73903D ;
 }
 
 #filtros a:hover{
-  background: #85a846;
+  background: #eec116;
 }
 
 #contenido_interno{
     clear: both;
 	margin: 0px auto;
-	width: 930px;
+	width: 932px;
     *width:960px;
-	background: #f8f7f7;
+	background: #fff;
     border-bottom-right-radius:7px;
     border-bottom-left-radius:7px;
     -moz-border-radius-bottomright:7px;
     -moz-border-radius-bottomleft:7px;
     -webkit-border-bottom-left-radius:7px;
     -webkit-border-bottom-right-radius:7px;
-    border-left:#a89b93 1px solid;
-    border-right:#a89b93 1px solid;
-    border-bottom:#a89b93 1px solid;
+
 	position: relative; 
 	z-index: 90;  
     padding:15px;
@@ -548,22 +526,20 @@ padding-right:15px;
   color:#fff;
   font-size:20px;
   text-decoration:none;
-  border:#94b957 1px solid;
-  text-shadow: 0px -1px 0px #37461c;
-  -moz-text-shadow: 0px -1px 0px #37461c;
-  -webkit-text-shadow: 0px -1px 0px #37461c;
+  border:#d7ab32 1px solid;
+  text-shadow: 0px -1px 1px #d7ab32;
+  -moz-text-shadow: 0px -1px 1px #d7ab32;
+  -webkit-text-shadow: 0px -1px 1px #d7ab32;
   border-radius:100px;
   -moz-border-radius:100px; 
   -webkit-border-radius:100px;
-  box-shadow: 0px 0px 5px #19200d;
-  -moz-box-shadow: 0px 0px 5px #19200d;
-  -khtml-box-shadow: 0px 0px 5px #19200d;
-  -webkit-box-shadow: 0px 0px 5px #19200d;	
+  font-weight:bold;
+
 }
 
 #boton:hover{
 
-  background: #85a846 ;
+  background: #eec116 ;
 
 }
 #contenido_interno form{
@@ -739,8 +715,8 @@ padding-left:20px;
 
 #footer{
     width: 100%;
-    height: 65px;
-    background-color: #c6bea1;
+    height: 155px;
+    background-color: #bab4a4;
 }
 
 #footer_contenedor{

@@ -416,7 +416,7 @@ class Problema(models.Model):
        
         
 #Ingreso familiar
-CHOICE_VENDIO = ((1,"Comunidad"),(2,"Intermediario"),(3,"Ferias"),(4,"Cooperativa"),(5,'C-I'),(6,'I-F'),(7,'F-Coop'),(8,'Todos'),(9,'C-Coop'))
+CHOICE_VENDIO = ((1,"Comunidad"),(2,"Intermediario"),(3,"Ferias"),(4,"Cooperativa"),(5,'C-I'),(6,'I-F'),(7,'F-Coop'),(8,'Todos'),(9,'C-Coop'),(10,'Coop-Interm'))
 CHOICE_MANEJA = ((1,"Hombre"),(2,"Mujer"),(3,"Ambos"),(4,"Hijos/as"),(5,'Hombre-Hijos'),(6,'Mujer-Hijos'),(7,'Todos'))
 class Rubros(models.Model):
     nombre = models.CharField(max_length=50)
