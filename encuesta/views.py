@@ -1141,11 +1141,19 @@ def seguridad_alimentaria(request):
                                context_instance=RequestContext(request))    
 def riego(request):
     consulta = _queryset_filtrado(request)
+    familias = consulta.count()
+    tabla = []
+
+    for lugar in CHOICE_RIEGO:
+                     calcular_positivos(query['hojas'], familias),
+                     calcular_positivos(query['quince'], familias),
+                     calcular_positivos(query['veinte'], familias),
+                     calcular_positivos(query['urea'], familias)]
+        tabla.append(resultado)
+
+    dicc = {'tabla': tabla, 'num_familias': familias}
     return render_to_response('encuesta/riego.html', 
                               context_instance=RequestContext(request))
-
-def condiciones(request):
-    pass
 
 def suelo(request):
     '''Vista de manejo de suelo'''
