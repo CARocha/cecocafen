@@ -2,60 +2,97 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>{%block title%}.::.. SISTEMA DE INFORMACIÓN DE CECOCAFEN ..::.{%endblock%}</title>
+    <title>{%block title%}SISTEMA DE INFORMACIÓN DE CECOCAFEN{%endblock%}</title>
     <link href="{{MEDIA_URL}}css/style.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{MEDIA_URL}}css/screen.css" rel="stylesheet" type="text/css" media="screen" />
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script type='text/javascript' src='{{MEDIA_URL}}js/menu.js'></script>
-    {%block extra_header%}{%endblock%}
-    	
+    <script type='text/javascript' src='{{MEDIA_URL}}js/tablesort.js'></script>	
+    <script type='text/javascript' src='{{MEDIA_URL}}js/jquery.metadata.js'></script>
+	{%block extra_header%}{%endblock%}
 </head>
 <body>
-
- <div id="header">
-    <h1>CECOCAFEN</h1>
- </div> <!-- fin header -->
- <div id="menu">
- 
- {% block menu %}
-    <ul id="nav">
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Indicadores</a></li>
-        <li><a href="#">Gráficos</a></li>
-        <li><a href="#">Ayuda</a></li>
-        <li><a href="/admin">Administración</a></li>
-    </ul>
- {% endblock %}
- 
- </div> <!-- fin del menu -->
- <div id="cuerpo">
-    <div id="contenido">
-        <div id="dentro-contenido">
-			<h2>Reseña Historica</h2>
-			{% block contenido %}
-            {% endblock %}
-        </div> <!-- fin del div dentro-contenido -->
+  <!-- Comienza el header -->
+<div id="header">
+    <div id="header_contenedor">
+			   <h1>Sistema de información <span class="jfps">Cecocafen</span></h1>
+			   <div id="coop"><h2>Cooperativa de café de Nicaragua</h2> </div>
+           <!-- comienza Menu --> 
+            <ul id="nav">
+                <li><a class="selected" href="/">Inicio</a></li>
+                <li><a href="/index">Consultar</a></li>
+                <li><a href="/admin">Administración</a></li>
+                <li><a href="#">Ayuda</a></li>
+            </ul><!-- termina Menu -->
+    </div><!-- Termina el header contenedor -->
+</div> <!-- Termina el header -->
+        <!-- comienza algo de pimp -->
+        {%block pimp%}{%endblock%}
+       
     
-    </div><!-- fin div contenido   -->
+<div id="contenedor" class="centro">  
+    <!-- Comienza Contenido-->
+	<div id="contenido">
+	 {%block menu%}
+        
+        <div id="menu">
+            <ul>
+                <li><a href="/familia">Familia</a></li>
+                <li><a href="/organizacion">Organización</a></li>
+                <li><a href="/fincas">Fincas</a></li>
+                <li><a href="/arboles">Árboles</a></li>
+                <li><a href="/animales">Animales</a></li>
+                <li><a href="/cultivos">Cultivos</a></li>
+                <li><a href="/ingresos">Ingresos</a></li>
+                <li><a href="/equipos">Bienes</a></li>
+                <li><a href="/ahorro_credito">Ahorro y Crédito</a></li>
+                <li><a href="/servicios">Servicios</a></li>
+                <li><a href="/seguridad_alimentaria">Seguridad Alimentaria</a></li>
+            </ul>
+        </div>
 
- <div id="lateral">
-    <div id="dentro-lateral">
-    <h3>Indicadores</h3>
-    <ul id="nav-lateral">
-		<li><a href="#">Fortalecimiento Org.</a></li>
-		<li><a href="#">Identidad Socio-Cultural</a></li>
-		<li><a href="#">Desarrollo Economico</a></li>
-		<li><a href="#">Salud Fisica</a></li>
-		<li><a href="#">Desarrollo Educativo</a></li>
-    </ul>
-    
-    </div>
- </div> <!-- Fin lateral-->
- 
- </div> <!-- Fin del div cuerpo  -->
+        {%endblock%}
+                 
+             <!-- Comienza Columna derecha--> 
+				<div id="colum_der" class="der">
+				    <div id="titulo">
+                    {% block titulo %} {% endblock %}
+                    </div>
+                   {%block filtros%}
+                           <div id="filtros">
+                                <span class="variables">Variables</span>
+                                
+                                {%if num_familias%}<span class="variables_filtro"><b>Familias</b><br>{{num_familias}}</span>{%endif%}
+                                {%comment%}{%if request.session.cooperativa%}<span class="variables_filtro"><b>Cooperativa</b><br>{{session.cooperativa}}</span>{%endif%}{%endcomment%}
+                                {%if request.session.fecha%}<span class="variables_filtro"><b>Año</b><br>{{request.session.fecha}}</span>{%endif%}
+                                {%if request.session.departamento%}<span class="variables_filtro"><b>Departamento</b><br>{{request.session.departamento}}</span>{%endif%}
+                                {%if request.session.municipio.nombre%}<span class="variables_filtro"><b>Municipio</b><br>{{request.session.municipio.nombre}}</span>{%endif%}
+                                {%if request.session.comunidad.nombre%}<span class="variables_filtro"><b>Comunidad</b><br>{{request.session.comunidad.nombre}}</span>{%endif%}
+                                {%if request.session.socio%}<span class="variables_filtro"><b>Socio</b><br>{%if request.session.socio = '1'%}Si{%else%}No{%endif%}</span>{%endif%}
+                                {%if request.session.desde%}<span class="variables_filtro"><b>Años de socio</b><br>{%if request.session.desde = '1'%}Menos de 5 {%else%}Mas de 5 {%endif%}</span>{%endif%}
+                                {%if request.session.duenio%}<span class="variables_filtro"><b>Tipo Dueño</b><br>{%if request.session.duenio = '1'%}Hombre{%endif%}{%if request.session.duenio = '2'%}Mujer{%endif%}{%if request.session.duenio = '3'%}Mancomunado{%endif%}{%if request.session.duenio = '4'%}Parientes{%endif%}{%if request.session.duenio = '5'%}Colectivo{%endif%}{%if request.session.duenio = '6'%}No hay{%endif%}</span>{%endif%}
+                                <a href="/index">Nueva Consulta</a>
+                            </div>
+                   {%endblock%}
+                        <div id="contenido_interno">
 
- <div id="pie">
- <div id="pie_cuerpo">
- </div>
- </div> <!-- Fin del pie de pagina -->
+                                        {%block contenido%}
+
+                                        {%endblock%}
+
+                            </div>
+                                <div class="separador" ></div>
+                        </div>
+                </div><!-- termina Columna derecha-->
+            <div class="separador" ></div>
+	</div><!-- Termina Contenido-->
+</div><!-- Termina Contenedor-->
+
+        <!-- Comienza Footer-->
+        <div id="footer">
+             <div id="footer_contenedor" class="centro">
+               <div id="logo_footer"></div>
+               <div id="creditos">Desarrollado por <a href="http://www.simas.org.ni">SIMAS</a> Con <a href="http://www.djangoproject.com/">Django</a> framework</div>
+             </div><!-- termina del footer_contenedor -->
+        </div><!-- Termina Footer-->
 </body>
 </html>
