@@ -23,8 +23,8 @@ ol, ul {
 /* --------------Comienza Generales-------------- */
 
 body {
-  background:#eaeaea;
-  /*background-image: url(../imagen/bg.jpg);*/
+  background:#eaeaea url(../imagen/fondolateral.jpg) no-repeat;
+  background-image: ;
   font-family: 'Trebuchet MS', Helvetica, sans-serif;
   font-size:14px;
   padding:0;
