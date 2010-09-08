@@ -235,7 +235,7 @@ def organizacion(request):
                                                          hijo = Sum('organizacion__hijos_socios'),
                                                          num = Count('organizacion__socio'),
                                                          miembro = Sum('organizacion__miembro'),
-                                                         comision = Sum('organizacion__comision'),
+                                                         comision = Sum('organizacion__miembro_trabajo'),
                                                          capacitacion = Sum('organizacion__cargo'))
 
     hombres_tiempo = consulta.filter(datos__sexo=1, 
@@ -254,7 +254,7 @@ def organizacion(request):
                                                          hijo = Sum('organizacion__hijos_socios'),
                                                          num = Count('organizacion__socio'),
                                                          miembro = Sum('organizacion__miembro'),
-                                                         comision = Sum('organizacion__comision'),
+                                                         comision = Sum('organizacion__miembro_trabajo'),
                                                          capacitacion = Sum('organizacion__cargo'))
 
     mujeres_tiempo = consulta.filter(datos__sexo=2, 
