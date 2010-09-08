@@ -1,8 +1,78 @@
 {%extends "base.html"%}
-
-{% load webdesign %}
-
-{% block contenido %}
-<h2>Reseña Historica</h2>
-{% lorem 3 p %}
+ {%block extra_header%}
+    <link href="{{MEDIA_URL}}css/visualize.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{MEDIA_URL}}css/visualize-light.css" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript" src="{{MEDIA_URL}}js/excanvas.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}js/visualize.jQuery.js"></script>
+	<script type="text/javascript" src="{{MEDIA_URL}}js/easySlider1.7.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){	
+			$("#slider").easySlider({
+				auto: true, 
+				continuous: true,
+				numeric: true,
+                speed: 800,
+                pause: 4000,
+                controlsShow: true,
+			});
+		});
+	</script>
+ {%endblock%}	
+  {% block pimp %}
 {% endblock %}
+{%block menu%}{%endblock%}
+{% block filtros%}{%endblock%}
+ {%block contenido%}
+    <div id="index_left">
+      <h2>Estadísticas Generales</h2>
+            <div class="estadisticas">
+                <span class="hombre"><img src="{{MEDIA_URL}}imagen/hombre.png" />Hombre <br><b style="font-size:18px;">{{conteo_hombre}}</b> </span>
+                <span class="hombre"><img src="{{MEDIA_URL}}imagen/mujer.png" />Mujer <br><b style="font-size:18px;">{{conteo_mujer}}</b> </span>
+                <span class="hombre total">Total de Encuestados <br><b style="font-size:22px;"> {{conteo_total}}</b></span>
+            </div>
+            <div class="estadisticas">
+                <div class="familia_promedio">Familia Promedio <br></div>
+                <span class="hombre"><b style="font-size:24px;">{{personas}}</b><br>Personas</span>
+                <span class="hombre"><b style="font-size:24px;">{{manzanas}}</b><br>Manzanas</span>
+                
+      
+            </div>
+            <span class="ultima_encuesta">Última encuesta subida al sistema  <b>27 Junio 2010</b><img src="{{MEDIA_URL}}imagen/calendario.png" /></span>
+
+    </div><!-- Termina index left-->
+    
+    <div id="index_right">
+    <h2>La Cooperativa</h2>
+        <br><p>La Cooperativa Juan Francisco Paz Silva tiene sus inicios en las tiendas campesinas que impulsó el gobierno durante los Años 80 y ha venido adoptando diferentes figuras legales con el propósito de tener condición jurídica para dar respuestas a los problemas de sus Asociados y Clientes en comunidades rurales. El centro neurálgico de la organización es la Tienda Campesina de la Cooperativa en la Población de Achuapa la cual es usada por un importante grupo poblacional como abastecedor de comercio al por menor.</p>
+        <br><p>La Cooperativa tiene en la actualidad 148 miembros contribuyentes, los servicios que esta ofrece se extienden a toda la población de la Municipalidad. De los 148 miembros, 131 son Hombres y 17 son Mujeres.</p>
+    </div><!-- Termina index right-->
+    <div class="separador" ></div>
+    <div id="grafo_index">
+    <table>
+	<caption>Familias Beneficiadas</caption>
+	<thead>
+		<tr>
+			<td></td>
+			<th scope="col">Encuestados</th>
+		</tr>
+	</thead>
+	<tbody>
+        {%for valor in valores%}
+		<tr>
+            <th scope="row">{{valor|first}}</th>
+            <td>{{valor|last}}</td>
+		</tr>
+        {%endfor%}
+	</tbody>
+</table>
+    </div>
+	<script type="text/javascript">
+		$(document).ready(function(){	
+            $('table').visualize({width:850,height:130,barMargin:25});
+            $('table').hide();
+		});
+        
+
+	</script>
+
+ {% endblock %}
