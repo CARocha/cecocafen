@@ -37,13 +37,7 @@
 </script>
 {% endblock %}
 {% block menu %}  
-<ul id="nav">
-        <li><a href="#">Inicio</a></li>
-        <li><a href="#">Indicadores</a></li>
-        <li><a href="#">Gráficos</a></li>
-        <li><a href="#">Ayuda</a></li>
-        <li><a href="/admin">Administración</a></li>
-</ul> 
+
 {% endblock %}
 
 {% block contenido %}
@@ -72,6 +66,27 @@
 
                       <input type="submit" value="Consultar" id="boton" class="filtro"/>
                     </form>
+                                        {%if centinela = 1 %}
+                    <div id="indicadores" class="der">
+                        <h2 class="titulo_indicadores">INDICADORES</h2>
+                        <div id="contenedor_indicadores">
+                            <a href="/familia" class="familia">Familia</a>
+                            <a href="/organizacion" class="organizacion">Organización</a>
+                            <a href="/fincas"class="fincas">Fincas</a>
+                            <a href="/arboles"class="arboles">Árboles</a>
+                            <a href="/animales"class="animales">Animales</a>
+                            <a href="/cultivos"class="cultivos">Cultivos</a>
+                            <a href="/ingresos"class="ingresos">Ingresos</a>
+                            <a href="/equipos"class="bienes">Bienes</a>
+                            <a href="/ahorro_credito" class="ahorro">Ahorro y Crédito</a>
+                            <a href="/servicios"class="servicios">Servicios</a>
+                            <a href="/seguridad_alimentaria" class="seguridad">Seguridad Alimentaria</a>
+                        </div>
+                        
+                    </div>
+                   
+                    {%endif%}
                          <div class="separador"></div>
+
 
 {% endblock %}
