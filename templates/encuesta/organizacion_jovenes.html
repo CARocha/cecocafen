@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Jóvenes{% endblock %}
+{%block titulo%}Jóvenes{%endblock%}
+{% block contenido %}
+<table border="1">
+ <thead>
+    <tr>
+        <th></th>
+        <th>Si</th>
+        <th>%Si</th>
+        <th>No</th>
+        <th>%No</th>
+        <th>Desde hace 5 años</th>
+        <th>%</th>
+        <th>Desde mas de 5 años</th>
+        <th>%</th>
+    </tr>
+ </thead>
+    {% for fila in tabla%}
+    <tr>
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+</table>
+<div class="separador"></div>
+{% endblock %}
+

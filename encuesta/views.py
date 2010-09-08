@@ -1224,7 +1224,68 @@ def jovenes(request):
     pass
 
 def organizacion_jovenes(request):
-    pass
+    '''tabla de organizacion jovenes'''
+    consulta = _queryset_filtrado(request)
+    num_familias = consulta.count()
+    num_casos = consulta.filter(jovenes__isnull=False).count()
+    tabla = []
+    fila_miembro = ['Es miembro del consejo']
+    fila_comision= ['Es parte de la comisiones']
+    fila_capacitaciones = ['Ha recibido capacitaciones']
+    fila_interesado = ['Esta interesado en asumir cargo']
+    sumas = consulta.aggregate(miembro = Sum('jovenes__miembro'),
+                               desde_miembro = Sum('jovenes__desde_miembro'),
+                               comision = Sum('jovenes__miembro_trabajo'),
+                               desde_comision = Sum('jovenes__desde_miembro_trabajo'),
+                               capacitacion = Sum('jovenes__cargo'),
+                               desde_capacitacion = Sum('jovenes__desde_cargo'),
+                               interesado = Sum('jovenes__quiero_miembro_junta'))
+
+    #limpiando none
+    for key in sumas:
+        if sumas[key] == None:
+            sumas[key] = 0
+    
+    fila_miembro.append(calcular_positivos(sumas['miembro'], num_casos, False))
+    fila_miembro.append(calcular_positivos(sumas['miembro'], num_casos, True))
+    fila_miembro.append(calcular_negativos(sumas['miembro'], num_casos, False))
+    fila_miembro.append(calcular_negativos(sumas['miembro'], num_casos, True))
+    fila_miembro.append(calcular_positivos(sumas['desde_miembro'], num_casos, False))
+    fila_miembro.append(calcular_positivos(sumas['desde_miembro'], num_casos, True))
+    fila_miembro.append(calcular_negativos(sumas['desde_miembro'], num_casos, False))
+    fila_miembro.append(calcular_negativos(sumas['desde_miembro'], num_casos, True))
+
+
+    fila_comision.append(calcular_positivos(sumas['comision'], num_casos, False))
+    fila_comision.append(calcular_positivos(sumas['comision'], num_casos, True))
+    fila_comision.append(calcular_negativos(sumas['comision'], num_casos, False))
+    fila_comision.append(calcular_negativos(sumas['comision'], num_casos, True))
+    fila_comision.append(calcular_positivos(sumas['desde_comision'], num_casos, False))
+    fila_comision.append(calcular_positivos(sumas['desde_comision'], num_casos, True))
+    fila_comision.append(calcular_negativos(sumas['desde_comision'], num_casos, False))
+    fila_comision.append(calcular_negativos(sumas['desde_comision'], num_casos, True))
+
+
+    fila_capacitaciones.append(calcular_positivos(sumas['capacitacion'], num_casos, False))
+    fila_capacitaciones.append(calcular_positivos(sumas['capacitacion'], num_casos, True))
+    fila_capacitaciones.append(calcular_negativos(sumas['capacitacion'], num_casos, False))
+    fila_capacitaciones.append(calcular_negativos(sumas['capacitacion'], num_casos, True))
+    fila_capacitaciones.append(calcular_positivos(sumas['desde_capacitacion'], num_casos, False))
+    fila_capacitaciones.append(calcular_positivos(sumas['desde_capacitacion'], num_casos, True))
+    fila_capacitaciones.append(calcular_negativos(sumas['desde_capacitacion'], num_casos, False))
+    fila_capacitaciones.append(calcular_negativos(sumas['desde_capacitacion'], num_casos, True))
+                               
+
+    fila_interesado.append(calcular_positivos(sumas['interesado'], num_casos, False))
+    fila_interesado.append(calcular_positivos(sumas['interesado'], num_casos, True))
+    fila_interesado.append(calcular_negativos(sumas['interesado'], num_casos, False))
+    fila_interesado.append(calcular_negativos(sumas['interesado'], num_casos, True))
+
+    tabla = [fila_miembro, fila_comision, fila_capacitaciones, fila_interesado]
+    print tabla
+    return render_to_response('encuesta/organizacion_jovenes.html', 
+                              {'tabla': tabla, 'num_familias': num_familias},
+                              context_instance=RequestContext(request))
 
 def suelo(request):
     pass
@@ -1452,6 +1513,7 @@ VALID_VIEWS = {
         'produccion': produccion,
         'condiciones': condiciones,
         'riego': riego,
+        'jovenes': organizacion_jovenes,
         }    
     
 # Vistas para obtener los municipios, comunidades, etc..
