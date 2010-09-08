@@ -1141,18 +1141,36 @@ def seguridad_alimentaria(request):
                                context_instance=RequestContext(request))    
 def riego(request):
     consulta = _queryset_filtrado(request)
-    familias = consulta.count()
+    num_familias = consulta.count()
     tabla = []
+    #fila: lugar, si, %si, no, %no
 
     for lugar in CHOICE_RIEGO:
-                     calcular_positivos(query['hojas'], familias),
-                     calcular_positivos(query['quince'], familias),
-                     calcular_positivos(query['veinte'], familias),
-                     calcular_positivos(query['urea'], familias)]
-        tabla.append(resultado)
-
-    dicc = {'tabla': tabla, 'num_familias': familias}
-    return render_to_response('encuesta/riego.html', 
+        query = consulta.filter(riego__lugar = lugar[0])
+        sumas = query.aggregate(inundacion = Sum('riego__inundacion'),
+                                aspersion = Sum('riego__aspersion'),
+                                goteo = Sum('riego__goteo'),
+                                regadera = Sum('riego__regadera'),
+                                panada = Sum('riego__panada'),
+                                manguera = Sum('riego__manguera'))
+        total_si = query.count()
+        total_no = num_familias - total_si
+        fila = [ lugar[1], total_si,
+                saca_porcentajes(total_si, num_familias, False),
+                total_no,
+                saca_porcentajes(total_no, num_familias, False),
+                calcular_positivos(sumas['inundacion'], total_si),
+                calcular_positivos(sumas['aspersion'], total_si),
+                calcular_positivos(sumas['goteo'], total_si),
+                calcular_positivos(sumas['regadera'], total_si),
+                calcular_positivos(sumas['panada'], total_si),
+                calcular_positivos(sumas['manguera'], total_si)]
+        tabla.append(fila)
+    #Nota: el calculo de valores se realiza con base a los que contestaron
+    #Si en el tipo de lugar de riego
+    dicc = {'tabla': tabla, 'num_familias': num_familias}
+    print dicc
+    return render_to_response('encuesta/riego.html', dicc, 
                               context_instance=RequestContext(request))
 
 def suelo(request):
@@ -1433,6 +1451,7 @@ VALID_VIEWS = {
         'postcosecha': postcosecha,
         'produccion': produccion,
         'condiciones': condiciones,
+        'riego': riego,
         }    
     
 # Vistas para obtener los municipios, comunidades, etc..
