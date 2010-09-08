@@ -969,12 +969,13 @@ class Jovenes(models.Model):
     conformado = models.ManyToManyField(AdmonActual, verbose_name="El consejo Admon actual esta conformado por", null=True, blank=True, related_name='conformados')
     conformarse = models.ManyToManyField(AdmonActual, verbose_name="El consejo de admón debe conformarse por", null=True, blank=True,related_name='conformarse')
     miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, null=True, blank=True)
-    desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
+    desde_miembro_trabajo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     cargo = models.IntegerField('He recibido capacitación para desempeñar mi cargo', 
                                  choices=CHOICE_OPCION, null=True, blank=True)
     desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, null=True, blank=True)
     quiero_miembro_junta = models.ManyToManyField(MiembroJoven, verbose_name="Quiero ser miembro del consejo admin o comisión", null=True, blank=True)
+
     class Meta:
         verbose_name_plural = "Jovenes"
     

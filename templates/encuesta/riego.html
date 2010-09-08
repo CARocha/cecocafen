@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Condiciones{% endblock %}
+{%block titulo%}Condiciones{%endblock%}
+{% block contenido %}
+<table border="1">
+ <thead>
+    <tr>
+        <th></th>
+        <th>Si</th>
+        <th>%Si</th>
+        <th>No</th>
+        <th>%No</th>
+        <th>Inundación</th>
+        <th>Aspersión</th>
+        <th>Goteo</th>
+        <th>Regadera</th>
+        <th>Panada</th>
+        <th>Manguera</th>
+    </tr>
+ </thead>
+    {% for fila in tabla%}
+    <tr>
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+</table>
+<div class="separador"></div>
+{% endblock %}
+

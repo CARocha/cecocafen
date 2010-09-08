@@ -1141,11 +1141,37 @@ def seguridad_alimentaria(request):
                                context_instance=RequestContext(request))    
 def riego(request):
     consulta = _queryset_filtrado(request)
-    return render_to_response('encuesta/riego.html', 
-                              context_instance=RequestContext(request))
+    num_familias = consulta.count()
+    tabla = []
+    #fila: lugar, si, %si, no, %no
 
-def condiciones(request):
-    pass
+    for lugar in CHOICE_RIEGO:
+        query = consulta.filter(riego__lugar = lugar[0])
+        sumas = query.aggregate(inundacion = Sum('riego__inundacion'),
+                                aspersion = Sum('riego__aspersion'),
+                                goteo = Sum('riego__goteo'),
+                                regadera = Sum('riego__regadera'),
+                                panada = Sum('riego__panada'),
+                                manguera = Sum('riego__manguera'))
+        total_si = query.count()
+        total_no = num_familias - total_si
+        fila = [ lugar[1], total_si,
+                saca_porcentajes(total_si, num_familias, False),
+                total_no,
+                saca_porcentajes(total_no, num_familias, False),
+                calcular_positivos(sumas['inundacion'], total_si),
+                calcular_positivos(sumas['aspersion'], total_si),
+                calcular_positivos(sumas['goteo'], total_si),
+                calcular_positivos(sumas['regadera'], total_si),
+                calcular_positivos(sumas['panada'], total_si),
+                calcular_positivos(sumas['manguera'], total_si)]
+        tabla.append(fila)
+    #Nota: el calculo de valores se realiza con base a los que contestaron
+    #Si en el tipo de lugar de riego
+    dicc = {'tabla': tabla, 'num_familias': num_familias}
+    print dicc
+    return render_to_response('encuesta/riego.html', dicc, 
+                              context_instance=RequestContext(request))
 
 def suelo(request):
     '''Vista de manejo de suelo'''
@@ -1383,6 +1409,24 @@ def produccion(request):
     return render_to_response('encuesta/produccion.html',{'tabla':tabla,
                               'num_familias':num_familias},
                                context_instance=RequestContext(request))
+
+def condiciones(request):
+    '''Condiciones del campo'''
+    consulta = _queryset_filtrado(request)
+    num_familias = consulta.count()
+    tabla = []
+
+    for pregunta in Campo.objects.all():
+        fila = [pregunta.afirmacion]
+        for condicion in CHOICE_CAMPO:
+            conteo = consulta.filter(campo__pregunta = pregunta, campo__respuesta = condicion[0]).count()
+            porcentaje = saca_porcentajes(conteo, num_familias, False)
+            fila.append(porcentaje)
+        tabla.append(fila)
+
+    dicc = {'tabla': tabla, 'num_familias': num_familias, 'columnas': CHOICE_CAMPO}
+    return render_to_response('encuesta/condiciones.html', dicc,
+                               context_instance=RequestContext(request))
         
 #TODO: completar esto
 VALID_VIEWS = {
@@ -1406,6 +1450,8 @@ VALID_VIEWS = {
         'compra': compra,
         'postcosecha': postcosecha,
         'produccion': produccion,
+        'condiciones': condiciones,
+        'riego': riego,
         }    
     
 # Vistas para obtener los municipios, comunidades, etc..
