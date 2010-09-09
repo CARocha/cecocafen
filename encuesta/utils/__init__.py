@@ -36,7 +36,7 @@ def calcular_positivos(suma, numero, porcentaje=True):
 def calcular_negativos(suma, numero, porcentaje = True):
     positivos = calcular_positivos(suma, numero, porcentaje)
     if porcentaje:
-        return 100 - positivos
+        return 100 - float(positivos)
     else:
         return numero - positivos
  
