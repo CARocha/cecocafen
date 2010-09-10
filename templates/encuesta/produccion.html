@@ -1,9 +1,125 @@
 {% extends "base.html" %}
 {%load unslugify %}
 
+{% block extra_header %}
+ <script type="text/javascript">
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/vulnerabilidad/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+$(document).ready(function() {
+    $("#grafico1").click(function(){
+        $("#grafico1").addClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+        $("#grafico7").removeClass('enlace_seleccionado');
+        $("#grafico8").removeClass('enlace_seleccionado');
+    });
+    
+    $("#grafico2").click(function(){
+        $("#grafico2").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+        $("#grafico7").removeClass('enlace_seleccionado');
+        $("#grafico8").removeClass('enlace_seleccionado');
+    });
+
+    $("#grafico3").click(function(){
+        $("#grafico3").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+        $("#grafico7").removeClass('enlace_seleccionado');
+        $("#grafico8").removeClass('enlace_seleccionado');
+    });
+    $("#grafico4").click(function(){
+        $("#grafico4").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+        $("#grafico7").removeClass('enlace_seleccionado');
+        $("#grafico8").removeClass('enlace_seleccionado');
+    });
+    $("#grafico5").click(function(){
+        $("#grafico5").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+        $("#grafico7").removeClass('enlace_seleccionado');
+        $("#grafico8").removeClass('enlace_seleccionado');
+    });
+    $("#grafico6").click(function(){
+        $("#grafico6").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico7").removeClass('enlace_seleccionado');
+        $("#grafico8").removeClass('enlace_seleccionado');
+    });
+    $("#grafico7").click(function(){
+        $("#grafico7").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico8").removeClass('enlace_seleccionado');
+    });
+    $("#grafico8").click(function(){
+        $("#grafico8").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+        $("#grafico4").removeClass('enlace_seleccionado');
+        $("#grafico5").removeClass('enlace_seleccionado');
+        $("#grafico6").removeClass('enlace_seleccionado');
+        $("#grafico3").removeClass('enlace_seleccionado');
+        $("#grafico7").removeClass('enlace_seleccionado');
+    });
+});
+</script>
+{% endblock %}
+
 {% block contenido %}
+
+<div id="sidebar">
+    <div class="graficos_widget">
+        <h1>Gráficos sobre vulnerabilidad</h1>
+        <a href="#" id="grafico1" onCLick="click_callback('alimentosbasico')">Alimentos Básicos</a>
+        <a href="#" id="grafico2" onCLick="click_callback('necesidadbasica')">Necesidades Básicas</a>
+        <a href="#" id="grafico3" onCLick="click_callback('razonesfalta')">Razones de falta</a>
+        <a href="#" id="grafico4" onCLick="click_callback('mesesdificil')">Meses Dificiles</a>
+        <a href="#" id="grafico5" onCLick="click_callback('cafeprecio')">Café cuando baja</a>
+        <a href="#" id="grafico6" onCLick="click_callback('accionesescazes')">Acciones escasez</a>
+        <a href="#" id="grafico7" onCLick="click_callback('conseguir')">De donde conseguir</a>
+        <a href="#" id="grafico8" onCLick="click_callback('portiempo')">Por cuanto tiempo</a>
+    </div>
+</div>
+<div id="grafo"></div>
 <table>
-<caption>La Produccion</caption>
+<caption>La Producción</caption>
  <thead>
     <tr>
         <th>producto</th>

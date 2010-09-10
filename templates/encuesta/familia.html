@@ -18,10 +18,13 @@
 </script>
 {%endblock%}
 {% block contenido %}
-numero familia = {{num_familia}}
 <br></br>
-
-<a id="grafico1" href="#" onCLick="click_callback('razones')">Razones sobre Migracion</a>
+<div id="sidebar">
+    <div class="graficos_widget">
+       <h1>Graficos Razones de Migración</h1>
+        <a id="grafico1" href="#" onCLick="click_callback('razones')">Razones sobre Migracion</a>
+    </div>
+</div>
 
 <div id="grafo"></div>
 <table>
