@@ -1227,20 +1227,26 @@ def organizacion_jovenes(request):
     '''tabla de organizacion jovenes'''
     consulta = _queryset_filtrado(request)
     num_familias = consulta.count()
+    #num_casos = num_familias 
     num_casos = consulta.filter(jovenes__isnull=False).count()
     tabla = []
     fila_miembro = ['Es miembro del consejo']
     fila_comision= ['Es parte de la comisiones']
     fila_capacitaciones = ['Ha recibido capacitaciones']
-    fila_interesado = ['Esta interesado en asumir cargo']
-    sumas = consulta.aggregate(miembro = Sum('jovenes__miembro'),
-                               desde_miembro = Sum('jovenes__desde_miembro'),
-                               comision = Sum('jovenes__miembro_trabajo'),
-                               desde_comision = Sum('jovenes__desde_miembro_trabajo'),
-                               capacitacion = Sum('jovenes__cargo'),
-                               desde_capacitacion = Sum('jovenes__desde_cargo'),
-                               interesado = Sum('jovenes__quiero_miembro_junta'))
+    #fila_interesado = ['Esta interesado en asumir cargo']
+    lista_id  = [id[0] for id in consulta.values_list('id')]
+    sumas = Jovenes.objects.filter(encuesta__id__in=lista_id).aggregate(miembro = Sum('miembro'),
+                               comision = Sum('miembro_trabajo'),
+                               capacitacion = Sum('cargo'))
 
+    sumas['desde_miembro_menor'] = consulta.filter(jovenes__desde_miembro=1).count() 
+    sumas['desde_miembro_mayor'] = consulta.filter(jovenes__desde_miembro=2).count() 
+    sumas['desde_comision_menor'] = consulta.filter(jovenes__desde_miembro_trabajo=1).count() 
+    sumas['desde_comision_mayor'] = consulta.filter(jovenes__desde_miembro_trabajo=2).count() 
+    sumas['desde_capacitacion_menor'] = consulta.filter(jovenes__desde_cargo=1).count() 
+    sumas['desde_capacitacion_mayor'] = consulta.filter(jovenes__desde_cargo=2).count() 
+
+    print sumas, num_casos
     #limpiando none
     for key in sumas:
         if sumas[key] == None:
@@ -1250,39 +1256,38 @@ def organizacion_jovenes(request):
     fila_miembro.append(calcular_positivos(sumas['miembro'], num_casos, True))
     fila_miembro.append(calcular_negativos(sumas['miembro'], num_casos, False))
     fila_miembro.append(calcular_negativos(sumas['miembro'], num_casos, True))
-    fila_miembro.append(calcular_positivos(sumas['desde_miembro'], num_casos, False))
-    fila_miembro.append(calcular_positivos(sumas['desde_miembro'], num_casos, True))
-    fila_miembro.append(calcular_negativos(sumas['desde_miembro'], num_casos, False))
-    fila_miembro.append(calcular_negativos(sumas['desde_miembro'], num_casos, True))
+    fila_miembro.append(sumas['desde_miembro_menor'])
+    fila_miembro.append(saca_porcentajes(sumas['desde_miembro_menor'], num_casos, False))
+    fila_miembro.append(sumas['desde_miembro_mayor'])
+    fila_miembro.append(saca_porcentajes(sumas['desde_miembro_mayor'], num_casos, False))
 
 
     fila_comision.append(calcular_positivos(sumas['comision'], num_casos, False))
     fila_comision.append(calcular_positivos(sumas['comision'], num_casos, True))
     fila_comision.append(calcular_negativos(sumas['comision'], num_casos, False))
     fila_comision.append(calcular_negativos(sumas['comision'], num_casos, True))
-    fila_comision.append(calcular_positivos(sumas['desde_comision'], num_casos, False))
-    fila_comision.append(calcular_positivos(sumas['desde_comision'], num_casos, True))
-    fila_comision.append(calcular_negativos(sumas['desde_comision'], num_casos, False))
-    fila_comision.append(calcular_negativos(sumas['desde_comision'], num_casos, True))
+    fila_comision.append(sumas['desde_comision_menor'])
+    fila_comision.append(saca_porcentajes(sumas['desde_comision_menor'], num_casos, False))
+    fila_comision.append(sumas['desde_comision_mayor'])
+    fila_comision.append(saca_porcentajes(sumas['desde_comision_mayor'], num_casos, False))
 
 
     fila_capacitaciones.append(calcular_positivos(sumas['capacitacion'], num_casos, False))
     fila_capacitaciones.append(calcular_positivos(sumas['capacitacion'], num_casos, True))
     fila_capacitaciones.append(calcular_negativos(sumas['capacitacion'], num_casos, False))
     fila_capacitaciones.append(calcular_negativos(sumas['capacitacion'], num_casos, True))
-    fila_capacitaciones.append(calcular_positivos(sumas['desde_capacitacion'], num_casos, False))
-    fila_capacitaciones.append(calcular_positivos(sumas['desde_capacitacion'], num_casos, True))
-    fila_capacitaciones.append(calcular_negativos(sumas['desde_capacitacion'], num_casos, False))
-    fila_capacitaciones.append(calcular_negativos(sumas['desde_capacitacion'], num_casos, True))
+    fila_capacitaciones.append(sumas['desde_capacitacion_menor'])
+    fila_capacitaciones.append(saca_porcentajes(sumas['desde_capacitacion_menor'], num_casos, False))
+    fila_capacitaciones.append(sumas['desde_capacitacion_mayor'])
+    fila_capacitaciones.append(saca_porcentajes(sumas['desde_capacitacion_mayor'], num_casos, False))
                                
 
-    fila_interesado.append(calcular_positivos(sumas['interesado'], num_casos, False))
-    fila_interesado.append(calcular_positivos(sumas['interesado'], num_casos, True))
-    fila_interesado.append(calcular_negativos(sumas['interesado'], num_casos, False))
-    fila_interesado.append(calcular_negativos(sumas['interesado'], num_casos, True))
+    #fila_interesado.append(calcular_positivos(sumas['interesado'], num_casos, False))
+    #fila_interesado.append(calcular_positivos(sumas['interesado'], num_casos, True))
+    #fila_interesado.append(calcular_negativos(sumas['interesado'], num_casos, False))
+    #fila_interesado.append(calcular_negativos(sumas['interesado'], num_casos, True))
 
-    tabla = [fila_miembro, fila_comision, fila_capacitaciones, fila_interesado]
-    print tabla
+    tabla = [fila_miembro, fila_comision, fila_capacitaciones]
     return render_to_response('encuesta/organizacion_jovenes.html', 
                               {'tabla': tabla, 'num_familias': num_familias},
                               context_instance=RequestContext(request))
