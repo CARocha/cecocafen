@@ -66,7 +66,25 @@ def _queryset_filtrado(request):
 
 #empieza la parte divertida
 def index(request):
-    return render_to_response("index.html", context_instance=RequestContext(request))
+    encuestas = Encuesta.objects.all()
+    conteo_total = encuestas.all().count()
+    conteo_hombre = DatosGenerales.objects.filter(sexo=1).count()
+    conteo_mujer = DatosGenerales.objects.filter(sexo=2).count()
+    #personas es la suma de personas en la familia/encuesta
+    personas = encuestas.aggregate(num=Sum('migracion__n_total'))['num'] / conteo_total
+    manzanas = encuestas.aggregate(num=Sum('tierra__areas'))['num'] / conteo_total
+    dicc = {'conteo_total': conteo_total, 
+            'conteo_hombre': conteo_hombre, 
+            'conteo_mujer': conteo_mujer,
+            'personas': personas,
+            'manzanas': manzanas,
+            'valores': []}
+
+    for beneficio in Beneficios.objects.all():
+        conteo = Encuesta.objects.filter(organizacion__beneficio = beneficio).aggregate(num=Count('organizacion__beneficio'))
+        dicc['valores'].append([beneficio.nombre, conteo['num']])
+
+    return direct_to_template(request, 'index.html', dicc)
 
 def inicio(request): 
     if request.method == 'POST':
