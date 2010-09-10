@@ -938,77 +938,32 @@ def educacion(request):
 def salud(request):
     '''salud'''
     consulta = _queryset_filtrado(request)
-    numero = consulta.count()
-    tabla_estado = []
-    tabla_sitio = []
+    num_familias = consulta.count()
+    tabla = [] 
 
-    for choice in CHOICE_SEX:
-        query = consulta.filter(salud__edad=choice[0])
-        casos = query.count()
-        resultados = query.aggregate(bs = Sum('salud__buena_salud'),
-                                     ds = Sum('salud__delicada_salud'),
-                                     ec = Sum('salud__cronica'),
-                                     centro = Sum('salud__centro'),
-                                     medico = Sum('salud__medico'),
-                                     clinica = Sum('salud__clinica'),
-                                     nologra = Sum('salud__nologra')
-                                     )
-        
-        #validando que no sea none
-        if resultados['bs']:
-            total_estado = resultados['bs'] 
-        else:
-            total_estado = 0
+    for enfermedad in CHOICE_ENFERMEDADES:
+        hijo = consulta.filter(enfermedad__enfermedad=enfermedad[0], enfermedad__hijo=1).count()
+        socia  = consulta.filter(enfermedad__enfermedad=enfermedad[0], enfermedad__socia=1).count()
+        companero = consulta.filter(enfermedad__enfermedad=enfermedad[0], enfermedad__companero=1).count()
+        fila = [enfermedad[1], 
+                saca_porcentajes(socia, num_familias, False), 
+                saca_porcentajes(hijo, num_familias, False),
+                saca_porcentajes(companero, num_familias, False)]
+        tabla.append(fila)
 
-        if resultados['ds']:
-            total_estado += resultados['ds'] 
-        
-        if resultados['ec']:
-            total_estado += resultados['ec']
-
-        fila_estado = [choice[1], casos,
-                saca_porcentajes(resultados['bs'], total_estado, False),
-                saca_porcentajes(resultados['ds'], total_estado, False),
-                saca_porcentajes(resultados['ec'], total_estado, False)]
-        tabla_estado.append(fila_estado)
-
-        total_sitio = 0
-        if resultados['centro']:
-            total_sitio += resultados['centro']
-        if resultados['medico']:
-            total_sitio += resultados['medico']
-        if resultados['clinica']:
-            total_sitio += resultados['clinica']
-
-        fila_sitio = [choice[1], casos,
-                      saca_porcentajes(resultados['centro'], total_sitio, False),
-                      saca_porcentajes(resultados['medico'], total_sitio, False),
-                      saca_porcentajes(resultados['clinica'], total_sitio, False),
-                      resultados['nologra']]
-        tabla_sitio.append(fila_sitio)
-
-    return render_to_response('encuesta/salud.html', 
-                              {'tabla_estado':tabla_estado, 
-                               'tabla_sitio': tabla_sitio,
-                               'num_familias': numero},
+    dicc = {'tabla': tabla, 'num_familias': num_familias}
+    return render_to_response('encuesta/salud.html', dicc,  
                               context_instance=RequestContext(request))
 
 @session_required
 def salud_grafos(request, tipo):
     '''Graficos de salud'''
-    consulta = _queryset_filtrado(request)
-    data = [] 
-    legends = []
-    if int(tipo) in [numero[0] for numero in CHOICE_SEX]:
-        for opcion in CHOICE_SALUD:
-            data.append(consulta.filter(salud__frecuencia=opcion[0], salud__edad = int(tipo)).count())
-            legends.append(opcion[1])
-        titulo = 'Disponibilidad del salud para %s' % CHOICE_SEX[int(tipo)-1][1]
-        return grafos.make_graph(data, legends, 
-                titulo, return_json = True,
-                type = grafos.PIE_CHART_3D)
-    else:
-        raise Http404
+    pass
+   #     return grafos.make_graph(data, legends, 
+   #             titulo, return_json = True,
+   #             type = grafos.PIE_CHART_3D)
+   # else:
+   #     raise Http404
 
 @session_required
 def agua(request):

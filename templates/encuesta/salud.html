@@ -95,14 +95,13 @@ $(document).ready(function() {
 <table>
  <thead>
     <tr>
-        <th></th>
-        <th>Frecuencia de consulta por edad</th>
-        <th>%Buena Salud</th>
-        <th>%Salud Delicada</th>
-        <th>%Enfermedades Crónica</th>
+        <th>Enfermedades</th>
+        <th>%Socio o socia</th>
+        <th>%Hijos o Hijas</th>
+        <th>%Compañero o compañera</th>
     </tr>
  </thead>
-    {% for fila in tabla_estado%}
+    {% for fila in tabla%}
     <tr>
         {%for celda in fila%}
         <td>{{celda}}</td>
@@ -110,26 +109,4 @@ $(document).ready(function() {
     </tr>
     {%endfor%}
 </table>
-
-<table>
- <thead>
-    <tr>
-        <th></th>
-        <th>Frecuencia de consulta por edad</th>
-        <th>%Visita Centro de Salud</th>
-        <th>%Visita Médico Privado</th>
-        <th>%Visita Clínica</th>
-        <th>Número de veces que no logra atención por año</th>
-    </tr>
- </thead>
-    {% for fila in tabla_sitio%}
-    <tr>
-        {%for celda in fila%}
-        <td>{{celda}}</td>
-        {%endfor%}
-    </tr>
-    {%endfor%}
-</table>
-
-
 {% endblock %}
