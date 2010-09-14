@@ -1372,6 +1372,7 @@ def postcosecha(request):
         key2 = slugify(u.unidad).replace('-','_')
         query = a.filter(postcosecha__producto = u)
         frecuencia = query.count()
+        cantidad = query.aggregate(cantidad=Sum('postcosecha__cantidad'))['cantidad']
         hombres = query.filter(postcosecha__responsable=1).count()
         mujeres = query.filter(postcosecha__responsable=2).count()
         hijos = query.filter(postcosecha__responsable=3).count()
@@ -1398,7 +1399,8 @@ def postcosecha(request):
                        'porcentaje_mujeres':porcentaje_mujeres,'porcentaje_hijos':porcentaje_hijos,
                        'porcentaje_sm':porcentaje_sm,'porcentaje_tm':porcentaje_tm,
                        'porcentaje_tr':porcentaje_tr,'porcentaje_s':porcentaje_s,'porcentaje_bp':porcentaje_bp,
-                       'porcentaje_b':porcentaje_b,'porcentaje_casa':porcentaje_casa}
+                       'porcentaje_b':porcentaje_b,'porcentaje_casa':porcentaje_casa,
+                       'cantidad':cantidad}
     return render_to_response('encuesta/postcosecha.html',{'tabla':tabla,
                               'num_familias':num_familias},
                                context_instance=RequestContext(request))
