@@ -88,27 +88,27 @@ class Organizacion(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION, null=True, blank=True)
+    socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION, default=2, blank=True)
     desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA,null=True, blank=True)
     #pertenecer = models.CharField('Cooperativa a la que pertenezco', max_length=200, null=True, blank=True)
     socio_cooperativa = models.IntegerField('Mi esposa/esposo es socio(a) de la cooperativa',
-                                             choices=CHOICE_OPCION,null=True, blank=True)
+                                             choices=CHOICE_OPCION, default = 2, blank=True)
     desde_socio_coop = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     hijos_socios = models.IntegerField('Mis Hijos/hijas son socio(as) de la cooperativa', 
-                                        choices=CHOICE_OPCION, null=True, blank=True)
+                                        choices=CHOICE_OPCION, default = 2, blank=True)
     desde_hijo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     beneficio = models.ManyToManyField(Beneficios, verbose_name="Beneficios obtenidos", null=True, blank=True)
     miembro = models.IntegerField('Es miembro del consejo de administracion', 
-                                   choices=CHOICE_OPCION, null=True, blank=True)
+                                   choices=CHOICE_OPCION, default=2, blank=True)
     desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     conformado = models.ManyToManyField(AdmonActual, verbose_name="El consejo Admon actual esta conformado por", null=True, blank=True, related_name='conformado')
     conformarse = models.ManyToManyField(AdmonActual, verbose_name="Está de acuerdo que el consejo de Admón esté conformado por", null=True, blank=True)
-    miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, null=True, blank=True)
+    miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, default=2, blank=True)
     desde_trabajo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     cargo = models.IntegerField('He recibido capacitación para desempeñar mi cargo', 
-                                 choices=CHOICE_OPCION, null=True, blank=True)
+                                 choices=CHOICE_OPCION, default=2, blank=True)
     desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
-    no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, null=True, blank=True)
+    no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, default=2, blank=True)
     quiero_miembro_junta = models.ManyToManyField(PorqueMiembro, verbose_name="Por qué queire ser miembro consejo", null=True, blank=True)
     class Meta:
         verbose_name_plural = "Organizacion"
@@ -959,21 +959,21 @@ class Jovenes(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.IntegerField(db_index=True)
     content_object = generic.GenericForeignKey()
-    socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION,null=True, blank=True)
+    socio = models.IntegerField('Soy socio o socia', choices=CHOICE_OPCION, default = 2, blank=True)
     desde_socio = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA,null=True, blank=True)
-    promotor = models.IntegerField('Es promotor de su cooperativa?', choices=CHOICE_OPCION,null=True, blank=True)
+    promotor = models.IntegerField('Es promotor de su cooperativa?', choices=CHOICE_OPCION, default=2, blank=True)
     beneficio = models.ManyToManyField(BeneficioJoven, verbose_name="Beneficios obtenidos", null=True, blank=True)
     miembro = models.IntegerField('Es miembro del consejo de administracion', 
-                                   choices=CHOICE_OPCION, null=True, blank=True)
+                                   choices=CHOICE_OPCION, default = 2, blank=True)
     desde_miembro = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA,null=True, blank=True)
     conformado = models.ManyToManyField(AdmonActual, verbose_name="El consejo Admon actual esta conformado por", null=True, blank=True, related_name='conformados')
     conformarse = models.ManyToManyField(AdmonActual, verbose_name="El consejo de admón debe conformarse por", null=True, blank=True,related_name='conformarse')
-    miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, null=True, blank=True)
+    miembro_trabajo = models.IntegerField('Es miembro/a de las comisiones de trabajo', choices=CHOICE_OPCION, default = 2, blank=True)
     desde_miembro_trabajo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
     cargo = models.IntegerField('He recibido capacitación para desempeñar mi cargo', 
                                  choices=CHOICE_OPCION, null=True, blank=True)
     desde_cargo = models.IntegerField('Desde Cuando', choices=CHOICE_DESDE_ORGA, null=True, blank=True)
-    no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, null=True, blank=True)
+    no_miembro = models.IntegerField('Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo', choices=CHOICE_OPCION, default=2, blank=True)
     quiero_miembro_junta = models.ManyToManyField(MiembroJoven, verbose_name="Quiero ser miembro del consejo admin o comisión", null=True, blank=True)
 
     class Meta:
