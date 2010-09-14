@@ -70,6 +70,8 @@ def index(request):
     conteo_total = encuestas.all().count()
     conteo_hombre = DatosGenerales.objects.filter(sexo=1).count()
     conteo_mujer = DatosGenerales.objects.filter(sexo=2).count()
+    #tipo de tecnologia
+   
     #personas es la suma de personas en la familia/encuesta
     personas = encuestas.aggregate(num=Sum('migracion__n_total'))['num'] / conteo_total
     manzanas = encuestas.aggregate(num=Sum('tierra__areas'))['num'] / conteo_total
@@ -1372,13 +1374,13 @@ def postcosecha(request):
         porcentaje_hombres = saca_porcentajes(hombres,sumas)
         porcentaje_mujeres = saca_porcentajes(mujeres,sumas)
         porcentaje_hijos = saca_porcentajes(hijos,sumas)
-        sm = query.filter(postcosecha__tipo__id=1).count()
-        tm = query.filter(postcosecha__tipo__id=2).count()
-        tr = query.filter(postcosecha__tipo__id=3).count()
-        s = query.filter(postcosecha__tipo__id=4).count()
-        bp = query.filter(postcosecha__tipo__id=5).count()
-        b = query.filter(postcosecha__tipo__id=6).count()
-        casa = query.filter(postcosecha__tipo__id=7).count()
+        sm = query.filter(postcosecha__tipo__id__exact=1).count()
+        tm = query.filter(postcosecha__tipo__id__exact=2).count()
+        tr = query.filter(postcosecha__tipo__id__exact=3).count()
+        s = query.filter(postcosecha__tipo__id__exact=4).count()
+        bp = query.filter(postcosecha__tipo__id__exact=5).count()
+        b = query.filter(postcosecha__tipo__id__exact=6).count()
+        casa = query.filter(postcosecha__tipo__id__exact=7).count()
         suma_tipo = sm + tm + tr + s + bp + b + casa
         porcentaje_sm = saca_porcentajes(sm,suma_tipo)
         porcentaje_tm = saca_porcentajes(tm, suma_tipo)
