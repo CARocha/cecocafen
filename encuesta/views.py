@@ -66,7 +66,27 @@ def _queryset_filtrado(request):
 
 #empieza la parte divertida
 def index(request):
-    return render_to_response("index.html", context_instance=RequestContext(request))
+    encuestas = Encuesta.objects.all()
+    conteo_total = encuestas.all().count()
+    conteo_hombre = DatosGenerales.objects.filter(sexo=1).count()
+    conteo_mujer = DatosGenerales.objects.filter(sexo=2).count()
+    #tipo de tecnologia
+   
+    #personas es la suma de personas en la familia/encuesta
+    personas = encuestas.aggregate(num=Sum('migracion__n_total'))['num'] / conteo_total
+    manzanas = encuestas.aggregate(num=Sum('tierra__areas'))['num'] / conteo_total
+    dicc = {'conteo_total': conteo_total, 
+            'conteo_hombre': conteo_hombre, 
+            'conteo_mujer': conteo_mujer,
+            'personas': personas,
+            'manzanas': manzanas,
+            'valores': []}
+
+    for beneficio in Beneficios.objects.all():
+        conteo = Encuesta.objects.filter(organizacion__beneficio = beneficio).aggregate(num=Count('organizacion__beneficio'))
+        dicc['valores'].append([beneficio.nombre, conteo['num']])
+
+    return direct_to_template(request, 'index.html', dicc)
 
 def inicio(request): 
     if request.method == 'POST':
@@ -122,7 +142,7 @@ def familia(request):
     '''Tabla de familias(migracion)'''
     #*******Variables globales**********
     a = _queryset_filtrado(request)
-    num_familia = a.count()
+    num_familias = a.count()
     #**********************************
     tabla = {}
     totales = {}
@@ -140,7 +160,7 @@ def familia(request):
         numero = query.count()
         porcentaje_num = saca_porcentajes(numero, totales['numero'])
         totalv = query.aggregate(totalv=Sum('migracion__n_total'))['totalv']
-        vive = totalv / num_familia if totalv != None and num_familia != None else 0
+        vive = totalv / num_familias if totalv != None and num_familias != None else 0
         vive_casa = query.aggregate(vive_casa = Sum('migracion__viven_casa'))['vive_casa']
         porcentaje_viven = saca_porcentajes(vive_casa, totalv)
         comunidad = query.aggregate(comunidad = Sum('migracion__viven_comu'))['comunidad']
@@ -630,14 +650,14 @@ def grafos_ingreso(request, tipo):
     #-----------------------
     if tipo == 'vendio':
         for opcion in CHOICE_VENDIO:
-            data.append(consulta.filter(ingresofamiliar__quien_vendio=opcion[0]).count())
+            data.append(consulta.filter(ingreso__quien_vendio=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
                 'A quien venden', return_json=True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'maneja':
         for opcion in CHOICE_MANEJA:
-            data.append(consulta.filter(ingresofamiliar__quien_vendio=opcion[0]).count())
+            data.append(consulta.filter(ingreso__maneja_negocio=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
                 'Quien maneja negocio', return_json=True,
@@ -664,42 +684,42 @@ def grafos_bienes(request, tipo):
     #----------------------
     if tipo == 'tipocasa':
         for opcion in CHOICE_TIPO_CASA:
-            data.append(consulta.filter(tipocasa__tipo=opcion[0]).count())
+            data.append(consulta.filter(tipo__tipo=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends, 
                 'Tipos de casas', return_json = True,
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'tipopiso': 
         for opcion in Piso.objects.all():
-            data.append(consulta.filter(tipocasa__piso=opcion).count())
+            data.append(consulta.filter(tipo__piso=opcion).count())
             legends.append(opcion.nombre)
         return grafos.make_graph(data, legends, 
                 'Tipo de pisos', return_json = True,
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'tipotecho':
         for opcion in Techo.objects.all():
-            data.append(consulta.filter(tipocasa__techo=opcion).count())
+            data.append(consulta.filter(tipo__techo=opcion).count())
             legends.append(opcion.nombre)
         return grafos.make_graph(data, legends, 
                 'Tipos de Techos', return_json = True,
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'ambiente':
         for opcion in CHOICE_AMBIENTE:
-            data.append(consulta.filter(detallecasa__ambientes=opcion[0]).count())
+            data.append(consulta.filter(detalle__ambientes=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
                'Numeros de ambientes', return_json = True,
                type = grafos.PIE_CHART_3D)
     elif tipo == 'letrina':
         for opcion in CHOICE_OPCION:
-            data.append(consulta.filter(detallecasa__letrina=opcion[0]).count())
+            data.append(consulta.filter(detalle__letrina=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
                 'Tiene letrina', return_json = True,
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'lavadero':
         for opcion in CHOICE_OPCION:
-            data.append(consulta.filter(detallecasa__lavadero=opcion[0]).count())
+            data.append(consulta.filter(detalle__lavadero=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
                'Tiene lavadero', return_json = True,
@@ -1307,6 +1327,7 @@ def postcosecha(request):
         key2 = slugify(u.unidad).replace('-','_')
         query = a.filter(postcosecha__producto = u)
         frecuencia = query.count()
+        cantidad = query.aggregate(cantidad=Sum('postcosecha__cantidad'))['cantidad']
         hombres = query.filter(postcosecha__responsable=1).count()
         mujeres = query.filter(postcosecha__responsable=2).count()
         hijos = query.filter(postcosecha__responsable=3).count()
@@ -1314,13 +1335,13 @@ def postcosecha(request):
         porcentaje_hombres = saca_porcentajes(hombres,sumas)
         porcentaje_mujeres = saca_porcentajes(mujeres,sumas)
         porcentaje_hijos = saca_porcentajes(hijos,sumas)
-        sm = query.filter(postcosecha__tipo__id=1).count()
-        tm = query.filter(postcosecha__tipo__id=2).count()
-        tr = query.filter(postcosecha__tipo__id=3).count()
-        s = query.filter(postcosecha__tipo__id=4).count()
-        bp = query.filter(postcosecha__tipo__id=5).count()
-        b = query.filter(postcosecha__tipo__id=6).count()
-        casa = query.filter(postcosecha__tipo__id=7).count()
+        sm = query.filter(postcosecha__tipo__id__exact=1).count()
+        tm = query.filter(postcosecha__tipo__id__exact=2).count()
+        tr = query.filter(postcosecha__tipo__id__exact=3).count()
+        s = query.filter(postcosecha__tipo__id__exact=4).count()
+        bp = query.filter(postcosecha__tipo__id__exact=5).count()
+        b = query.filter(postcosecha__tipo__id__exact=6).count()
+        casa = query.filter(postcosecha__tipo__id__exact=7).count()
         suma_tipo = sm + tm + tr + s + bp + b + casa
         porcentaje_sm = saca_porcentajes(sm,suma_tipo)
         porcentaje_tm = saca_porcentajes(tm, suma_tipo)
@@ -1333,17 +1354,19 @@ def postcosecha(request):
                        'porcentaje_mujeres':porcentaje_mujeres,'porcentaje_hijos':porcentaje_hijos,
                        'porcentaje_sm':porcentaje_sm,'porcentaje_tm':porcentaje_tm,
                        'porcentaje_tr':porcentaje_tr,'porcentaje_s':porcentaje_s,'porcentaje_bp':porcentaje_bp,
-                       'porcentaje_b':porcentaje_b,'porcentaje_casa':porcentaje_casa}
+                       'porcentaje_b':porcentaje_b,'porcentaje_casa':porcentaje_casa,
+                       'cantidad':cantidad}
     return render_to_response('encuesta/postcosecha.html',{'tabla':tabla,
                               'num_familias':num_familias},
                                context_instance=RequestContext(request))
-    
-def grafos_vulnerabilidad(request):
+
+@session_required    
+def grafos_vulnerabilidad(request, tipo):
     ''' sobre el modelo de vulnerabilidad
     '''
     #--------- variables globales ----
     consulta = _queryset_filtrado(request)
-    num_familias = a.count()
+    num_familias = consulta.count()
     #--------------------------------- 
     data = [] 
     legends = []
@@ -1406,9 +1429,10 @@ def grafos_vulnerabilidad(request):
                 type=grafos.PIE_CHART_3D)
     else:
         raise Http404
+    pass
 
 def produccion(request):
-    ''' sobre el modelo de post cosecha
+    ''' sobre el modelo de produccion
     '''
     #--------- variables globales ----
     a = _queryset_filtrado(request)

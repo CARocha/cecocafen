@@ -8,8 +8,8 @@
     <tr>
         <th>Producto</th>
         <th>Cantidad Almacenada(qq)</th>
-        <th colspan="4">Responsable de Almacenamiento</th>
-        <th colspan="4">Tipo de almacenaje</th>
+        <th colspan="3">Responsable de Almacenamiento</th>
+        <th colspan="7">Tipo de almacenaje</th>
     </tr>
     <tr>
         <th></th>
@@ -23,13 +23,14 @@
         <th>Sacos %</th>
         <th>Bolsa plastica %</th>
         <th>Barril %</th>
+        <th>Casa %</th>
     </tr>
  </thead>
     <tr>
         {%for key, value in tabla.items%}
         <tr>
         <td>{{key|unslugify}}</td>
-        <td></td>
+        <td>{{value.cantidad|floatformat}}</td>
         <td>{{value.porcentaje_hombres|floatformat}}</td>
         <td>{{value.porcentaje_mujeres|floatformat}}</td>
         <td>{{value.porcentaje_hijos|floatformat}}</td>
