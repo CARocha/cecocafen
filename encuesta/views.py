@@ -978,12 +978,37 @@ def salud(request):
 @session_required
 def salud_grafos(request, tipo):
     '''Graficos de salud'''
-    pass
-   #     return grafos.make_graph(data, legends, 
-   #             titulo, return_json = True,
-   #             type = grafos.PIE_CHART_3D)
-   # else:
-   #     raise Http404
+    consulta = _queryset_filtrado(request)
+    data = []
+    legends = []
+    titulo = ''
+
+    if tipo == 'donde':
+        titulo = 'Donde reliza sus necesidades'
+        for choice in CHOICE_LETRINA:
+            data.append(consulta.filter(salud__donde=choice[0]).count())
+            legends.append(choice[1])
+    elif tipo == 'tratamiento':
+        pass
+    elif tipo == 'frecuencia':
+        titulo = 'Frecuencia de la limpieza'
+        for choice in CHOICE_LIMPIEZA:
+            data.append(consulta.filter(salud__limpieza=choice[0]).count())
+            legends.append(choice[1])
+    elif tipo == 'basura':
+        titulo = 'Forma de disponer la basura'
+        for choice in CHOICE_DESHACER:
+            data.append(consulta.filter(salud__deshacer=choice[0]).count())
+            legends.append(choice[1])
+    elif tipo == 'envases':
+        #envases de agroquimicos
+        pass
+    else:
+        raise Http404
+
+    return grafos.make_graph(data, legends, 
+                titulo, return_json = True,
+                type = grafos.PIE_CHART_3D)
 
 @session_required
 def agua(request):
