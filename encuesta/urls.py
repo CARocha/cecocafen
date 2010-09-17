@@ -17,6 +17,7 @@ urlpatterns = patterns('encuesta.views',
     (r'^grafo/agua-disponibilidad/(?P<tipo>\d+)/$', 'agua_grafos_disponibilidad'),
     (r'^grafo/agua-calidad/(?P<tipo>\d+)/$', 'agua_grafos_calidad'),
     (r'^grafo/salud/(?P<tipo>\w+)/$', 'salud_grafos'), 
+    (r'^grafo/cancer/(?P<id>\d+)/$', 'cancer_grafos'),
     (r'^(?P<vista>\w+)/$', '_get_view'),
    
 )

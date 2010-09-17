@@ -1011,6 +1011,73 @@ def salud_grafos(request, tipo):
                 type = grafos.PIE_CHART_3D)
 
 @session_required
+def cancer_grafos(request, id):
+    '''Grafos de la tabla cancer'''
+    #id van de
+    consulta = _queryset_filtrado(request)
+    data = []
+    legends = []
+    id = int(id)
+    pregunta = get_object_or_404(PreguntaCancer, id=id)
+    titulo = pregunta.pregunta 
+
+    if id == 1:
+        #su pareja pide permiso
+        #resp: si, no, no se
+        for i in [1, 2, 3]:
+            resp = RespuestasCancer.objects.get(id=i)
+            data.append(consulta.filter(cancer__preguntas = pregunta, 
+                                                   cancer__resp = resp).count())
+            legends.append(resp.respuesta)
+    elif id == 2:
+        #se ha realizado examen ginecológico
+        #resp: si, no 
+        for i in [1, 2]:
+            resp = RespuestasCancer.objects.get(id=i)
+            data.append(consulta.filter(cancer__preguntas = pregunta, 
+                                                   cancer__resp = resp).count())
+            legends.append(resp.respuesta)
+    elif id == 3:
+        #frecuencia de chequeos
+        #resp: una vez, dos veces, cada 2 años, nunca
+        for i in [5, 6, 7, 8]:
+            resp = RespuestasCancer.objects.get(id=i)
+            data.append(consulta.filter(cancer__preguntas = pregunta, 
+                                                   cancer__resp = resp).count())
+            legends.append(resp.respuesta)
+    elif id == 4:
+        #como han sido los resultados de su pap
+        #resp: negativos, inflamacion, infeccion, precancer
+        for i in [9, 10, 11, 12]:
+            resp = RespuestasCancer.objects.get(id=i)
+            data.append(consulta.filter(cancer__preguntas = pregunta, 
+                                                   cancer__resp = resp).count())
+            legends.append(resp.respuesta)
+    elif id == 5:
+        #Como ha hecho para tratarse los problemas que le han resultado del PAP
+        #resp: negativos, inflamacion, infeccion, precancer
+        for i in [13, 14, 15, 16, 17, 18, 19]:
+            resp = RespuestasCancer.objects.get(id=i)
+            data.append(consulta.filter(cancer__preguntas = pregunta, 
+                                                   cancer__resp = resp).count())
+            legends.append(resp.respuesta)
+    elif id == 6:
+        #Tiene algun problema de salud que le preocupe?
+        #resp: negativos, inflamacion, infeccion, precancer
+        for i in [1, 2]:
+            resp = RespuestasCancer.objects.get(id=i)
+            data.append(consulta.filter(cancer__preguntas = pregunta, 
+                                                   cancer__resp = resp).count())
+            legends.append(resp.respuesta)
+    else:
+        raise Http404
+
+    return grafos.make_graph(data, legends, 
+                titulo, return_json = True,
+                type = grafos.PIE_CHART_3D)
+
+
+@session_required
 def agua(request):
     '''Agua'''
     consulta = _queryset_filtrado(request)
