@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {% block title %}Las Familias(Migracion){% endblock %}
+{%block titulo%}Familias{%endblock%}
 {% block extra_header %}
  <script type="text/javascript">
     var activo = 0; 
@@ -18,6 +19,14 @@
 </script>
 {%endblock%}
 {% block contenido %}
+<div id="contenedor_servicio">
+    <a href="/familia" class="familia">Familia</a>
+    <a href="/postcosecha" class="educacion">Post Cosecha</a>
+    <a href="/fincas"class="fincas">Finca</a>
+    <a href="/abono"class="luz">Abono y aplicacion</a>
+    <a href="/riego"class="luz">Riego</a>
+    <a href="/condiciones"class="luz">Condiciones</a>
+</div>
 <br></br>
 <div id="sidebar">
     <div class="graficos_widget">

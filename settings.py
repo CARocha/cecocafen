@@ -74,4 +74,4 @@ INSTALLED_APPS = (
     'lugar',
 )
 
-NO_DATA_GRAPH_URL=''
+NO_DATA_GRAPH_URL = '/archivos/imagen/error_grafo.jpg'

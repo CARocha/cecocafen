@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {% block contenido %}
-    numero familia = {{num_familias}}
+<div id="contenedor_servicio">
+    <a href="/familia" class="familia">Familia</a>
+    <a href="/postcosecha" class="educacion">Post Cosecha</a>
+    <a href="/fincas"class="fincas">Finca</a>
+    <a href="/abono"class="luz">Abono y aplicacion</a>
+    <a href="/riego"class="luz">Riego</a>
+    <a href="/condiciones"class="luz">Condiciones</a>
+</div>
 <table>
-<caption>Las Compra</caption>
+<caption>Compra y aplicacón de abonos</caption>
  <thead>
     <tr>
         <th>Tipo de abono</th>

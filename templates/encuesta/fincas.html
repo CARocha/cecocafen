@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {%load unslugify %}
-{% block title %}JFPS - Fincas{% endblock %}
+{% block title %}Cecocafen - Fincas{% endblock %}
+{%block titulo%}Las Fincas{%endblock%}
 {%block extra_header%}
 <script type="text/javascript">
     //si activo es 0 el html interno esta vacio
@@ -40,9 +41,15 @@
 
 </script>
 {%endblock%}
-{%block titulo%}Las Fincas{%endblock%}
-
 {% block contenido %}
+<div id="contenedor_servicio">
+    <a href="/familia" class="familia">Familia</a>
+    <a href="/postcosecha" class="educacion">Post Cosecha</a>
+    <a href="/fincas"class="fincas">Finca</a>
+    <a href="/abono"class="luz">Abono y aplicacion</a>
+    <a href="/riego"class="luz">Riego</a>
+    <a href="/condiciones"class="luz">Condiciones</a>
+</div>
 <div id="sidebar">
     <div class="graficos_widget">
         <h1>Gráficos</h1>
