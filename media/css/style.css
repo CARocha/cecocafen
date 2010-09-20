@@ -247,26 +247,24 @@ display: inline;
 
 }
 #menu ul li a:link, #menu ul li a:visited {
-color:#fff;
-background: #ADADAD;
-padding: 9px 6px;
-float: left;
-text-decoration: none;
-   border-top-right-radius:5px;
-   border-top-left-radius:5px;
+    color:#fff;
+    background: #ADADAD;
+    padding: 9px 6px;
+    float: left;
+    text-decoration: none;
+    border-top-right-radius:5px;
+    border-top-left-radius:5px;
    -moz-border-radius-topright:5px;
    -moz-border-radius-topleft:5px;
    -webkit-border-top-left-radius:5px;
    -webkit-border-top-right-radius:5px;
-margin-right:6px;
-font-size:13px;
-
-
-
+    margin-right:6px;
+    font-size:13px;
 }
+
 #menu ul li a:hover, #menu ul li a:active{
 color: #fff;
-background:#691028 ;
+background:#691028;
 }
 
 /* ---------------Termina menu linea base*/
@@ -606,8 +604,8 @@ padding-right:15px;
 #contenedor_servicio{
     padding:10px;
     padding-left:30px;
-    width:640px;
-    *width:680px;
+    width:854px;
+    *width:877px;
     height:35px;
     background:#dddcd1;
   border-radius:3px;
@@ -618,10 +616,10 @@ padding-right:15px;
 }
 
 #contenedor_servicio a{
-    width:78px;
+    width:67px;
     *width:128px;
-    height:23px;
-    *height:33px;
+    height:29px;
+    *height:39px;
     display:block;
     float:left;
     margin-right:25px;

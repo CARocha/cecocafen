@@ -799,6 +799,14 @@ def servicios(request):
     return render_to_response('encuesta/servicios.html',
                               {'num_familias': familias}, 
                               context_instance=RequestContext(request))
+                              
+@session_required
+def familias(request):
+    '''familias: familia, tenencia, suelo, riego, postcosecha'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/familias.html',
+                              {'num_familias': familias}, 
+                              context_instance=RequestContext(request))
     
 @session_required
 def educacion(request):
@@ -1177,8 +1185,46 @@ def abono(request):
                      calcular_positivos(query['veinte'], familias),
                      calcular_positivos(query['urea'], familias)]
         tabla_abono.append(resultado)
+        
+    ''' sobre compra y aplicacion de abono
+    '''
+    #--------- variables globales ----
+    a = _queryset_filtrado(request)
+    #---------------------------------
+    tabla_compra = {}
+    
+    for k in CHOICE_ANO:
+        key = (k[1]).replace('-','_')
+        query = a.filter(compra__cuanto = k[0])
+        frecuencia = query.count()
+        pulpa = query.aggregate(pulpa=Sum('compra__pulpa'))['pulpa']
+        estiercol = query.aggregate(estiercol=Sum('compra__estiercol'))['estiercol']
+        gallinaza = query.aggregate(gallinaza=Sum('compra__gallinaza'))['gallinaza']
+        composta = query.aggregate(composta=Sum('compra__composta'))['composta']
+        lombrices = query.aggregate(lombrices=Sum('compra__lombrices'))['lombrices']
+        bocachi = query.aggregate(bocachi=Sum('compra__bocachi'))['bocachi']
+        foliar_org = query.aggregate(foliar_org=Sum('compra__foliar_org'))['foliar_org']
+        foliar_qui = query.aggregate(foliar_qui=Sum('compra__foliar_qui'))['foliar_qui']
+        verde = query.aggregate(verde=Sum('compra__verde'))['verde']
+        quince = query.aggregate(quince=Sum('compra__quince'))['quince']
+        veinte = query.aggregate(veinte=Sum('compra__veinte'))['veinte']
+        seis = query.aggregate(seis=Sum('compra__seis'))['seis']
+        urea = query.aggregate(urea=Sum('compra__urea'))['urea']
+        tabla_compra[key] = {'frecuencia':frecuencia,
+                      'pulpa':pulpa, 
+                      'estiercol':estiercol,
+                      'gallinaza':gallinaza,
+                      'composta':composta,
+                      'lombrices':lombrices,
+                      'bocachi':bocachi,
+                      'foliar_org':foliar_org,
+                      'foliar_qui':foliar_qui,
+                      'verde':verde,
+                      'quince':quince,
+                      'veinte':veinte,
+                      'seis':seis,'urea':urea}  
 
-    dicc = {'tabla': tabla_abono, 'num_familias': familias}
+    dicc = {'tabla': tabla_abono, 'num_familias': familias,'tabla_compra':tabla_compra}
     return render_to_response('encuesta/abono.html', dicc, 
                               context_instance=RequestContext(request))
 def jovenes(request):
@@ -1483,6 +1529,7 @@ VALID_VIEWS = {
         'condiciones': condiciones,
         'riego': riego,
         'jovenes': organizacion_jovenes,
+        'familias': familias,
         }    
     
 # Vistas para obtener los municipios, comunidades, etc..
