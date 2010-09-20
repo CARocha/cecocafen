@@ -570,7 +570,7 @@ def animales(request):
                                    venta_organizada = Sum('finca__venta_organizada'),
                                    consumo = Sum('finca__consumo'))
         try:
-            animal_familia = animales['cantidad']/float(numero) 
+            animal_familia = float(animales['cantidad'])/float(numero) 
         except:
             animal_familia = 0
         animal_familia = "%.2f" % animal_familia
@@ -579,7 +579,8 @@ def animales(request):
         tabla_produccion.append([animal.nombre, animales['cantidad'], 
                                  producto.nombre, producto.unidad, 
                                  animales['consumo'], 
-                                 animales['venta_libre'], animales['venta_organizada']])
+                                 animales['venta_libre'], 
+                                 animales['venta_organizada']])
 
     return render_to_response('encuesta/animales.html', 
                               {'tabla':tabla, 'totales': totales, 
