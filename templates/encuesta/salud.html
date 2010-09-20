@@ -8,8 +8,8 @@
     //caso si activo es otro num sustituir grafico
     //si activo es el mismo id, esconder grafico
     var activo = 0; 
-    function click_callback(id){
-        $.getJSON('/grafo/salud/' + id, function(data) {
+    function click_callback(url, id){
+        $.getJSON(url + id, function(data) {
             if (activo!= id){
                 $("#grafo").html('<img src="' + data.url + '" />');
                 activo = id;
@@ -19,58 +19,47 @@
             }
         });
     }
+    
+    function click_cancer(id){
+        click_callback('/grafo/cancer/', id);
+    }
+    
+    function click_salud(id){
+        click_callback('/grafo/salud/', id);
+    }
+
+    function click_mental(id){
+        click_callback('/grafo/mental/', id);
+    }
+
 $(document).ready(function() {
     $("#grafico1").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
         $("#grafico1").addClass('enlace_seleccionado');
-        $("#grafico2").removeClass('enlace_seleccionado');
-        $("#grafico3").removeClass('enlace_seleccionado');
-        $("#grafico4").removeClass('enlace_seleccionado');
-        $("#grafico5").removeClass('enlace_seleccionado');
-        $("#grafico6").removeClass('enlace_seleccionado');
     });
     
     $("#grafico2").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
         $("#grafico2").addClass('enlace_seleccionado'); 
-        $("#grafico1").removeClass('enlace_seleccionado');
-        $("#grafico3").removeClass('enlace_seleccionado');
-        $("#grafico4").removeClass('enlace_seleccionado');
-        $("#grafico5").removeClass('enlace_seleccionado');
-        $("#grafico6").removeClass('enlace_seleccionado');
     });
 
     $("#grafico3").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
         $("#grafico3").addClass('enlace_seleccionado'); 
-        $("#grafico1").removeClass('enlace_seleccionado');
-        $("#grafico2").removeClass('enlace_seleccionado');
-        $("#grafico4").removeClass('enlace_seleccionado');
-        $("#grafico5").removeClass('enlace_seleccionado');
-        $("#grafico6").removeClass('enlace_seleccionado');
     });
     $("#grafico4").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
         $("#grafico4").addClass('enlace_seleccionado'); 
-        $("#grafico1").removeClass('enlace_seleccionado');
-        $("#grafico2").removeClass('enlace_seleccionado');
-        $("#grafico3").removeClass('enlace_seleccionado');
-        $("#grafico5").removeClass('enlace_seleccionado');
-        $("#grafico6").removeClass('enlace_seleccionado');
     });
 
     $("#grafico5").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
         $("#grafico5").addClass('enlace_seleccionado'); 
-        $("#grafico1").removeClass('enlace_seleccionado');
-        $("#grafico2").removeClass('enlace_seleccionado');
-        $("#grafico3").removeClass('enlace_seleccionado');
-        $("#grafico4").removeClass('enlace_seleccionado');
-        $("#grafico6").removeClass('enlace_seleccionado');
     });
 
     $("#grafico6").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
         $("#grafico5").addClass('enlace_seleccionado'); 
-        $("#grafico1").removeClass('enlace_seleccionado');
-        $("#grafico2").removeClass('enlace_seleccionado');
-        $("#grafico3").removeClass('enlace_seleccionado');
-        $("#grafico4").removeClass('enlace_seleccionado');
-        $("#grafico5").removeClass('enlace_seleccionado');
     });
 });
 </script>
@@ -84,11 +73,26 @@ $(document).ready(function() {
 </div>
     <div class="graficos_widget">
         <h1>Graficos </h1>
-        <a id="grafico1" href="#" onCLick="click_callback('basura')">Forma de disponer la basura</a>
-        <a id="grafico2" href="#" onCLick="click_callback('donde')">Donde hacen sus necesidades</a>
-        <a id="grafico3" href="#" onCLick="click_callback('tratamiento')">Tratamiento de desechos</a>
-        <a id="grafico4" href="#" onCLick="click_callback('frecuencia')">Frecuencia de limpieza</a>
-        <a id="grafico5" href="#" onCLick="click_callback('envases')">Que hace con envases agroquímicos</a>
+        <a id="grafico1" href="#" onCLick="click_salud('basura')">Forma de disponer la basura</a>
+        <a id="grafico2" href="#" onCLick="click_salud('donde')">Donde hacen sus necesidades</a>
+        <a id="grafico3" href="#" onCLick="click_salud('tratamiento')">Tratamiento de desechos</a>
+        <a id="grafico4" href="#" onCLick="click_salud('frecuencia')">Frecuencia de limpieza</a>
+        <a id="grafico5" href="#" onCLick="click_salud('envases')">Que hace con envases agroquímicos</a>
+        <h1>Cáncer</h1>
+        <a id="grafico6" href="#" onCLick="click_cancer(1)">¿Su pareja espera que le pida permiso antes de buscar atención medica para usted misma?</a>
+        <a id="grafico7" href="#" onCLick="click_cancer(2)">¿Se ha realizado chequeos ginecológicos?</a>
+        <a id="grafico8" href="#" onCLick="click_cancer(3)">¿Se ha realizado el PAP alguna vez?</a>
+        <a id="grafico9" href="#" onCLick="click_cancer(4)">¿Cómo han sido los resultados de su PAP?</a>
+        <a id="grafico10" href="#" onCLick="click_cancer(5)">¿Como ha hecho para tratarse los problemas que le han resultado del PAP?</a>
+        <a id="grafico11" href="#" onCLick="click_cancer(6)">¿Actualmente tiene usted algún problema de salud reproductiva que le preocupe?</a>
+        <h1>Cáncer</h1>
+        <a id="grafico12" href="#" onCLick="click_mental(1)">Estado civil</a>
+        <a id="grafico13" href="#" onCLick="click_mental(2)">¿Trata de impedirle que vea a sus amistades?</a>
+        <a id="grafico14" href="#" onCLick="click_mental(3)">¿Intenta que usted no tenga contacto con su familia?</a>
+        <a id="grafico15" href="#" onCLick="click_mental(4)">¿A recibido maltrato de alguna persona en su hogar?</a>
+        <a id="grafico16" href="#" onCLick="click_mental(5)">¿Cómo pareja, se pelean constantemente, hasta ponerse violentos?</a>
+        <a id="grafico17" href="#" onCLick="click_mental(6)">¿Si en algunas ocasiones los niños y niñas sufren violencia por parte de una persona adulta?</a>
+
     </div>
 <div id="grafo"></div>
 <table>

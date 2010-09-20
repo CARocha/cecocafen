@@ -894,6 +894,33 @@ def salud_grafos(request, tipo):
                 type = grafos.PIE_CHART_3D)
 
 @session_required
+def mental_grafos(request, id):
+    '''Grafos de la tabla de mujeres con problemas en el coco'''
+    consulta = _queryset_filtrado(request)
+    data = []
+    legends = []
+    id = int(id)
+    pregunta = get_object_or_404(PreguntaMental, id=id)
+    titulo = pregunta.nombre
+    
+    if id == 1:
+        for resp in REPUESTA_MENTAL[:5]:
+            data.append(consulta.filter(mental__pregunta = pregunta, 
+                                                   mental__respuesta = resp[0]).count())
+            legends.append(resp[1])
+    elif id in range(2,7):
+        for resp in REPUESTA_MENTAL[8:11]:
+            data.append(consulta.filter(mental__pregunta = pregunta, 
+                                                   mental__respuesta = resp[0]).count())
+            legends.append(resp[1])
+    else:
+        raise Http404
+
+    return grafos.make_graph(data, legends, 
+                titulo, return_json = True,
+                type = grafos.PIE_CHART_3D)
+
+@session_required
 def cancer_grafos(request, id):
     '''Grafos de la tabla cancer'''
     #id van de
