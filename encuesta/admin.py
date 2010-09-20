@@ -223,7 +223,7 @@ class EncuestaAdmin(admin.ModelAdmin):
             RiegoInline,AguaInline,AhorroInline,CreditoInline,SaludInline,EnfermedadInline,CancerInline,
             MentalInline,EducacionInline,JovenesInlines
             ]
-    list_display = ['nombre_socios', 'comunidades', 'municipios','recolector']
+    list_display = ['nombre_socios', 'comunidades', 'municipios','recolector','departamento']
     list_filter = ['fecha']
     date_hierarchy = 'fecha'
     search_fields = ['datos__nombre','datos__comunidad__nombre']

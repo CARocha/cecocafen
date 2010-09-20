@@ -14,9 +14,14 @@ class CecocafenForm(forms.Form):
     fecha = forms.ChoiceField(choices=ANOS_CHOICES)
     departamento = forms.ModelChoiceField(queryset=Departamento.objects.all(), 
             required=False, empty_label="Todos los Departamentos")
-    cooperativa = forms.CharField(widget = forms.Select, required = False)
     municipio = forms.CharField(widget = forms.Select, required=False)
     comunidad = forms.CharField(widget = forms.Select, required=False)
+    cooperativa = forms.ModelChoiceField(required = False, 
+                                         queryset=Cooperativa.objects.all())
     socio = forms.ChoiceField(choices = CHOICE_OPCION_F , required=False)
     desde = forms.ChoiceField(choices = CHOICE_DESDE_F , required=False)
     dueno = forms.ChoiceField(label = 'Dueño', choices = CHOICE_DUENO_F , required=False)
+    tecnologia = forms.ModelChoiceField(required = False,
+                                         queryset=Tecnologia.objects.all())
+    certificacion = forms.ModelChoiceField(required = False,
+                                           queryset=Certificacion.objects.all())

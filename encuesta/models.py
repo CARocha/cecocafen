@@ -1042,4 +1042,6 @@ class Encuesta(models.Model):
         return self.datos.all()[0].comunidad
     def municipios(self):
         return self.datos.all()[0].comunidad.municipio
+    def departamento(self):
+        return self.datos.all()[0].comunidad.municipio.departamento
 

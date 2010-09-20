@@ -509,7 +509,7 @@ background:#691028 ;
 }
 
 #id_cooperativa, #id_fecha, #id_departamento, #id_municipio,
-#id_comunidad, #id_socio, #id_sexo, #id_dueno,#id_desde{
+#id_comunidad, #id_socio, #id_sexo, #id_dueno,#id_desde, #id_tecnologia, #id_certificacion{
     width:200px;
     height:30px;
     background: #fff url(../imagen/combobox.png) repeat-x;

@@ -31,9 +31,7 @@ def _queryset_filtrado(request):
     #diccionario de parametros del queryset
     params = {}
     if 'fecha' in request.session:
-        params['fecha__year'] = anio 
-        if 'cooperativa' in request.session:
-            params['datos__cooperativa'] = request.session['cooperativa']
+        params['fecha__year'] = anio
 
         if 'departamento' in request.session:
             #incluye municipio y comunidad
@@ -45,6 +43,9 @@ def _queryset_filtrado(request):
             else:
                 params['datos__comunidad__municipio__departamento'] = request.session['departamento']
 
+        if 'cooperativa' in request.session:
+            params['datos__cooperativa'] = request.session['cooperativa']
+
         if 'socio' in request.session:
             params['organizacion__socio'] = request.session['socio']
             
@@ -53,6 +54,11 @@ def _queryset_filtrado(request):
 
         if 'duenio' in  request.session:
             params['tenencia__dueno'] = request.session['duenio']
+        if 'tecnologia' in request.session:
+            params['datos__tecnologia'] = request.session['tecnologia']
+            
+        if 'cetificacion' in request.session:
+            params['datos__certificacion'] = request.session['cetificacion']
         
         unvalid_keys = []
         for key in params:
