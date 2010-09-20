@@ -410,120 +410,7 @@ def fincas_grafos(request, tipo):
                 'Dueño de propiedad', return_json = True,
                 type = grafos.PIE_CHART_3D)
     else:
-        raise Http404
-
-@session_required
-def arboles(request):
-    '''Tabla de arboles'''
-    #******Variables***************
-    a = _queryset_filtrado(request)
-    num_familias = a.count()
-    #******************************
-    
-    #********Existencia de arboles sumatorias*****************
-    maderable = a.aggregate(Sum('existenciarboles__cant_maderable'))['existenciarboles__cant_maderable__sum']
-    forrajero = a.aggregate(Sum('existenciarboles__cant_forrajero'))['existenciarboles__cant_forrajero__sum']
-    energetico = a.aggregate(Sum('existenciarboles__cant_energetico'))['existenciarboles__cant_energetico__sum']
-    frutal = a.aggregate(Sum('existenciarboles__cant_frutal'))['existenciarboles__cant_frutal__sum']
-    #*********************************************
-    
-    #*******promedios de arboles por familia*********
-    pro_maderable = maderable / num_familias if maderable != None else 0
-    pro_forrajero = forrajero / num_familias if forrajero != None else 0
-    pro_energetico = energetico / num_familias if energetico != None else 0
-    pro_frutal = frutal / num_familias if frutal != None else 0
-    #***********************************************
-    
-    #******conteo de arboles********************
-    maderablect = a.aggregate(Count('existenciarboles__cant_maderable'))['existenciarboles__cant_maderable__count']
-    forrajeroct = a.aggregate(Count('existenciarboles__cant_forrajero'))['existenciarboles__cant_forrajero__count']
-    energeticoct = a.aggregate(Count('existenciarboles__cant_energetico'))['existenciarboles__cant_energetico__count']
-    frutalct = a.aggregate(Count('existenciarboles__cant_frutal'))['existenciarboles__cant_frutal__count']
-    
-    #**********Reforestacion************************
-    tabla = {}
-    totales = {}
-    totales['numero'] = a.aggregate(numero = Count('reforestacion__reforestacion'))['numero']
-    totales['porcentaje_nativos'] = 100
-    totales['nativos'] = a.aggregate(nativo=Sum('reforestacion__cantidad_nativos'))['nativo']
-#    print totales['nativos']
-    totales['nonativos'] = a.aggregate(nonativos=Sum('reforestacion__cantidad_nonativos'))['nonativos']
-    totales['porcentaje_nonativos'] = 100
-    
-    for activ in Actividades.objects.all():
-        key = slugify(activ.nombre).replace('-', '_')
-        query = a.filter(reforestacion__reforestacion = activ)
-        numero = query.count()
-        porcentaje_num = saca_porcentajes(numero, num_familias)
-        nativos = query.aggregate( cantidad = Sum('reforestacion__cantidad_nativos'))['cantidad']
-        nonativos = query.aggregate( cantidadno = Sum('reforestacion__cantidad_nonativos'))['cantidadno']
-        totalnn = nativos + nonativos if nativos != None and nonativos != None else 0 
-        porcentaje_nativos = saca_porcentajes(nativos, totalnn)
-        porcentaje_nonativos = saca_porcentajes(nonativos, totalnn)
-        tabla[key] = {'numero': numero, 'porcentaje_num':porcentaje_num, 
-                      'porcentaje_nativos': porcentaje_nativos,'nativos': nativos,
-                      'porcentaje_nonativos': porcentaje_nonativos,'nonativos':nonativos }
-        
-    
-    return  render_to_response('encuesta/arboles.html',
-                              {'num_familias':num_familias,'maderable':maderable,
-                               'forrajero':forrajero,'energetico':energetico,'frutal':frutal,
-                               'pro_maderable':pro_maderable,'pro_forrajero':pro_forrajero,
-                               'pro_energetico':pro_energetico,'pro_frutal':pro_frutal,
-                               'maderablect':maderablect,'forrajeroct':forrajeroct,
-                               'energeticoct':energeticoct,'frutalct':frutalct,
-                               'tabla':tabla,'totales':totales},
-                                context_instance=RequestContext(request))
-
-@session_required
-def arboles_grafos(request, tipo):
-    ''' graficos para los distintos tipos de arboles en las fincas
-        Maderables, Forrajero, Energetico y Frutal
-    '''
-    #--- variables ---
-    consulta = _queryset_filtrado(request)
-    data = [] 
-    legends = []
-    #-----------------
-    if tipo == 'maderable':
-        for opcion in Maderable.objects.all():
-            data.append(consulta.filter(existenciarboles__maderable=opcion).count())
-            legends.append(opcion.nombre)
-        return grafos.make_graph(data, legends, 
-                'Tipo Maderable', return_json = True,
-                type = grafos.PIE_CHART_3D)
-    elif tipo == 'forrajero': 
-        for opcion in Forrajero.objects.all():
-            data.append(consulta.filter(existenciarboles__forrajero=opcion).count())
-            legends.append(opcion.nombre)
-        return grafos.make_graph(data, legends, 
-                'Tipo Forrajero', return_json = True,
-                type = grafos.PIE_CHART_3D)
-    elif tipo == 'energetico':
-        for opcion in Energetico.objects.all():
-            data.append(consulta.filter(existenciarboles__energetico=opcion).count())
-            legends.append(opcion.nombre)
-        return grafos.make_graph(data, legends,
-               'Tipo Energetico', return_json = True,
-               type = grafos.PIE_CHART_3D)
-    elif tipo == 'frutal':
-        for opcion in Frutal.objects.all():
-            data.append(consulta.filter(existenciarboles__energetico=opcion).count())
-            legends.append(opcion.nombre)
-        return grafos.make_graph(data, legends,
-               'Tipo Frutal', return_json = True,
-               type = grafos.PIE_CHART_3D)
-    elif tipo == 'nativos':
-        nativo = consulta.aggregate(nati=Count('reforestacion__nativos'))['nati']
-        nonativo = consulta.aggregate(noti=Count('reforestacion__nonativos'))['noti']
-        data = [[nativo], [nonativo]]
-        legends = ['Nativos','NoNativos']
-        message = "Especie de arboles"
-        return grafos.make_graph(data, legends, message, multiline=True,
-                                 return_json = True, type=grafos.GROUPED_BAR_CHART_V)
-    else:
-        raise Http404
-    
+        raise Http404   
 
 @session_required
 def cultivos(request):
@@ -1577,7 +1464,6 @@ VALID_VIEWS = {
         'familia': familia,
         'luz': luz,
         'fincas': fincas,
-        'arboles': arboles,
         'cultivos': cultivos,
         'ingresos': ingresos,
         'animales': animales,
