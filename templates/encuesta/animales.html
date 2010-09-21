@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {% block title %}Cecocafen - Fincas{% endblock %}
-{%block titulo%}Los Animales{%endblock%}
+{%block titulo%}Animales{%endblock%}
 {% block contenido %}
+<div id="contenedor_servicio">
+    <a href="/fincas" class="fincas">Uso Tierra</a>
+    <a href="#"class="luz">Suelo</a>
+    <a href="/cultivos"class="cultivos">Cultivos</a>
+    <a href="/animales"class="animales">Animales</a>
+    <a href="/postcosecha"class="arboles">Post Cosecha</a>
+    <a href="/riego"class="servicios">Riego</a>
+</div>
 <table>
 <caption>Los Animales</caption>
  <thead>

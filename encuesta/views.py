@@ -349,6 +349,7 @@ def fincas(request):
     tabla = {}
     totales = {}
     consulta = _queryset_filtrado(request)
+    num_familias = _queryset_filtrado(request).count()
 
     totales['numero'] = consulta.count() 
     totales['porcentaje_num'] = 100
@@ -364,10 +365,25 @@ def fincas(request):
         porcentaje_mz = saca_porcentajes(manzanas, totales['manzanas'])
         tabla[key] = {'numero': numero, 'porcentaje_num': porcentaje_num,
                       'manzanas': manzanas, 'porcentaje_mz': porcentaje_mz}
-
+                      
+    #**********Reforestacion************************
+    tabla_re = {}
     
+    for activ in Actividades.objects.all():
+        key = slugify(activ.nombre).replace('-', '_')
+        query = consulta.filter(reforestacion__actividad = activ)
+        numero = query.count()
+        porcentaje_num = saca_porcentajes(numero, num_familias)
+        nativos = query.aggregate( cantidad = Sum('reforestacion__cantidad'))['cantidad']
+        porcentaje_nativos = saca_porcentajes(nativos, numero)
+        tabla_re[key] = {'numero': numero, 'porcentaje_num':porcentaje_num, 
+                      'porcentaje_nativos': porcentaje_nativos,'nativos': nativos
+                       }
+                          
     return render_to_response('encuesta/fincas.html', 
-                              {'tabla':tabla, 'totales': totales},
+                              {'tabla':tabla, 'totales': totales,
+                              'tabla_re':tabla_re,
+                              'num_familias': consulta.count()},
                               context_instance=RequestContext(request))
 
 @session_required
@@ -413,11 +429,11 @@ def cultivos(request):
     for i in Cultivos.objects.all():
         key = slugify(i.nombre).replace('-', '_')
         key2 = slugify(i.unidad).replace('-', '_')
-        query = a.filter(cultivosfinca__cultivos = i)
-        totales = query.aggregate(total=Sum('cultivosfinca__total'))['total']
-        consumo = query.aggregate(consumo=Sum('cultivosfinca__consumo'))['consumo']
-        libre = query.aggregate(libre=Sum('cultivosfinca__venta_libre'))['libre']
-        organizada =query.aggregate(organizada=Sum('cultivosfinca__venta_organizada'))['organizada']
+        query = a.filter(cultivos__cultivos = i)
+        totales = query.aggregate(total=Sum('cultivos__total'))['total']
+        consumo = query.aggregate(consumo=Sum('cultivos__consumo'))['consumo']
+        libre = query.aggregate(libre=Sum('cultivos__venta_libre'))['libre']
+        organizada =query.aggregate(organizada=Sum('cultivos__venta_organizada'))['organizada']
         tabla[key] = {'key2':key2,'totales':totales,'consumo':consumo,'libre':libre,'organizada':organizada}
     #*******************************************
     return render_to_response('encuesta/cultivos.html',
@@ -780,22 +796,6 @@ def ahorro_credito_grafos(request, tipo):
                 type = grafos.PIE_CHART_3D)
     else:
         raise Http404
-
-@session_required
-def servicios(request):
-    '''servicios: educacion, salud, agua, luz'''
-    familias = _queryset_filtrado(request).count()
-    return render_to_response('encuesta/servicios.html',
-                              {'num_familias': familias}, 
-                              context_instance=RequestContext(request))
-                              
-@session_required
-def familias(request):
-    '''familias: familia, tenencia, suelo, riego, postcosecha'''
-    familias = _queryset_filtrado(request).count()
-    return render_to_response('encuesta/familias.html',
-                              {'num_familias': familias}, 
-                              context_instance=RequestContext(request))
     
 @session_required
 def educacion(request):
@@ -1158,10 +1158,6 @@ def riego(request):
     return render_to_response('encuesta/riego.html', dicc, 
                               context_instance=RequestContext(request))
 
-def suelo(request):
-    '''Vista de manejo de suelo'''
-    pass
-
 def abono(request):
     '''Vista del uso del abono'''
     consulta = _queryset_filtrado(request)
@@ -1243,8 +1239,6 @@ def abono(request):
     dicc = {'tabla': tabla_abono, 'num_familias': familias,'tabla_compra':tabla_compra}
     return render_to_response('encuesta/abono.html', dicc, 
                               context_instance=RequestContext(request))
-def jovenes(request):
-    pass
 
 def organizacion_jovenes(request):
     '''tabla de organizacion jovenes'''
@@ -1520,7 +1514,52 @@ def condiciones(request):
     dicc = {'tabla': tabla, 'num_familias': num_familias, 'columnas': CHOICE_CAMPO}
     return render_to_response('encuesta/condiciones.html', dicc,
                                context_instance=RequestContext(request))
-        
+@session_required
+def servicios(request):
+    '''servicios: educacion, salud, agua, luz'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/servicios.html',
+                              {'num_familias': familias}, 
+                              context_instance=RequestContext(request))                              
+@session_required
+def familias(request):
+    '''familias: familia, tenencia, suelo, riego, postcosecha'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/familias.html',
+                              {'num_familias': familias}, 
+                              context_instance=RequestContext(request))
+                              
+@session_required
+def organizaciones(request):
+    '''Organizaciones: aca van organizacion socios adultos, socios jovenes
+    '''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/organizaciones.html',
+                              {'num_familias':familias},
+                              context_instance=RequestContext(request))
+@session_required
+def alimento(request):
+    '''alimento: seguridad alimentaria, vulnerabilidad'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/alimento.html',
+                              {'num_familias': familias}, 
+                              context_instance=RequestContext(request))
+                              
+@session_required
+def salud_hogar(request):
+    '''salud: del hogar, de la familia, mental de las mujeres'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/salud_hogar.html',
+                              {'num_familias': familias}, 
+                              context_instance=RequestContext(request))
+
+@session_required
+def finca(request):
+    ''' finca: tierra, suelo, cultivo, animales, postcosecha, riego '''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/finca.html',
+                               {'num_familias': familias},
+                               context_instance=RequestContext(request))        
 #TODO: completar esto
 VALID_VIEWS = {
         'familia': familia,
@@ -1546,6 +1585,10 @@ VALID_VIEWS = {
         'riego': riego,
         'jovenes': organizacion_jovenes,
         'familias': familias,
+        'organizaciones': organizaciones,
+        'alimento': alimento,
+        'salud_hogar': salud_hogar,
+        'finca': finca,
         }    
     
 # Vistas para obtener los municipios, comunidades, etc..

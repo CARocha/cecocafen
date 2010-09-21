@@ -604,7 +604,7 @@ padding-right:15px;
 #contenedor_servicio{
     padding:10px;
     padding-left:30px;
-    width:854px;
+    width:895px;
     *width:877px;
     height:35px;
     background:#dddcd1;
@@ -616,7 +616,7 @@ padding-right:15px;
 }
 
 #contenedor_servicio a{
-    width:67px;
+    width:74px;
     *width:128px;
     height:29px;
     *height:39px;

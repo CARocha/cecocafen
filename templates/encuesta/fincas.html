@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {% block title %}Cecocafen - Fincas{% endblock %}
-{%block titulo%}Las Fincas{%endblock%}
+{%block titulo%}Tierra{%endblock%}
 {%block extra_header%}
 <script type="text/javascript">
     //si activo es 0 el html interno esta vacio
@@ -43,12 +43,12 @@
 {%endblock%}
 {% block contenido %}
 <div id="contenedor_servicio">
-    <a href="/familia" class="familia">Familia</a>
-    <a href="/postcosecha" class="educacion">Post Cosecha</a>
-    <a href="/fincas"class="fincas">Finca</a>
-    <a href="/abono"class="luz">Abono y aplicacion</a>
-    <a href="/riego"class="luz">Riego</a>
-    <a href="/condiciones"class="luz">Condiciones</a>
+    <a href="/fincas" class="fincas">Uso Tierra</a>
+    <a href="#"class="luz">Suelo</a>
+    <a href="/cultivos"class="cultivos">Cultivos</a>
+    <a href="/animales"class="animales">Animales</a>
+    <a href="/postcosecha"class="arboles">Post Cosecha</a>
+    <a href="/riego"class="servicios">Riego</a>
 </div>
 <div id="sidebar">
     <div class="graficos_widget">
@@ -60,7 +60,7 @@
 </div>
 <div id="grafo"></div>
 <table>
-<caption>Las Fincas</caption>
+<caption>Tabla uso tierra</caption>
  <thead>
     <tr>
         <th></th>
@@ -88,5 +88,27 @@
     {%endfor%}
 </table>
 
+<!--Tabla reforestacion-->
+
+<table>
+<caption>Tabla Reforestación</caption>
+ <thead>
+    <tr>
+        <th>Actividad</th>
+        <th>Frecuencia</th>
+        <th>% Frec.</th>
+        <th>Cantidad</th>
+    </tr>
+ </thead>
+    {%for key, value in tabla_re.items%}
+    <tr>
+        <td>{{key|unslugify}}</td>
+        <td>{{value.numero|floatformat}}</td>
+        <td>{{value.porcentaje_num|floatformat}}</td>
+        <td>{{value.nativos|floatformat}}</td>
+        
+    </tr>
+    {%endfor%}
+</table>
 
 {% endblock %}

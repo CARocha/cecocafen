@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {%load unslugify %}
-
+{%block titulo%}Vulnerabilidad{%endblock%}
 {% block extra_header %}
  <script type="text/javascript">
     var activo = 0; 
@@ -103,7 +103,10 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block contenido %}
-
+<div id="contenedor_servicio">
+    <a href="/seguridad_alimentaria" class="seguridad">Seguridad Alimentaria</a>
+    <a href="/produccion"class="luz">Vulnerabilidad</a>
+</div>
 <div id="sidebar">
     <div class="graficos_widget">
         <h1>Gráficos sobre vulnerabilidad</h1>
@@ -119,7 +122,7 @@ $(document).ready(function() {
 </div>
 <div id="grafo"></div>
 <table>
-<caption>La Producción</caption>
+<caption>Promedio de productos</caption>
  <thead>
     <tr>
         <th>producto</th>

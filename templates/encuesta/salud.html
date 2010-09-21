@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {% block title %}Cecocafen - Salud{% endblock %}
-{%block titulo%}La Salud{%endblock%}
+{%block titulo%}Salud Hogar{%endblock%}
 {%block extra_header%}
 <script type="text/javascript">
     //si activo es 0 el html interno esta vacio
@@ -66,10 +66,9 @@ $(document).ready(function() {
 {%endblock%}
 {% block contenido %}
 <div id="contenedor_servicio">
-    <a href="/salud" class="salud">Salud</a>
-    <a href="/educacion" class="educacion">Educación</a>
-    <a href="/agua"class="agua">Agua</a>
-    <a href="/luz"class="luz">Luz</a>
+    <a href="/salud" class="salud">Hogar</a>
+    <a href="#"class="luz">Familia</a>
+    <a href="#"class="luz">Mental</a>
 </div>
     <div class="graficos_widget">
         <h1>Graficos </h1>
@@ -96,6 +95,7 @@ $(document).ready(function() {
     </div>
 <div id="grafo"></div>
 <table>
+<caption>Tabla salud hogar</caption>
  <thead>
     <tr>
         <th>Enfermedades</th>
