@@ -185,6 +185,48 @@ def grafo_migracion(request, tipo):
         return grafos.make_graph(data, legends, 
                 'Razones de las Migraciones', return_json = True,
                 type = grafos.PIE_CHART_3D)
+    if tipo == 'hombres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=1,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones de la migracion de los hombres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'mujeres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=2,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones migracion de las mujeres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'adohombres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=3,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones migracion Adolecentes Hombres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'adomujeres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=4,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones migracion Adolecente Mujeres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'ninos':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=5,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones de la migracion Niños', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'ninas':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=6,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones de la migracion Niñas', return_json = True,
+                type = grafos.PIE_CHART_3D)
     elif tipo == 'cocina':
         for opcion in Combustible.objects.all():
             data.append(consulta.filter(conservacion__cocinar=opcion).count())
