@@ -846,8 +846,8 @@ def educacion(request):
                               context_instance=RequestContext(request))
 
 @session_required
-def salud(request):
-    '''salud'''
+def salud_familiar(request):
+    '''salud familiar'''
     consulta = _queryset_filtrado(request)
     num_familias = consulta.count()
     tabla = [] 
@@ -863,7 +863,30 @@ def salud(request):
         tabla.append(fila)
 
     dicc = {'tabla': tabla, 'num_familias': num_familias}
-    return render_to_response('encuesta/salud.html', dicc,  
+    return render_to_response('encuesta/salud_familiar.html', dicc,  
+                              context_instance=RequestContext(request))
+
+@session_required
+def salud(request):
+    '''salud: del hogar, de la familia, mental de las mujeres'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/salud.html',
+                              {'num_familias': familias}, 
+                              context_instance=RequestContext(request))
+@session_required
+def salud_hogar(request):
+    '''salud: del hogar, de la familia, mental de las mujeres'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/salud_hogar.html',
+                              {'num_familias': familias}, 
+                              context_instance=RequestContext(request))
+
+@session_required
+def salud_mental(request):
+    '''salud: del hogar, de la familia, mental de las mujeres'''
+    familias = _queryset_filtrado(request).count()
+    return render_to_response('encuesta/salud_mental.html',
+                              {'num_familias': familias}, 
                               context_instance=RequestContext(request))
 
 @session_required
@@ -1574,6 +1597,9 @@ VALID_VIEWS = {
         'equipos': equipos,
         'seguridad_alimentaria': seguridad_alimentaria,
         'salud': salud,
+        'salud_hogar': salud_hogar,
+        'salud_familiar': salud_familiar,
+        'salud_mental': salud_mental,
         'agua': agua,
         'luz': luz,
         'organizacion': organizacion,
@@ -1587,7 +1613,6 @@ VALID_VIEWS = {
         'familias': familias,
         'organizaciones': organizaciones,
         'alimento': alimento,
-        'salud_hogar': salud_hogar,
         'finca': finca,
         }    
     

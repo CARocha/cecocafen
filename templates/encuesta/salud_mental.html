@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Cecocafen - Salud del Hogar{% endblock %}
-{%block titulo%}Salud Hogar{%endblock%}
+{% block title %}Cecocafen - Salud Mental{% endblock %}
+{%block titulo%}Salud Mental{%endblock%}
 {%block extra_header%}
 <script type="text/javascript">
     //si activo es 0 el html interno esta vacio
@@ -19,14 +19,6 @@
         });
     }
     
-    function click_cancer(id){
-        click_callback('/grafo/cancer/', id);
-    }
-    
-    function click_salud(id){
-        click_callback('/grafo/salud/', id);
-    }
-
     function click_mental(id){
         click_callback('/grafo/mental/', id);
     }
@@ -73,11 +65,13 @@ $(document).ready(function() {
     <div class="separador"></div>
     <div class="graficos_widget">
         <h1>Graficos </h1>
-        <a id="grafico1" href="#" onCLick="click_salud('basura')">Forma de disponer la basura</a>
-        <a id="grafico2" href="#" onCLick="click_salud('donde')">Donde hacen sus necesidades</a>
-        <a id="grafico3" href="#" onCLick="click_salud('tratamiento')">Tratamiento de desechos</a>
-        <a id="grafico4" href="#" onCLick="click_salud('frecuencia')">Frecuencia de limpieza</a>
-        <a id="grafico5" href="#" onCLick="click_salud('envases')">Que hace con envases agroquímicos</a>
+        <h1>Salud Mental</h1>
+        <a id="grafico12" href="#" onCLick="click_mental(1)">Estado civil</a>
+        <a id="grafico13" href="#" onCLick="click_mental(2)">¿Trata de impedirle que vea a sus amistades?</a>
+        <a id="grafico14" href="#" onCLick="click_mental(3)">¿Intenta que usted no tenga contacto con su familia?</a>
+        <a id="grafico15" href="#" onCLick="click_mental(4)">¿A recibido maltrato de alguna persona en su hogar?</a>
+        <a id="grafico16" href="#" onCLick="click_mental(5)">¿Cómo pareja, se pelean constantemente, hasta ponerse violentos?</a>
+        <a id="grafico17" href="#" onCLick="click_mental(6)">¿Si en algunas ocasiones los niños y niñas sufren violencia por parte de una persona adulta?</a>
     </div>
 <div id="grafo"></div>
 {% endblock %}
