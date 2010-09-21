@@ -41,6 +41,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'cecocafen.urls'
@@ -72,6 +73,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'encuesta',
     'lugar',
+    #'debug_toolbar'
 )
 
 NO_DATA_GRAPH_URL = '/archivos/imagen/error_grafo.jpg'
