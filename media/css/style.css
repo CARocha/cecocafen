@@ -233,7 +233,7 @@ border-bottom:#fff 1px solid;
     font-size: 14px;
     font-weight: bold;
     width: 950px;
-    height: 60px;
+    height: 37px;
     float: left;
     padding-bottom:1px;
     margin-bottom: 9px;
@@ -578,21 +578,22 @@ padding-right:15px;
     color:#000
 }
 
-.familia{background:#f9f8f8 url(../imagen/familia.jpg) no-repeat;}
-.organizacion{background:#f9f8f8 url(../imagen/organizacion.jpg) no-repeat;}
-.fincas{background:#f9f8f8 url(../imagen/fincas.jpg) no-repeat;}
-.arboles{background:#f9f8f8 url(../imagen/arboles.jpg) no-repeat;}
-.animales{background:#f9f8f8 url(../imagen/animales.jpg) no-repeat;}
-.cultivos{background:#f9f8f8 url(../imagen/cultivos.jpg) no-repeat;}
-.ingresos{background:#f9f8f8 url(../imagen/ingresos.jpg) no-repeat;}
-.bienes{background:#f9f8f8 url(../imagen/bienes.jpg) no-repeat;}
-.ahorro{background:#f9f8f8 url(../imagen/credito.jpg) no-repeat;}
-.servicios{background:#f9f8f8 url(../imagen/servicios.jpg) no-repeat;}
-.seguridad{background:#f9f8f8 url(../imagen/seguridad.jpg) no-repeat;}
-.agua{background:#f9f8f8 url(../imagen/agua.jpg) no-repeat;}
-.salud{background:#f9f8f8 url(../imagen/salud.jpg) no-repeat;}
-.luz{background:#f9f8f8 url(../imagen/luz.jpg) no-repeat;}
-.educacion{background:#f9f8f8 url(../imagen/educacion.jpg) no-repeat;}
+.familia{background:#f9f8f8 url(../imagen/familia1.jpg) no-repeat;}
+.organizacion{background:#f9f8f8 url(../imagen/organizacion1.jpg) no-repeat;}
+.fincas{background:#f9f8f8 url(../imagen/fincas1.jpg) no-repeat;}
+.arboles{background:#f9f8f8 url(../imagen/arboles1.jpg) no-repeat;}
+.animales{background:#f9f8f8 url(../imagen/animales1.jpg) no-repeat;}
+.cultivos{background:#f9f8f8 url(../imagen/cultivos1.jpg) no-repeat;}
+.ingresos{background:#f9f8f8 url(../imagen/ingresos1.jpg) no-repeat;}
+.bienes{background:#f9f8f8 url(../imagen/bienes1.jpg) no-repeat;}
+.ahorro{background:#f9f8f8 url(../imagen/credito1.jpg) no-repeat;}
+.servicios{background:#f9f8f8 url(../imagen/servicios1.jpg) no-repeat;}
+.seguridad{background:#f9f8f8 url(../imagen/seguridad1.jpg) no-repeat;}
+.agua{background:#f9f8f8 url(../imagen/agua1.jpg) no-repeat;}
+.salud{background:#f9f8f8 url(../imagen/salud1.jpg) no-repeat;}
+.luz{background:#f9f8f8 url(../imagen/luz1.jpg) no-repeat;}
+.educacion{background:#f9f8f8 url(../imagen/educacion1.jpg) no-repeat;}
+.migracion{background:#f9f8f8 url(../imagen/migracion.jpg) no-repeat;}
 
 .titulo_indicadores{
     font-size:17px;
