@@ -1221,6 +1221,7 @@ def seguridad_alimentaria(request):
     return render_to_response('encuesta/seguridad.html',{'tabla':tabla,
                               'num_familias':num_familia},
                                context_instance=RequestContext(request))    
+@session_required
 def riego(request):
     consulta = _queryset_filtrado(request)
     num_familias = consulta.count()
@@ -1255,11 +1256,13 @@ def riego(request):
     return render_to_response('encuesta/riego.html', dicc, 
                               context_instance=RequestContext(request))
 
+@session_required
 def abono(request):
     '''Vista del uso del abono'''
     consulta = _queryset_filtrado(request)
     familias = consulta.count()
-    tabla_abono = []
+    tabla_abono_sup= []
+    tabla_abono_inf = []
 
     for abono in CHOICE_PROD_ABONO:
         total_si = consulta.filter(abono__respuesta=1, abono__producto = abono[0]).count()
@@ -1284,7 +1287,9 @@ def abono(request):
                      calcular_positivos(query['pulpa'], familias),
                      calcular_positivos(query['estiercol'], familias),
                      calcular_positivos(query['gallinaza'], familias),
-                     calcular_positivos(query['composta'], familias),
+                     calcular_positivos(query['composta'], familias)]
+
+        resultado2 = [abono[1], 
                      calcular_positivos(query['lombrices'], familias),
                      calcular_positivos(query['bocachi'], familias),
                      calcular_positivos(query['foliar'], familias),
@@ -1293,7 +1298,9 @@ def abono(request):
                      calcular_positivos(query['quince'], familias),
                      calcular_positivos(query['veinte'], familias),
                      calcular_positivos(query['urea'], familias)]
-        tabla_abono.append(resultado)
+
+        tabla_abono_sup.append(resultado)
+        tabla_abono_inf.append(resultado2)
         
     ''' sobre compra y aplicacion de abono
     '''
@@ -1333,10 +1340,13 @@ def abono(request):
                       'veinte':veinte,
                       'seis':seis,'urea':urea}  
 
-    dicc = {'tabla': tabla_abono, 'num_familias': familias,'tabla_compra':tabla_compra}
+    dicc = {'tabla_abono_sup': tabla_abono_sup, 
+            'tabla_abono_inf': tabla_abono_inf,
+            'num_familias': familias,'tabla_compra':tabla_compra}
     return render_to_response('encuesta/abono.html', dicc, 
                               context_instance=RequestContext(request))
 
+@session_required
 def organizacion_jovenes(request):
     '''tabla de organizacion jovenes'''
     consulta = _queryset_filtrado(request)
@@ -1360,7 +1370,6 @@ def organizacion_jovenes(request):
     sumas['desde_capacitacion_menor'] = consulta.filter(jovenes__desde_cargo=1).count() 
     sumas['desde_capacitacion_mayor'] = consulta.filter(jovenes__desde_cargo=2).count() 
 
-    print sumas, num_casos
     #limpiando none
     for key in sumas:
         if sumas[key] == None:
@@ -1406,9 +1415,7 @@ def organizacion_jovenes(request):
                               {'tabla': tabla, 'num_familias': num_familias},
                               context_instance=RequestContext(request))
 
-def suelo(request):
-    pass
-
+@session_required
 def compra(request):
     ''' sobre compra y aplicacion de abono
     '''
@@ -1452,6 +1459,7 @@ def compra(request):
                               'num_familias':num_familias},
                                context_instance=RequestContext(request))
                     
+@session_required
 def postcosecha(request):   
     ''' sobre el modelo de post cosecha
     '''
@@ -1568,8 +1576,8 @@ def grafos_vulnerabilidad(request, tipo):
                 type=grafos.PIE_CHART_3D)
     else:
         raise Http404
-    pass
 
+@session_required
 def produccion(request):
     ''' sobre el modelo de produccion
     '''
@@ -1594,6 +1602,7 @@ def produccion(request):
                               'num_familias':num_familias},
                                context_instance=RequestContext(request))
 
+@session_required
 def condiciones(request):
     '''Condiciones del campo'''
     consulta = _queryset_filtrado(request)

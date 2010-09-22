@@ -43,11 +43,35 @@
         <th>%</th>
         <th>no</th>
         <th>%</th>
+        <th>pulpa</th>
+        <th>estiercol</th>
+        <th>gallinaza</th>
+        <th>composta</th>
     </tr>
   </thead>
-    {%for key, value in tabla.items%}
+    {%for fila in tabla_abono_sup%}
     <tr>
-
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+    <tr>
+        <th></th>
+        <th>lombrices</th>
+        <th>bocachi</th>
+        <th>foliar</th>
+        <th>verde</th>
+        <th>hojas</th>
+        <th>quince</th>
+        <th>veinte</th>
+        <th>urea</th>
+    </tr>
+    {%for fila in tabla_abono_inf%}
+    <tr>
+        {%for celda in fila%}
+        <td>{{celda}}</td>
+        {%endfor%}
     </tr>
     {%endfor%}
 </table>
