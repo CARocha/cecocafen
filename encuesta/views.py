@@ -185,6 +185,48 @@ def grafo_migracion(request, tipo):
         return grafos.make_graph(data, legends, 
                 'Razones de las Migraciones', return_json = True,
                 type = grafos.PIE_CHART_3D)
+    if tipo == 'hombres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=1,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones de la migracion de los hombres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'mujeres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=2,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones migracion de las mujeres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'adohombres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=3,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones migracion Adolecentes Hombres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'adomujeres':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=4,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones migracion Adolecente Mujeres', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'ninos':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=5,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones de la migracion Niños', return_json = True,
+                type = grafos.PIE_CHART_3D)
+    if tipo == 'ninas':
+        for opcion in RazonesMigracion.objects.all():
+            data.append(consulta.filter(migracion__edades=6,migracion__razones=opcion).count())
+            legends.append(opcion.razones)
+        return grafos.make_graph(data, legends,
+                'Razones de la migracion Niñas', return_json = True,
+                type = grafos.PIE_CHART_3D)
     elif tipo == 'cocina':
         for opcion in Combustible.objects.all():
             data.append(consulta.filter(conservacion__cocinar=opcion).count())
@@ -193,7 +235,7 @@ def grafo_migracion(request, tipo):
                 'Que utiliza para cocinar', return_json = True,
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'actividad':
-        for opcion in Conservacion.objects.all():
+        for opcion in CHOICE_CONSER:
             data.append(consulta.filter(conservacion__actividad=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
@@ -201,7 +243,7 @@ def grafo_migracion(request, tipo):
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'conservacion':
         for opcion in ActividadConservacion.objects.all():
-            data.append(consulta.filter(consevacion__cuales=opcion).count())
+            data.append(consulta.filter(conservacion__cuales=opcion).count())
             legends.append(opcion.nombre)
         return grafos.make_graph(data, legends,
                                  'Actividades para conservacion', return_json = True,
@@ -227,13 +269,6 @@ def grafo_migracion(request, tipo):
         return grafos.make_graph(data, legends,
                 'Fuentes de Otros Salarios', return_json = True,
                 type = grafos.PIE_CHART_3D)
-    elif tipo == 'aportar':
-        for opcion in CHOICE_APORTE:
-            data.append(consulta.filter(aporte__persona=opcion[0]).count())
-            legends.append(opcion[1])
-            message = "Aporte en la finca"
-        return grafos.make_graph(data, legends, message, multiline = True,
-                return_json = True, type = grafos.GROUPED_BAR_CHART_V)
     else:
         raise Http404
 
@@ -568,6 +603,45 @@ def grafos_ingreso(request, tipo):
         return grafos.make_graph(data, legends,
                 'Quien tiene los ingresos', return_json=True,
                 type=grafos.PIE_CHART_3D)
+    elif tipo == 'salario':
+        for opcion in TipoTrabajo.objects.all()[:4]:
+            data.append(consulta.filter(otrosingresos__fuente__nombre__icontains="Salarios",
+                                        otrosingresos__tipo=opcion).count())
+            legends.append(opcion)
+        return grafos.make_graph(data, legends,
+                'Tipos de salarios', return_json=True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'negocio':
+        for opcion in TipoTrabajo.objects.all()[4:8]:
+            data.append(consulta.filter(otrosingresos__fuente__nombre__icontains="Negocios",
+                                        otrosingresos__tipo=opcion).count())
+            legends.append(opcion)
+        return grafos.make_graph(data, legends,
+                'Tipos de Negocios', return_json=True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'remesa':
+        for opcion in TipoTrabajo.objects.all():
+            data.append(consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
+                                        otrosingresos__tipo=opcion).count())
+            legends.append(opcion)
+        return grafos.make_graph(data, legends,
+                'Tipos de Remesas', return_json=True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'alquiler':
+        for opcion in TipoTrabajo.objects.all()[10:13]:
+            data.append(consulta.filter(otrosingresos__fuente__nombre__icontains="Alquiler",
+                                        otrosingresos__tipo=opcion).count())
+            legends.append(opcion)
+        return grafos.make_graph(data, legends,
+                'Tipos de Alquiler', return_json=True,
+                type=grafos.PIE_CHART_3D)
+    elif tipo == 'aportar':
+        for opcion in CHOICE_APORTE:
+            data.append[(consulta.filter(aporte__persona=opcion[0]).count())]
+            legends.append(opcion[1])
+            message = "Aporte en la finca"
+        return grafos.make_graph(data, legends, message, multiline = True,
+                return_json = True, type = grafos.GROUPED_BAR_CHART_V)
     else:
         raise Http404
     pass

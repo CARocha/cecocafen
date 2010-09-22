@@ -1,15 +1,41 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {%block titulo%}Post Cosecha{%endblock%}
+{% block extra_header %}
+ <script type="text/javascript">
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/migrar/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+</script>
+{%endblock%}
 {% block contenido %}
 <div id="contenedor_servicio">
     <a href="/fincas" class="fincas">Uso Tierra</a>
-    <a href="#"class="luz">Suelo</a>
+    <a href="/abono"class="luz">Suelo</a>
     <a href="/cultivos"class="cultivos">Cultivos</a>
     <a href="/animales"class="animales">Animales</a>
     <a href="/postcosecha"class="arboles">Post Cosecha</a>
     <a href="/riego"class="servicios">Riego</a>
 </div>
+
+<div id="sidebar">
+    <div class="graficos_widget">
+       <h1>Principales problemas y soluciones</h1>
+        <a id="grafico1" href="#" onCLick="click_callback('tipoproblema')">Tipos Problemas</a>
+        <a id="grafico2" href="#" onCLick="click_callback('tiposolucion')">Tipos Soluciones</a>
+    </div>
+</div>
+<div id="grafo"></div>
+
 <table>
 <caption>Tabla PostCosecha</caption>
  <thead>

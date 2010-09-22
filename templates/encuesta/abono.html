@@ -1,15 +1,39 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {%block titulo%}Uso y aplicación de Abono{%endblock%}
+{% block extra_header %}
+ <script type="text/javascript">
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/migrar/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+</script>
+{%endblock%}
 {% block contenido %}
 <div id="contenedor_servicio">
-    <a href="/familia" class="familia">Familia</a>
-    <a href="/postcosecha" class="educacion">Post Cosecha</a>
-    <a href="/fincas"class="fincas">Finca</a>
-    <a href="/abono"class="luz">Abono y aplicacion</a>
-    <a href="/riego"class="luz">Riego</a>
-    <a href="/condiciones"class="luz">Condiciones</a>
+    <a href="/fincas" class="fincas">Uso Tierra</a>
+    <a href="/abono"class="luz">Suelo</a>
+    <a href="/cultivos"class="cultivos">Cultivos</a>
+    <a href="/animales"class="animales">Animales</a>
+    <a href="/postcosecha"class="arboles">Post Cosecha</a>
+    <a href="/riego"class="servicios">Riego</a>
 </div>
+<div id="sidebar">
+    <div class="graficos_widget">
+       <h1>Manejo de suelo</h1>
+        <a id="grafico1" href="#" onCLick="click_callback('actividad')">Hacen actividades conservación</a>
+        <a id="grafico2" href="#" onCLick="click_callback('conservacion')">Si, que actividades</a>
+    </div>
+</div>
+<div id="grafo"></div>
 <table>
 <caption>Uso de Abonos</caption>
  <thead>
@@ -19,41 +43,11 @@
         <th>%</th>
         <th>no</th>
         <th>%</th>
-        <th>Pulpa %</th>
-        <th>Estiercole %</th>
-        <th>Gallinazo %</th>
-        <th>Composta %</th>
-        <th>Lombrice %</th>
-        <th>Bocachi %</th>
-        <th>Foliar %</th>
-        <th>Abono verde %</th>
-        <th>Hojas y rastrajos %</th>
-        <th>15 %</th>
-        <th>20 %</th>
-        <th>18 %</th>
-        <th>urea %</th>
     </tr>
   </thead>
     {%for key, value in tabla.items%}
     <tr>
-        <td>{{key|unslugify}}</td>
-        <td>{{value.si|floatformat}}</td>
-        <td>{{value.porcentaje_si|floatformat}}</td>
-        <td>{{value.no|floatformat}}</td>
-        <td>{{value.porcentaje_no|floatformat}}</td>
-        <td>{{value.porcentaje_pulpa|floatformat}}</td>
-        <td>{{value.porcentaje_estiercol|floatformat}}</td>
-        <td>{{value.porcentaje_gallinaza|floatformat}}</td>
-        <td>{{value.porcentaje_composta|floatformat}}</td>
-        <td>{{value.porcentaje_lombrices|floatformat}}</td>
-        <td>{{value.porcentaje_bocachi|floatformat}}</td>
-        <td>{{value.porcentaje_foliar|floatformat}}</td>
-        <td>{{value.porcentaje_verde|floatformat}}</td>
-        <td>{{value.porcentaje_hojas|floatformat}}</td>
-        <td>{{value.porcentaje_quince|floatformat}}</td>
-        <td>{{value.porcentaje_veinte|floatformat}}</td>
-        <td>{{value.porcentaje_seis|floatformat}}</td>
-        <td>{{value.porcentaje_urea|floatformat}}</td>
+
     </tr>
     {%endfor%}
 </table>
