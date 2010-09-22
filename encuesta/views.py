@@ -235,7 +235,7 @@ def grafo_migracion(request, tipo):
                 'Que utiliza para cocinar', return_json = True,
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'actividad':
-        for opcion in Conservacion.objects.all():
+        for opcion in CHOICE_CONSER:
             data.append(consulta.filter(conservacion__actividad=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,

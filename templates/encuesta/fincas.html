@@ -38,13 +38,26 @@
         $("#grafico2").removeClass('enlace_seleccionado');
     });
 });
-
+</script>
+<script type="text/javascript">
+     var activo = 0; 
+     function clock_callback(id){
+        $.getJSON('/grafo/migrar/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
 </script>
 {%endblock%}
 {% block contenido %}
 <div id="contenedor_servicio">
     <a href="/fincas" class="fincas">Uso Tierra</a>
-    <a href="#"class="luz">Suelo</a>
+    <a href="/abono"class="luz">Suelo</a>
     <a href="/cultivos"class="cultivos">Cultivos</a>
     <a href="/animales"class="animales">Animales</a>
     <a href="/postcosecha"class="arboles">Post Cosecha</a>
@@ -56,6 +69,7 @@
         <a href="#" id="grafico1" onCLick="click_callback('tenencia')">Tenencia de las Parcelas</a>
         <a href="#" id="grafico2" onCLick="click_callback('solares')">Tenencia de los solares</a>
         <a href="#" id="grafico3" onCLick="click_callback('propietario')">Dueño de la Propiedad</a>
+        <a href="#" id="grafico4" onCLick="clock_callback('cocina')">Utiliza para cocinar</a>
     </div>
 </div>
 <div id="grafo"></div>
