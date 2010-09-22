@@ -1,6 +1,22 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {%block titulo%}Uso y aplicación de Abono{%endblock%}
+{% block extra_header %}
+ <script type="text/javascript">
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/migrar/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+</script>
+{%endblock%}
 {% block contenido %}
 <div id="contenedor_servicio">
     <a href="/fincas" class="fincas">Uso Tierra</a>
@@ -12,11 +28,12 @@
 </div>
 <div id="sidebar">
     <div class="graficos_widget">
-       <h1>Graficos Razones de Migración</h1>
-        <a id="grafico1" href="#" onCLick="click_callback('hombres')">Hombres</a>
-        <a id="grafico1" href="#" onCLick="click_callback('mujeres')">Mujeres</a>
+       <h1>Manejo de suelo</h1>
+        <a id="grafico1" href="#" onCLick="click_callback('actividad')">Hacen actividades conservación</a>
+        <a id="grafico2" href="#" onCLick="click_callback('conservacion')">Si, que actividades</a>
     </div>
 </div>
+<div id="grafo"></div>
 <table>
 <caption>Uso de Abonos</caption>
  <thead>
