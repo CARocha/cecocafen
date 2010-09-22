@@ -797,15 +797,30 @@ def ahorro_credito(request):
     ''' ahorro y credito'''
     #ahorro
     consulta = _queryset_filtrado(request)
-    #tabla_ahorro = []
+    num_familias = consulta.count()
+    tabla_ahorro = []
     #totales_ahorro = {}
-
-    #columnas_ahorro = ['Si', '%']
-
-    #for pregunta in AhorroPregunta.objects.exclude(id__in=[3, 5]):
-    #    #opciones solo si
-    #    subquery = consulta.filter(ahorro__ahorro = pregunta, ahorro__respuesta = 1).count()
-    #    tabla_ahorro.append([pregunta.nombre, subquery, saca_porcentajes(subquery, consulta.count(), False)])
+    sumas_ahorro = consulta.aggregate(efectivo = Sum('ahorro__tiene_efectivo'),
+                                      interes = Sum('ahorro__interes_ahorro'),
+                                      joyas = Sum('ahorro__tiene_joya'),
+                                      posee = Sum('ahorro__posee_ahorro'))
+    #ahorro
+    fila = ['¿Tiene ahorro en efectivo?', 
+            calcular_positivos(sumas_ahorro['efectivo'], num_familias, False),
+            calcular_positivos(sumas_ahorro['efectivo'], num_familias)]
+    tabla_ahorro.append(fila)
+    fila = ['¿Tiene ahorro en Joyas?', 
+            calcular_positivos(sumas_ahorro['joyas'], num_familias, False),
+            calcular_positivos(sumas_ahorro['joyas'], num_familias)]
+    tabla_ahorro.append(fila)
+    fila = ['¿Posee cuenta de ahorrro?', 
+            calcular_positivos(sumas_ahorro['posee'], num_familias, False),
+            calcular_positivos(sumas_ahorro['posee'], num_familias)]
+    tabla_ahorro.append(fila)
+    fila = ['¿Le interesa tener ahorros?', 
+            calcular_positivos(sumas_ahorro['interes'], num_familias, False),
+            calcular_positivos(sumas_ahorro['interes'], num_familias)]
+    tabla_ahorro.append(fila)
 
     #credito
     tabla_credito= {}
@@ -825,7 +840,8 @@ def ahorro_credito(request):
     tabla_credito['al_dia'] = [al_dia, saca_porcentajes(al_dia, totales_credito['numero'])] 
 
     dicc = {'tabla_credito': tabla_credito,
-            'num_familias': consulta.count()}
+            'tabla_ahorro': tabla_ahorro,
+            'num_familias': num_familias}
 
     return render_to_response('encuesta/ahorro_credito.html', dicc,
                               context_instance=RequestContext(request))
