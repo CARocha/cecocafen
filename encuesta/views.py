@@ -940,13 +940,13 @@ def salud_familiar(request):
     return render_to_response('encuesta/salud_familiar.html', dicc,  
                               context_instance=RequestContext(request))
 
-@session_required
-def salud(request):
-    '''salud: del hogar, de la familia, mental de las mujeres'''
-    familias = _queryset_filtrado(request).count()
-    return render_to_response('encuesta/salud.html',
-                              {'num_familias': familias}, 
-                              context_instance=RequestContext(request))
+#@session_required
+#def salud(request):
+#    '''salud: del hogar, de la familia, mental de las mujeres'''
+#    familias = _queryset_filtrado(request).count()
+#    return render_to_response('encuesta/salud.html',
+#                              {'num_familias': familias}, 
+#                              context_instance=RequestContext(request))
 @session_required
 def salud_hogar(request):
     '''salud: del hogar, de la familia, mental de las mujeres'''
@@ -1652,10 +1652,10 @@ def alimento(request):
                               context_instance=RequestContext(request))
                               
 @session_required
-def salud_hogar(request):
+def salud(request):
     '''salud: del hogar, de la familia, mental de las mujeres'''
     familias = _queryset_filtrado(request).count()
-    return render_to_response('encuesta/salud_hogar.html',
+    return render_to_response('encuesta/salud.html',
                               {'num_familias': familias}, 
                               context_instance=RequestContext(request))
 
