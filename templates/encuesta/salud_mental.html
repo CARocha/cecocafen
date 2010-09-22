@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Cecocafen - Salud Mental{% endblock %}
+{%block titulo%}Salud Mental{%endblock%}
+{%block extra_header%}
+<script type="text/javascript">
+    //si activo es 0 el html interno esta vacio
+    //caso si activo es otro num sustituir grafico
+    //si activo es el mismo id, esconder grafico
+    var activo = 0; 
+    function click_callback(url, id){
+        $.getJSON(url + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+    
+    function click_mental(id){
+        click_callback('/grafo/mental/', id);
+    }
+
+$(document).ready(function() {
+    $("#grafico1").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico1").addClass('enlace_seleccionado');
+    });
+    
+    $("#grafico2").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico2").addClass('enlace_seleccionado'); 
+    });
+
+    $("#grafico3").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico3").addClass('enlace_seleccionado'); 
+    });
+    $("#grafico4").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico4").addClass('enlace_seleccionado'); 
+    });
+
+    $("#grafico5").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico5").addClass('enlace_seleccionado'); 
+    });
+
+    $("#grafico6").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico5").addClass('enlace_seleccionado'); 
+    });
+});
+</script>
+{%endblock%}
+{% block contenido %}
+
+    <div id="contenedor_servicio">
+        <a href="/salud_hogar" class="salud">Hogar</a>
+        <a href="/salud_familiar"class="familia">Familia</a>
+        <a href="/salud_mental"class="luz">Mental</a>
+    </div>
+    <div class="separador"></div>
+    <div class="graficos_widget">
+        <h1>Graficos </h1>
+        <h1>Salud Mental</h1>
+        <a id="grafico12" href="#" onCLick="click_mental(1)">Estado civil</a>
+        <a id="grafico13" href="#" onCLick="click_mental(2)">¿Trata de impedirle que vea a sus amistades?</a>
+        <a id="grafico14" href="#" onCLick="click_mental(3)">¿Intenta que usted no tenga contacto con su familia?</a>
+        <a id="grafico15" href="#" onCLick="click_mental(4)">¿A recibido maltrato de alguna persona en su hogar?</a>
+        <a id="grafico16" href="#" onCLick="click_mental(5)">¿Cómo pareja, se pelean constantemente, hasta ponerse violentos?</a>
+        <a id="grafico17" href="#" onCLick="click_mental(6)">¿Si en algunas ocasiones los niños y niñas sufren violencia por parte de una persona adulta?</a>
+    </div>
+<div id="grafo"></div>
+{% endblock %}

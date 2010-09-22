@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Cecocafen - Salud del Hogar{% endblock %}
+{%block titulo%}Salud Hogar{%endblock%}
+{%block extra_header%}
+<script type="text/javascript">
+    //si activo es 0 el html interno esta vacio
+    //caso si activo es otro num sustituir grafico
+    //si activo es el mismo id, esconder grafico
+    var activo = 0; 
+    function click_callback(url, id){
+        $.getJSON(url + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+    
+    function click_cancer(id){
+        click_callback('/grafo/cancer/', id);
+    }
+    
+    function click_salud(id){
+        click_callback('/grafo/salud/', id);
+    }
+
+    function click_mental(id){
+        click_callback('/grafo/mental/', id);
+    }
+
+$(document).ready(function() {
+    $("#grafico1").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico1").addClass('enlace_seleccionado');
+    });
+    
+    $("#grafico2").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico2").addClass('enlace_seleccionado'); 
+    });
+
+    $("#grafico3").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico3").addClass('enlace_seleccionado'); 
+    });
+    $("#grafico4").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico4").addClass('enlace_seleccionado'); 
+    });
+
+    $("#grafico5").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico5").addClass('enlace_seleccionado'); 
+    });
+
+    $("#grafico6").click(function(){
+        $("a.enlace_seleccionado").removeClass('enlace_seleccionado');
+        $("#grafico5").addClass('enlace_seleccionado'); 
+    });
+});
+</script>
+{%endblock%}
+{% block contenido %}
+
+    <div id="contenedor_servicio">
+        <a href="/salud_hogar" class="salud">Hogar</a>
+        <a href="/salud_familiar"class="familia">Familia</a>
+        <a href="/salud_mental"class="luz">Mental</a>
+    </div>
+    <div class="separador"></div>
+    <div class="graficos_widget">
+        <h1>Graficos </h1>
+        <a id="grafico1" href="#" onCLick="click_salud('basura')">Forma de disponer la basura</a>
+        <a id="grafico2" href="#" onCLick="click_salud('donde')">Donde hacen sus necesidades</a>
+        <a id="grafico3" href="#" onCLick="click_salud('tratamiento')">Tratamiento de desechos</a>
+        <a id="grafico4" href="#" onCLick="click_salud('frecuencia')">Frecuencia de limpieza</a>
+        <a id="grafico5" href="#" onCLick="click_salud('envases')">Que hace con envases agroquímicos</a>
+    </div>
+<div id="grafo"></div>
+{% endblock %}

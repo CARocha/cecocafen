@@ -1,7 +1,15 @@
 {% extends "base.html"%}
 {%load unslugify %}
-{%block titulo%}Los Cultivos{%endblock%}
+{%block titulo%}Cultivos{%endblock%}
 {%block contenido%}
+<div id="contenedor_servicio">
+    <a href="/fincas" class="fincas">Uso Tierra</a>
+    <a href="/abono"class="luz">Suelo</a>
+    <a href="/cultivos"class="cultivos">Cultivos</a>
+    <a href="/animales"class="animales">Animales</a>
+    <a href="/postcosecha"class="arboles">Post Cosecha</a>
+    <a href="/riego"class="servicios">Riego</a>
+</div>
 <table>
 <caption>Los cultivos y la producción</caption>
  <thead>

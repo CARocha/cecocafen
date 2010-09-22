@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {%load unslugify %}
 {% block title %}Cecocafen - Organización{% endblock %}
-{%block titulo%}La Organización{%endblock%}
+{%block titulo%}Socios Adultos{%endblock%}
 {%block extra_header%}
 <script type="text/javascript">
     var activo = 0; 
@@ -32,6 +32,10 @@
 {%endblock%}
 
 {% block contenido %}
+<div id="contenedor_servicio">
+    <a href="/organizacion" class="organizacion">Socios Adultos </a>
+    <a href="/jovenes" class="educacion">Socios  Jóvenes</a>
+</div>
 
 <div id="sidebar">
     <div class="graficos_widget">
@@ -43,7 +47,7 @@
 <div id="grafo"></div>
 
 <table>
-<caption>La organización</caption>
+<caption>La organización socios adultos</caption>
  <thead>
     <tr>
         <th></th>
