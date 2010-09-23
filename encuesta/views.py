@@ -622,9 +622,9 @@ def grafos_ingreso(request, tipo):
     elif tipo == 'remesa':
         #for opcion in TipoTrabajo.objects.all()[9:9]:
         nacional = consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
-                                    otrosingresos__tipo=9).count()
-        extran = consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
                                     otrosingresos__tipo=16).count()
+        extran = consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
+                                    otrosingresos__tipo=9).count()
         data = (nacional,extran)
         legends = ('Nacional','Extranjero')
         return grafos.make_graph(data, legends,
