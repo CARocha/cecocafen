@@ -1441,6 +1441,31 @@ def organizacion_jovenes(request):
                               context_instance=RequestContext(request))
 
 @session_required
+def grafos_jovenes(request, tipo):
+    '''Grafos de los jóvenes de la organizacion'''
+    consulta = _queryset_filtrado(request)
+    data = []
+    legends = []
+    title = ''
+    
+    if tipo == 'beneficio':
+        for beneficio in BeneficioJoven.objects.all():
+            data.append(consulta.filter(jovenes__beneficio = beneficio).count())
+            legends.append(beneficio.beneficio)
+            title = 'Beneficio de ser miembro'
+    elif tipo == 'porque':
+        for razon in MiembroJoven.objects.all():
+            data.append(consulta.filter(jovenes__quiero_miembro_junta = razon).count())
+            legends.append(razon.nombre)
+            title = 'Razón por la cual quiero ser miembro del consejo de administración'
+    else:
+        raise Http404
+
+    return grafos.make_graph(data, legends, 
+            title, return_json = True,
+            type = grafos.PIE_CHART_3D)
+
+@session_required
 def compra(request):
     ''' sobre compra y aplicacion de abono
     '''

@@ -1,11 +1,47 @@
 {% extends "base.html" %}
 {% block title %}Jóvenes{% endblock %}
 {%block titulo%}Socios Jóvenes{%endblock%}
+{%block extra_header%}
+<script type="text/javascript">
+    var activo = 0; 
+    function click_callback(id){
+        $.getJSON('/grafo/jovenes/' + id, function(data) {
+            if (activo!= id){
+                $("#grafo").html('<img src="' + data.url + '" />');
+                activo = id;
+            }else{
+                $("#grafo").html('');
+                activo = 0;
+            }
+        });
+    }
+    $(document).ready(function() {
+    $("#grafico1").click(function(){
+        $("#grafico1").addClass('enlace_seleccionado');
+        $("#grafico2").removeClass('enlace_seleccionado');
+    });
+    
+    $("#grafico2").click(function(){
+        $("#grafico2").addClass('enlace_seleccionado'); 
+        $("#grafico1").removeClass('enlace_seleccionado');
+    });
+
+    });
+</script>
+{%endblock%}
 {% block contenido %}
 <div id="contenedor_servicio">
     <a href="/organizacion" class="organizacion">Socios Adultos </a>
     <a href="/jovenes" class="educacion">Socios  Jóvenes</a>
 </div>
+<div id="sidebar">
+    <div class="graficos_widget">
+        <h1>Gráficos</h1>
+        <a href="#" id="grafico1" onCLick="click_callback('porque')">Razón por la cual quiero ser parte del consejo</a>
+        <a href="#" id="grafico2" onCLick="click_callback('beneficio')">Beneficio de ser socios/socias</a>
+    </div>
+</div>
+<div id="grafo"></div>
 <table>
 <caption>La organización socios jóvenes</caption>
  <thead>
