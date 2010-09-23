@@ -1800,13 +1800,13 @@
        y1="2435.5879"
        x2="-4643.9844"
        y2="2483.5879"
-       gradientTransform="matrix(0.90175345,0,0,1,-175.01067,64.346717)" />
+       gradientTransform="matrix(0.86988113,0,0,1.5599879,-279.67036,-943.81409)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4287"
        id="linearGradient4285"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.90175345,0,0,1,-176.42487,100.40916)"
+       gradientTransform="matrix(0.90175345,0,0,1.559988,-131.00552,-880.91315)"
        x1="-4644.1289"
        y1="2435.5879"
        x2="-4643.9844"
@@ -1816,7 +1816,7 @@
        xlink:href="#linearGradient4300"
        id="linearGradient4297"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.90175345,0,0,1,-176.42487,137.88582)"
+       gradientTransform="matrix(0.90175345,0,0,1.5599879,-131.00552,-815.5654)"
        x1="-4644.1289"
        y1="2435.5879"
        x2="-4643.9844"
@@ -3302,9 +3302,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.7400388"
-     inkscape:cx="-4394.7239"
-     inkscape:cy="-602.10252"
+     inkscape:zoom="1.9375"
+     inkscape:cx="-4444.0255"
+     inkscape:cy="-1892.8997"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -3348,11 +3348,11 @@
     <image
        sodipodi:absref="/home/crocha/proyectos/django/cecocafen/media/imagen/dibujo.svg-image3697-419.png"
        xlink:href="dibujo.svg-image3697-419.png"
-       y="-483.61508"
-       x="-1373.8607"
-       id="image3701"
+       width="1366"
        height="768"
-       width="1366" />
+       id="image3701"
+       x="-1373.8607"
+       y="-483.61508" />
     <image
        y="-560.17902"
        x="-667.72198"
@@ -3425,11 +3425,11 @@
     <image
        sodipodi:absref="/home/crocha/proyectos/django/cecocafen/media/imagen/dibujo.svg-image3764-4294966886.png"
        xlink:href="dibujo.svg-image3764-4294966886.png"
-       width="1366"
-       height="768"
-       id="image3768"
+       y="-488.90778"
        x="-2968.3044"
-       y="-488.90778" />
+       id="image3768"
+       height="768"
+       width="1366" />
     <rect
        style="opacity:0.63492066999999996;fill:#cdc099;fill-opacity:1;fill-rule:evenodd;stroke:#5d2a03;stroke-width:2.20000004999999987;stroke-linecap:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect3900"
@@ -3522,11 +3522,11 @@
     <image
        sodipodi:absref="/home/crocha/proyectos/django/cecocafen/media/imagen/dibujo.svg-image3974-988.png"
        xlink:href="dibujo.svg-image3974-988.png"
-       width="1366"
-       height="768"
-       id="image3978"
+       y="357.36218"
        x="-2963.0588"
-       y="357.36218" />
+       id="image3978"
+       height="768"
+       width="1366" />
     <rect
        style="fill:url(#radialGradient3692);fill-opacity:1;fill-rule:evenodd;stroke:#a0b586;stroke-width:0.98677111;stroke-opacity:1"
        id="rect3682"
@@ -5314,13 +5314,13 @@
     <image
        sodipodi:absref="/home/crocha/proyectos/django/cecocafen/media/imagen/dibujo.svg-image4272-369.png"
        xlink:href="dibujo.svg-image4272-369.png"
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       y="2040.416"
-       x="-4258.5146"
-       id="image4276"
+       width="1366"
        height="768"
-       width="1366" />
+       id="image4276"
+       x="-4258.5146"
+       y="2040.416"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
        style="fill:url(#linearGradient4288);fill-opacity:1;fill-rule:evenodd;stroke:none"
        id="rect4278"
@@ -5416,11 +5416,11 @@
     <image
        sodipodi:absref="/home/crocha/proyectos/django/cecocafen/media/imagen/dibujo.svg-image4364-424.png"
        xlink:href="dibujo.svg-image4364-424.png"
-       y="2036.3623"
-       x="-5651"
-       id="image4368"
+       width="1366"
        height="768"
-       width="1366" />
+       id="image4368"
+       x="-5651"
+       y="2036.3623" />
     <rect
        style="fill:#ece9df;fill-opacity:1;stroke:#beb592;stroke-opacity:1"
        id="rect4370"
@@ -5575,45 +5575,54 @@
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/bcorrales/SIMAS/trabajo achuapa/arte/fondo_widget_grafico.png"
+       inkscape:export-filename="/home/crocha/proyectos/django/cecocafen/media/imagen/fondo_widget_grafico11.png"
        style="fill:url(#linearGradient4275);fill-opacity:1;stroke:none"
        id="rect4269"
-       width="250"
-       height="29.205353"
-       x="-4487.7393"
-       y="2504.6062" />
+       width="241.16379"
+       height="45.560001"
+       x="-4439.9663"
+       y="2862.9612" />
     <path
        id="path4272"
-       d="m -4475.9752,2514.9024 0,11.0968 8.5161,-5.4193 -8.5161,-5.6775 z"
-       style="fill:#b7b6a0;fill-opacity:1;stroke:none" />
+       d="m -4430.5558,2878.9473 0,12.4646 8.5161,-6.0873 -8.5161,-6.3773 z"
+       style="fill:#b7b6a0;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/crocha/proyectos/django/cecocafen/media/imagen/fondo_widget_grafico11.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
-       y="2540.6687"
-       x="-4489.1533"
-       height="29.205353"
+       y="2925.8625"
+       x="-4443.7339"
+       height="45.560001"
        width="250"
        id="rect4279"
        style="fill:url(#linearGradient4285);fill-opacity:1;stroke:none"
-       inkscape:export-filename="/home/bcorrales/SIMAS/trabajo achuapa/arte/fondo_widget_grafico2.png"
+       inkscape:export-filename="/home/crocha/proyectos/django/cecocafen/media/imagen/fondo_widget_grafico12.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
        style="fill:#78775b;fill-opacity:1;stroke:none"
-       d="m -4477.3894,2550.9648 0,11.0968 8.5161,-5.4193 -8.5161,-5.6775 z"
-       id="path4283" />
+       d="m -4430.4216,2944.1906 0,11.0968 8.5161,-5.4193 -8.5161,-5.6775 z"
+       id="path4283"
+       inkscape:export-filename="/home/crocha/proyectos/django/cecocafen/media/imagen/fondo_widget_grafico12.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/bcorrales/SIMAS/trabajo achuapa/arte/fondo_widget_grafico3.png"
+       inkscape:export-filename="/home/crocha/proyectos/django/cecocafen/media/imagen/fondo_widget_grafico13.png"
        style="fill:url(#linearGradient4297);fill-opacity:1;stroke:none"
        id="rect4293"
        width="250"
-       height="29.205353"
-       x="-4489.1533"
-       y="2578.1453" />
+       height="45.560001"
+       x="-4443.7339"
+       y="2991.21" />
     <path
        id="path4295"
-       d="m -4477.3894,2588.4415 0,11.0968 8.5161,-5.4193 -8.5161,-5.6775 z"
-       style="fill:#78775b;fill-opacity:1;stroke:none" />
+       d="m -4433.0023,3008.8931 0,11.0968 8.5161,-5.4193 -8.5161,-5.6775 z"
+       style="fill:#78775b;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/home/crocha/proyectos/django/cecocafen/media/imagen/fondo_widget_grafico13.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
        style="fill:#c7bea2;fill-opacity:1;fill-rule:evenodd;stroke:none"
        id="rect4310"

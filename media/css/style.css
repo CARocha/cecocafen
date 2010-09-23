@@ -732,7 +732,7 @@ padding-right:15px;
     display:block;
     width:215px;
     height:40px;
-    background:#fff url(../imagen/fondo_widget_grafico.png no-repeat);
+    background:#fff url(../imagen/fondo_widget_grafico11.png) no-repeat;
     border-bottom:#e1dccb 1px solid;
     text-decoration:none;
     color:#8B8989;
@@ -742,13 +742,18 @@ padding-right:15px;
 }
 
 .graficos_widgeta a:hover{
-    background:#fff url(../imagen/fondo_widget_grafico2.png);
+    background:#fff url(../imagen/fondo_widget_grafico12.png)no-repeat;
     color:#5C5C5C;
 
 }
 
+.enlace_seleccionadoo {
+    background:#fff url(../imagen/fondo_widget_grafico13.png) !important;
+    color:#000!important;
+}
+
 .graficos_widgeta a:active{
-    background:#fff url(../imagen/fondo_widget_grafico3.png);
+    background:#fff url(../imagen/fondo_widget_grafico13.png)no-repeat;
     color:#000;
 
 }
