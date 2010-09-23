@@ -654,8 +654,6 @@ def grafos_ingreso(request, tipo):
                 return_json = True, type = grafos.GROUPED_BAR_CHART_V)
     else:
         raise Http404
-    pass
-            
 
 @session_required
 def grafos_bienes(request, tipo):
@@ -710,7 +708,6 @@ def grafos_bienes(request, tipo):
             
     else:
         raise Http404
-    pass
 
 @session_required
 def equipos(request):
@@ -859,7 +856,6 @@ def ahorro_credito(request):
 @session_required
 def ahorro_credito_grafos(request, tipo):
     '''Tipo puede ser: ahorro, uso, origen, satisfaccion'''
-    #TODO: origen y uso
     consulta = _queryset_filtrado(request)
     data = [] 
     legends = []
@@ -1003,7 +999,9 @@ def salud_grafos(request, tipo):
             data.append(consulta.filter(salud__donde=choice[0]).count())
             legends.append(choice[1])
     elif tipo == 'tratamiento':
-        pass
+        for tratamiento in Tratamiento.objects.all():
+            data.append(consulta.filter(salud__tratamiento = tratamiento).count())
+            legends.append(tratamiento.nombre)
     elif tipo == 'frecuencia':
         titulo = 'Frecuencia de la limpieza'
         for choice in CHOICE_LIMPIEZA:
@@ -1015,8 +1013,9 @@ def salud_grafos(request, tipo):
             data.append(consulta.filter(salud__deshacer=choice[0]).count())
             legends.append(choice[1])
     elif tipo == 'envases':
-        #envases de agroquimicos
-        pass
+        for envase in Quimico.objects.all():
+            data.append(consulta.filter(salud__agroquimico = envase).count())
+            legends.append(envase.nombre)
     else:
         raise Http404
 
@@ -1647,6 +1646,7 @@ def condiciones(request):
     return render_to_response('encuesta/condiciones.html', dicc,
                                context_instance=RequestContext(request))
                                
+@session_required
 def datos_generales(request):
     '''Datos generales de las encuestas '''
     #-------variables globales-----
