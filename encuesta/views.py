@@ -620,10 +620,13 @@ def grafos_ingreso(request, tipo):
                 'Tipos de Negocios', return_json=True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'remesa':
-        for opcion in TipoTrabajo.objects.all():
-            data.append(consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
-                                        otrosingresos__tipo=opcion).count())
-            legends.append(opcion)
+        #for opcion in TipoTrabajo.objects.all()[9:9]:
+        nacional = consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
+                                    otrosingresos__tipo=9).count()
+        extran = consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
+                                    otrosingresos__tipo=16).count()
+        data = (nacional,extran)
+        legends = ('Nacional','Extranjero')
         return grafos.make_graph(data, legends,
                 'Tipos de Remesas', return_json=True,
                 type=grafos.PIE_CHART_3D)
