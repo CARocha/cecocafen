@@ -117,7 +117,9 @@ def inicio(request):
             request.session['comunidad'] = comunidad
             request.session['socio'] = form.cleaned_data['socio']
             request.session['desde'] = form.cleaned_data['desde']
-            request.session['duenio'] = form.cleaned_data['dueno']   
+            request.session['duenio'] = form.cleaned_data['dueno']
+            request.session['tecnologia'] = form.cleaned_data['tecnologia']
+            request.session['certificacion'] = form.cleaned_data['certificacion'] 
 
             mensaje = "Todas las variables estan correctamente :)"
             request.session['activo'] = True
@@ -1628,6 +1630,19 @@ def condiciones(request):
     dicc = {'tabla': tabla, 'num_familias': num_familias, 'columnas': CHOICE_CAMPO}
     return render_to_response('encuesta/condiciones.html', dicc,
                                context_instance=RequestContext(request))
+                               
+def datos_generales(request):
+    '''Datos generales de las encuestas '''
+    #-------variables globales-----
+    a = _queryset_filtrado(request)
+    num_familias = a.count()
+    #-----------------------------
+    total = num_familias
+    hombres = DatosGenerales.objects.filter(datos__sexo=1).count()
+    mujeres = DatosGenerales.objects.filter(datos__sexo=2).count()
+    
+    return render_to_response('encuesta/datos.html', dicc,
+                              context_instance=RequestContext(request))
 @session_required
 def servicios(request):
     '''servicios: educacion, salud, agua, luz'''
