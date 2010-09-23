@@ -117,7 +117,9 @@ def inicio(request):
             request.session['comunidad'] = comunidad
             request.session['socio'] = form.cleaned_data['socio']
             request.session['desde'] = form.cleaned_data['desde']
-            request.session['duenio'] = form.cleaned_data['dueno']   
+            request.session['duenio'] = form.cleaned_data['dueno']
+            request.session['tecnologia'] = form.cleaned_data['tecnologia']
+            request.session['certificacion'] = form.cleaned_data['certificacion'] 
 
             mensaje = "Todas las variables estan correctamente :)"
             request.session['activo'] = True
@@ -620,10 +622,13 @@ def grafos_ingreso(request, tipo):
                 'Tipos de Negocios', return_json=True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'remesa':
-        for opcion in TipoTrabajo.objects.all():
-            data.append(consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
-                                        otrosingresos__tipo=opcion).count())
-            legends.append(opcion)
+        #for opcion in TipoTrabajo.objects.all()[9:9]:
+        nacional = consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
+                                    otrosingresos__tipo=16).count()
+        extran = consulta.filter(otrosingresos__fuente__nombre__icontains="Remesas",
+                                    otrosingresos__tipo=9).count()
+        data = (nacional,extran)
+        legends = ('Nacional','Extranjero')
         return grafos.make_graph(data, legends,
                 'Tipos de Remesas', return_json=True,
                 type=grafos.PIE_CHART_3D)
@@ -636,10 +641,15 @@ def grafos_ingreso(request, tipo):
                 'Tipos de Alquiler', return_json=True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'aportar':
-        for opcion in CHOICE_APORTE:
-            data.append[(consulta.filter(aporte__persona=opcion[0]).count())]
-            legends.append(opcion[1])
-            message = "Aporte en la finca"
+        #data.append[(consulta.filter(aporte__persona=opcion[0]).count())]
+        uno = consulta.filter(aporte__persona=1).count()
+        dos = consulta.filter(aporte__persona=2).count()
+        tres = consulta.filter(aporte__persona=3).count()
+        cuatro = consulta.filter(aporte__persona=4).count()
+        
+        data = [[uno],[dos],[tres],[cuatro]]
+        legends = ['2-3','4-5','6-7','mas de 8']
+        message = "Aporte en la finca"
         return grafos.make_graph(data, legends, message, multiline = True,
                 return_json = True, type = grafos.GROUPED_BAR_CHART_V)
     else:
@@ -956,13 +966,13 @@ def salud_familiar(request):
     return render_to_response('encuesta/salud_familiar.html', dicc,  
                               context_instance=RequestContext(request))
 
-@session_required
-def salud(request):
-    '''salud: del hogar, de la familia, mental de las mujeres'''
-    familias = _queryset_filtrado(request).count()
-    return render_to_response('encuesta/salud.html',
-                              {'num_familias': familias}, 
-                              context_instance=RequestContext(request))
+#@session_required
+#def salud(request):
+#    '''salud: del hogar, de la familia, mental de las mujeres'''
+#    familias = _queryset_filtrado(request).count()
+#    return render_to_response('encuesta/salud.html',
+#                              {'num_familias': familias}, 
+#                              context_instance=RequestContext(request))
 @session_required
 def salud_hogar(request):
     '''salud: del hogar, de la familia, mental de las mujeres'''
@@ -1636,6 +1646,19 @@ def condiciones(request):
     dicc = {'tabla': tabla, 'num_familias': num_familias, 'columnas': CHOICE_CAMPO}
     return render_to_response('encuesta/condiciones.html', dicc,
                                context_instance=RequestContext(request))
+                               
+def datos_generales(request):
+    '''Datos generales de las encuestas '''
+    #-------variables globales-----
+    a = _queryset_filtrado(request)
+    num_familias = a.count()
+    #-----------------------------
+    total = num_familias
+    hombres = DatosGenerales.objects.filter(datos__sexo=1).count()
+    mujeres = DatosGenerales.objects.filter(datos__sexo=2).count()
+    
+    return render_to_response('encuesta/datos.html', dicc,
+                              context_instance=RequestContext(request))
 @session_required
 def servicios(request):
     '''servicios: educacion, salud, agua, luz'''
@@ -1668,10 +1691,10 @@ def alimento(request):
                               context_instance=RequestContext(request))
                               
 @session_required
-def salud_hogar(request):
+def salud(request):
     '''salud: del hogar, de la familia, mental de las mujeres'''
     familias = _queryset_filtrado(request).count()
-    return render_to_response('encuesta/salud_hogar.html',
+    return render_to_response('encuesta/salud.html',
                               {'num_familias': familias}, 
                               context_instance=RequestContext(request))
 
