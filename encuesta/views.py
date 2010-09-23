@@ -636,10 +636,15 @@ def grafos_ingreso(request, tipo):
                 'Tipos de Alquiler', return_json=True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'aportar':
-        for opcion in CHOICE_APORTE:
-            data.append[(consulta.filter(aporte__persona=opcion[0]).count())]
-            legends.append(opcion[1])
-            message = "Aporte en la finca"
+        #data.append[(consulta.filter(aporte__persona=opcion[0]).count())]
+        uno = consulta.filter(aporte__persona=1).count()
+        dos = consulta.filter(aporte__persona=2).count()
+        tres = consulta.filter(aporte__persona=3).count()
+        cuatro = consulta.filter(aporte__persona=4).count()
+        
+        data = [[uno],[dos],[tres],[cuatro]]
+        legends = ['2-3','4-5','6-7','mas de 8']
+        message = "Aporte en la finca"
         return grafos.make_graph(data, legends, message, multiline = True,
                 return_json = True, type = grafos.GROUPED_BAR_CHART_V)
     else:
