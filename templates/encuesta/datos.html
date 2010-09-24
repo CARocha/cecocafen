@@ -1,0 +1,8 @@
+ {%load unslugify %}
+ 
+ {%for key, value in tabla.items%}
+    <tr>
+        <td>{{key|unslugify}}</td>
+        <td>{{value.lista|floatformat}}</td>
+    </tr>
+    {%endfor%}

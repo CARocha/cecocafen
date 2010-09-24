@@ -1654,10 +1654,21 @@ def datos_generales(request):
     num_familias = a.count()
     #-----------------------------
     total = num_familias
-    hombres = DatosGenerales.objects.filter(datos__sexo=1).count()
-    mujeres = DatosGenerales.objects.filter(datos__sexo=2).count()
+    hombres = DatosGenerales.objects.filter(sexo=1).count()
+    mujeres = DatosGenerales.objects.filter(sexo=2).count()
     
-    return render_to_response('encuesta/datos.html', dicc,
+    tabla = {}
+    lista_municipio=[]
+    
+    for i in Municipio.objects.all():
+        key = slugify(i.nombre).replace('-','_')
+        b = a.filter(datos__comunidad__municipio__nombre=i).count()
+        lista_municipio.append(b)
+    tabla[key] = {'lista':lista_municipio}
+        
+    print tabla
+    #dicc = {'lista':lista_municipio}
+    return render_to_response('encuesta/datos.html', {'tabla':tabla},
                               context_instance=RequestContext(request))
 @session_required
 def servicios(request):
@@ -1736,6 +1747,7 @@ VALID_VIEWS = {
         'organizaciones': organizaciones,
         'alimento': alimento,
         'finca': finca,
+        'datos_generales': datos_generales,
         }    
     
 # Vistas para obtener los municipios, comunidades, etc..
