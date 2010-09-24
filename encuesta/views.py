@@ -994,25 +994,27 @@ def salud_grafos(request, tipo):
     titulo = ''
 
     if tipo == 'donde':
-        titulo = 'Donde reliza sus necesidades'
+        titulo = 'Donde realiza sus necesidades usted y su familia?'
         for choice in CHOICE_LETRINA:
             data.append(consulta.filter(salud__donde=choice[0]).count())
             legends.append(choice[1])
     elif tipo == 'tratamiento':
+        titulo = 'Tratamientos a los desechos humanos?'
         for tratamiento in Tratamiento.objects.all():
             data.append(consulta.filter(salud__tratamiento = tratamiento).count())
             legends.append(tratamiento.nombre)
     elif tipo == 'frecuencia':
-        titulo = 'Frecuencia de la limpieza'
+        titulo = 'Cada cuanto hace limpieza alredor de su vivienda?'
         for choice in CHOICE_LIMPIEZA:
             data.append(consulta.filter(salud__limpieza=choice[0]).count())
             legends.append(choice[1])
     elif tipo == 'basura':
-        titulo = 'Forma de disponer la basura'
+        titulo = 'De que manera se deshacen de la basura?'
         for choice in CHOICE_DESHACER:
             data.append(consulta.filter(salud__deshacer=choice[0]).count())
             legends.append(choice[1])
     elif tipo == 'envases':
+        titulo = 'Que hace con los envases de agroquímicos?'
         for envase in Quimico.objects.all():
             data.append(consulta.filter(salud__agroquimico = envase).count())
             legends.append(envase.nombre)
@@ -1573,56 +1575,56 @@ def grafos_vulnerabilidad(request, tipo):
             data.append(consulta.filter(consume__preg1=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends, 
-                'Alimentos basicos consume compra', return_json = True,
+                '¿Qué porcentaje de alimentos básicos que consume compra?', return_json = True,
                 type = grafos.PIE_CHART_3D)
     elif tipo == 'necesidadbasica':
         for opcion in CHOICE_PREG2:
             data.append(consulta.filter(consume__preg2=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
-               'Cubre necesidades de alimentos basico', return_json = True,
+               '¿Siente que en alguna ocasión no ha podido Cubrir sus necesidades básicas de alimentación?', return_json = True,
                type = grafos.PIE_CHART_3D)
     elif tipo == 'razonesfalta':
         for opcion in CHOICE_MOTIVO:
             data.append(consulta.filter(consume__preg3=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
-                'Razones de falta de alimentos', return_json = True,
+                'Porque motivo no cubre sus necesidades', return_json = True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'mesesdificil':
         for opcion in Meses.objects.all():
             data.append(consulta.filter(consume__preg4=opcion).count())
             legends.append(opcion.nombre)
         return grafos.make_graph(data, legends,
-                'Meses dificiles para conseguir alimentos', return_json = True,
+                '¿Cuáles son los meses más difíciles para la familia?', return_json = True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'cafeprecio':
         for opcion in CHOICE_PREG5:
             data.append(consulta.filter(consume__preg5=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
-                'Acciones cuando baja precio de cafe', return_json = True,
+                '¿Qué hace cuando los precios del café bajan?', return_json = True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'accionesescazes':
         for opcion in SolucionesEscazes.objects.all():
             data.append(consulta.filter(escasez__preg1=opcion).count())
             legends.append(opcion.nombre)
         return grafos.make_graph(data, legends,
-                'Acciones en tiempo de escazes', return_json = True,
+                '¿Qué soluciones y practicas implementa en los tiempos de escasez?', return_json = True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'conseguir':
         for opcion in CHOICE_ESCASEZ:
             data.append(consulta.filter(escasez__preg2=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
-                'Donde consigue alimento en la epoca de escazes', return_json = True,
+                '¿Donde Consigue alimentos en la época de escasez?', return_json = True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'portiempo':
         for opcion in CHOICE_PREG7:
             data.append(consulta.filter(consume__preg7=opcion[0]).count())
             legends.append(opcion[1])
         return grafos.make_graph(data, legends,
-                'Por cuánto tiempo puede conseguir alimentos', return_json = True,
+                '¿Por cuánto tiempo puede conseguir alimentos en ese sitio mientras dura la escasez? ', return_json = True,
                 type=grafos.PIE_CHART_3D)
     else:
         raise Http404
