@@ -1129,13 +1129,13 @@ def agua(request):
     for choice in CHOICE_FUENTE_AGUA:
         query = consulta.filter(agua__fuente=choice[0])
         numero = query.count()
-        resultados = query.aggregate(cantidad=Sum('agua__cantidad'))
+        resultados = query.aggregate(cantidad=Sum('agua__cantidad'), 
+                                     distancia=Sum('agua__distancia'))
 #        try:
 #            prom = resultados['cantidad']/float(numero)
 #        except:
 #            prom = 0
-        distancia = query.aggregate(distancia=Sum('agua__distancia'))['distancia']
-        pro_distancia = saca_porcentajes(distancia,numero)
+        pro_distancia = resultados['distancia'] / numero
         fila = [choice[1], numero,
                 #saca_porcentajes(numero, total['total'], False),
                 saca_porcentajes(numero, consulta.count(), False),
