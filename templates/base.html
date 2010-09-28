@@ -26,9 +26,7 @@
             </ul><!-- termina Menu -->
     </div><!-- Termina el header contenedor -->
 </div> <!-- Termina el header -->
-        <!-- comienza algo de pimp -->
-        {%block pimp%}{%endblock%}
-       
+{% block pimp2 %}{% endblock %}
     
 <div id="contenedor" class="centro">  
     <!-- Comienza Contenido-->
@@ -51,13 +49,14 @@
         </div>
 
         {%endblock%}
-                 
+        
              <!-- Comienza Columna derecha--> 
 				<div id="colum_der" class="der">
 				    <div id="titulo">
                     {% block titulo %} {% endblock %}
                     </div>
                    {%block filtros%}
+                   
                            <div id="filtros">
                                 <span class="variables">Variables</span>
                                 
@@ -73,8 +72,8 @@
                                 <a href="/index">Nueva Consulta</a>
                             </div>
                    {%endblock%}
+                   
                         <div id="contenido_interno">
-
                                         {%block contenido%}
 
                                         {%endblock%}
