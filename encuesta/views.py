@@ -1129,13 +1129,13 @@ def agua(request):
     for choice in CHOICE_FUENTE_AGUA:
         query = consulta.filter(agua__fuente=choice[0])
         numero = query.count()
-        resultados = query.aggregate(cantidad=Sum('agua__cantidad'))
+        resultados = query.aggregate(cantidad=Sum('agua__cantidad'), 
+                                     distancia=Sum('agua__distancia'))
 #        try:
 #            prom = resultados['cantidad']/float(numero)
 #        except:
 #            prom = 0
-        distancia = query.aggregate(distancia=Sum('agua__distancia'))['distancia']
-        pro_distancia = saca_porcentajes(distancia,numero)
+        pro_distancia = resultados['distancia'] / numero
         fila = [choice[1], numero,
                 #saca_porcentajes(numero, total['total'], False),
                 saca_porcentajes(numero, consulta.count(), False),
@@ -1297,34 +1297,45 @@ def abono(request):
         total_no = familias - total_si  
         porcentaje_no = 100 - float(porcentaje_si)
         porcentaje_no = '%.2f' % porcentaje_no
-        query = consulta.aggregate(pulpa = Sum('abono__pulpa'),
-                                   estiercol = Sum('abono__estiercol'),
+        query = consulta.filter(abono__producto=abono[0]).aggregate(pulpa = Sum('abono__pulpa'),
+                                   cpulpa = Count('abono__pulpa'),
+                                   estiercol = Sum('abono__estiercol'), 
+                                   cestiercol = Count('abono__estiercol'), 
                                    gallinaza = Sum('abono__gallinaza'),
+                                   cgallinaza = Count('abono__gallinaza'),
                                    composta = Sum('abono__composta'),
+                                   ccomposta = Count('abono__composta'),
                                    lombrices = Sum('abono__lombrices'),
+                                   clombrices = Count('abono__lombrices'),
                                    bocachi = Sum('abono__bocachi'),
+                                   cbocachi = Count('abono__bocachi'),
                                    foliar = Sum('abono__foliar'),
+                                   cfoliar = Count('abono__foliar'),
                                    verde = Sum('abono__verde'),
+                                   cverde = Count('abono__verde'),
                                    hojas = Sum('abono__hojas'),
+                                   chojas = Count('abono__hojas'),
                                    quince = Sum('abono__quince'),
+                                   cquince = Count('abono__quince'),
                                    veinte = Sum('abono__veinte'),
-                                   urea = Sum('abono__urea'))
-
+                                   cveinte = Count('abono__veinte'),
+                                   urea = Sum('abono__urea'),
+                                   curea = Count('abono__urea'))
         resultado = [abono[1], total_si, porcentaje_si, total_no, porcentaje_no,
-                     calcular_positivos(query['pulpa'], familias),
-                     calcular_positivos(query['estiercol'], familias),
-                     calcular_positivos(query['gallinaza'], familias),
-                     calcular_positivos(query['composta'], familias)]
+                     calcular_positivos(query['pulpa'], query['cpulpa']),
+                     calcular_positivos(query['estiercol'], query['cestiercol']),
+                     calcular_positivos(query['gallinaza'], query['cgallinaza']),
+                     calcular_positivos(query['composta'], query['ccomposta'])]
 
         resultado2 = [abono[1], 
-                     calcular_positivos(query['lombrices'], familias),
-                     calcular_positivos(query['bocachi'], familias),
-                     calcular_positivos(query['foliar'], familias),
-                     calcular_positivos(query['verde'], familias),
-                     calcular_positivos(query['hojas'], familias),
-                     calcular_positivos(query['quince'], familias),
-                     calcular_positivos(query['veinte'], familias),
-                     calcular_positivos(query['urea'], familias)]
+                     calcular_positivos(query['lombrices'], query['clombrices']),
+                     calcular_positivos(query['bocachi'], query['cbocachi']),
+                     calcular_positivos(query['foliar'], query['cfoliar']),
+                     calcular_positivos(query['verde'], query['cverde']),
+                     calcular_positivos(query['hojas'], query['chojas']),
+                     calcular_positivos(query['quince'], query['cquince']),
+                     calcular_positivos(query['veinte'], query['cveinte']),
+                     calcular_positivos(query['urea'], query['curea'])]
 
         tabla_abono_sup.append(resultado)
         tabla_abono_inf.append(resultado2)
