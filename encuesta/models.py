@@ -558,7 +558,7 @@ class Infraestructuras(models.Model):
     def __unicode__(self):
         return self.nombre
         
-CHOICE_EQUIPO = ((1,"Tiene Luz"),(2,"Con medidor UF"),(3,"Con planta"),(4,"Con panel solar o aeromotor"))
+CHOICE_EQUIPO = ((1,"Tiene Luz"),(2,"Con medidor UF"),(3,"Con planta"),(4,"Con panel solar o aeromotor"),(5,"Ilegal"))
         
 class Propiedades(models.Model):
     '''
