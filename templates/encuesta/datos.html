@@ -1,8 +1,100 @@
- {%load unslugify %}
- 
- {%for key, value in tabla.items%}
+{% extends "base.html" %}
+{%load unslugify %}
+{% block title %}Cecocafen - Datos Generales{% endblock %}
+{%block titulo%}Datos Generales{%endblock%}
+{% block contenido %}
+<table>
+<caption>Por Sexo</caption>
+<thead>
     <tr>
-        <td>{{key|unslugify}}</td>
-        <td>{{value.lista|floatformat}}</td>
+        <th>Hombres</th>
+        <th>Mujeres</th>
+        <th>total</th>
     </tr>
-    {%endfor%}
+</thead>
+    <tr>
+        <td>{{hombres}}</td>
+        <td>{{mujeres}}</td>
+        <td>{{total}}</td>
+</table>
+
+<table>
+<caption>Por Municipio</caption>
+<thead>
+    <tr>
+        <th>Municipio</th>
+        <th>Cantidad encuestado</th>
+    </tr>
+ </thead>
+{%for key, value in tabla.items %}
+    <tr>
+    <td>{{key|unslugify}}</td>  
+        {% for key, valor in value.items %}
+            {% for k in valor%}
+                <td>{{k}}</td>
+            {%endfor%}       
+        {%endfor%}
+    </tr>
+{%endfor%}
+</table>
+
+<table>
+<caption>Por Cooperativa</caption>
+<thead>
+    <tr>
+        <th>Cooperativas</th>
+        <th>Cantidad encuesta/cooperativa</th>
+    </tr>
+ </thead>
+{%for key, value in tabla1.items %}
+    <tr>
+    <td>{{key|unslugify}}</td>  
+        {% for key, valor in value.items %}
+            {% for k in valor%}
+                <td>{{k}}</td>
+            {%endfor%}       
+        {%endfor%}
+    </tr>
+{%endfor%}
+</table>
+
+<table>
+<caption>Por Tecnología</caption>
+<thead>
+    <tr>
+        <th>Tecnología</th>
+        <th>Cantidad encuestado usa tecnologia</th>
+    </tr>
+ </thead>
+{%for key, value in tabla2.items %}
+    <tr>
+    <td>{{key|unslugify}}</td>  
+        {% for key, valor in value.items %}
+            {% for k in valor%}
+                <td>{{k}}</td>
+            {%endfor%}       
+        {%endfor%}
+    </tr>
+{%endfor%}
+</table>
+
+<table>
+<caption>Por Certificación</caption>
+<thead>
+    <tr>
+        <th>Certificación</th>
+        <th>Cantidad encuestado certificado</th>
+    </tr>
+ </thead>
+{%for key, value in tabla3.items %}
+    <tr>
+    <td>{{key|unslugify}}</td>  
+        {% for key, valor in value.items %}
+            {% for k in valor%}
+                <td>{{k}}</td>
+            {%endfor%}    
+        {%endfor%}
+    </tr>
+{%endfor%}
+</table>
+{% endblock %}

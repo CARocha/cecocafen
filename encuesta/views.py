@@ -1617,7 +1617,7 @@ def grafos_vulnerabilidad(request, tipo):
                 '¿Qué hace cuando los precios del café bajan?', return_json = True,
                 type=grafos.PIE_CHART_3D)
     elif tipo == 'accionesescazes':
-        for opcion in SolucionesEscazes.objects.all():
+        for opcion in SolucionEscasez.objects.all():
             data.append(consulta.filter(escasez__preg1=opcion).count())
             legends.append(opcion.nombre)
         return grafos.make_graph(data, legends,
@@ -1679,7 +1679,7 @@ def condiciones(request):
             porcentaje = saca_porcentajes(conteo, num_familias, False)
             fila.append(porcentaje)
         tabla.append(fila)
-
+    print tabla
     dicc = {'tabla': tabla, 'num_familias': num_familias, 'columnas': CHOICE_CAMPO}
     return render_to_response('encuesta/condiciones.html', dicc,
                                context_instance=RequestContext(request))
@@ -1691,22 +1691,46 @@ def datos_generales(request):
     a = _queryset_filtrado(request)
     num_familias = a.count()
     #-----------------------------
-    total = num_familias
-    hombres = DatosGenerales.objects.filter(sexo=1).count()
-    mujeres = DatosGenerales.objects.filter(sexo=2).count()
+    
+    hombres = a.filter(datos__sexo=1).count() #DatosGenerales.objects.filter(sexo=1).count()
+    mujeres = a.filter(datos__sexo=2).count() #DatosGenerales.objects.filter(sexo=2).count()
+    total = hombres + mujeres
     
     tabla = {}
-    lista_municipio=[]
-    
     for i in Municipio.objects.all():
+        lista_municipio=[]
         key = slugify(i.nombre).replace('-','_')
         b = a.filter(datos__comunidad__municipio__nombre=i).count()
         lista_municipio.append(b)
-    tabla[key] = {'lista':lista_municipio}
+        tabla[key] = {'lista':lista_municipio}
         
-    print tabla
-    #dicc = {'lista':lista_municipio}
-    return render_to_response('encuesta/datos.html', {'tabla':tabla},
+    tabla1 = {}
+    for c in Cooperativa.objects.all():
+        lista_coop=[]
+        key = slugify(c.nombre).replace('-','_')
+        coop = a.filter(datos__cooperativa__nombre=c).count()
+        lista_coop.append(coop)
+        tabla1[key] = {'cooperativa':lista_coop}
+        
+    tabla2 = {}
+    for k in Tecnologia.objects.all():
+        lista_tec=[]
+        key = slugify(k.nombre).replace('-','_')
+        tec = a.filter(datos__tecnologia__nombre=k).count()
+        lista_tec.append(tec)
+        tabla2[key] = {'tecnologia':lista_tec}
+    
+    tabla3 = {}
+    for y in Certificacion.objects.all():
+        lista_cer = []
+        key = slugify(y.nombre).replace('-','_')
+        cer = a.filter(datos__certificacion__nombre=y).count()
+        lista_cer.append(cer)
+        tabla3[key] = {'certicacion':lista_cer}
+        
+    return render_to_response('encuesta/datos.html', {'tabla':tabla, 
+                              'tabla1':tabla1, 'tabla2':tabla2, 'tabla3':tabla3,
+                              'hombres':hombres, 'mujeres':mujeres,'total':total},
                               context_instance=RequestContext(request))
 @session_required
 def servicios(request):
