@@ -54,11 +54,12 @@ def _queryset_filtrado(request):
 
         if 'duenio' in  request.session:
             params['tenencia__dueno'] = request.session['duenio']
+            
         if 'tecnologia' in request.session:
             params['datos__tecnologia'] = request.session['tecnologia']
             
-        if 'cetificacion' in request.session:
-            params['datos__certificacion'] = request.session['cetificacion']
+        if 'certificacion' in request.session:
+            params['datos__certificacion'] = request.session['certificacion']
         
         unvalid_keys = []
         for key in params:
