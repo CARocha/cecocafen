@@ -986,107 +986,69 @@ tbody tr td:first-child {
 
 /* TERMINA CSS Especial para las tablas */
 
-/*Empieza el slide tipo MAC :P*/
-#gallery{
-    /* CSS3 Box Shadow */
-    -moz-box-shadow:0 0 3px #AAAAAA;
-    -webkit-box-shadow:0 0 3px #AAAAAA;
-    box-shadow:0 0 3px #AAAAAA;
+#slider {
+    width:944px;
+    margin:8pt auto;
+    -moz-box-shadow:0px 0px 11px #333;
+	-webkit-box-shadow:0px 0px 11px #333;
+	box-shadow:0px 0px 11px #333;
 
-    /* CSS3 Rounded Corners */
-
-    -moz-border-radius-bottomleft:4px;
-    -webkit-border-bottom-left-radius:4px;
-    border-bottom-left-radius:4px;
-
-    -moz-border-radius-bottomright:4px;
-    -webkit-border-bottom-right-radius:4px;
-    border-bottom-right-radius:4px;
-
-    -moz-border-radius-topright:4px;
-    -webkit-border-top-right-radius:4px;
-    border-top-right-radius:4px;
-
-    -moz-border-radius-topleft:4px;
-    -webkit-border-top-left-radius:4px;
-    border-top-left-radius:4px;
-
-    border:1px solid white;
-
-    background:url(../imagen/img/panel.jpg) repeat-x bottom center #ffffff;
-
-    /* The width of the gallery */
-    width:948px;
-    overflow:hidden;
-}
-#slides{
-	/* This is the slide area */
-	height:400px;
-	
-	/* jQuery changes the width later on to the sum of the widths of all the slides. */
-	width:948px;
-	overflow:hidden;
 }
 
-.slide{
+.nivoSlider {
+	position:relative;
+	min-height:220px;
+	margin:30px 30px 60px 30px;
+	background:#202834 url(../images/loading.gif) no-repeat 50% 50%;
+	-moz-box-shadow:0px 0px 10px #333;
+	-webkit-box-shadow:0px 0px 10px #333;
+	box-shadow:0px 0px 10px #333;
+}
+.nivoSlider img {
+	position:absolute;
+	top:0px;
+	left:0px;
+	display:none;
+}
+.nivoSlider a {
+	border:0;
+}
+
+.nivo-directionNav a {
+	display:block;
+	width:30px;
+	height:30px;
+	background:url(../imagen/arrows.png) no-repeat;
+	text-indent:-9999px;
+	border:0;
+}
+
+a.nivo-nextNav {
+	background-position:-30px 0;
+	right:15px;
+}
+a.nivo-prevNav {
+	left:15px;
+}
+
+#slider .nivo-controlNav {
+	position:absolute;
+	left:47%;
+	bottom:-15px;
+}
+
+#slider .nivo-controlNav a {
+	display:block;
+	width:10px;
+	height:10px;
+	background:url(../imagen/bullets.png) no-repeat;
+	text-indent:-9999px;
+	border:0;
+	margin-right:3px;
 	float:left;
 }
 
-#menu2{
-	/* This is the container for the thumbnails */
-	height:45px;
+#slider .nivo-controlNav a.active {
+	background-position:-10px 0;
 }
-#menu2 ul{
-	margin:0px;
-	padding:0px;
-}
-
-#menu2 li{
-	/* Every thumbnail is a li element */
-	width:60px;
-	display:inline-block;
-	list-style:none;
-	height:45px;
-	overflow:hidden;
-}
-
-#menu2 li.inact:hover{
-	/* The inactive state, highlighted on mouse over */
-	background:url(../imagen/img/pic_bg.png) repeat;
-}
-
-#menu2 li.act,li.act:hover{
-	/* The active state of the thumb */
-	background:url(../imagen/img/active_bg.png) no-repeat;
-}
-
-#menu2 li.act a{
-	cursor:default;
-}
-
-.fbar{
-	/* The left-most vertical bar, next to the first thumbnail */
-	width:2px;
-	background:url(../imagen/img/divider.png) no-repeat right;
-}
-
-#menu2 li a{
-	display:block;
-	background:url(../imagen/img/divider.png) no-repeat right;
-	height:35px;
-	padding-top:10px;
-}
-
-#menu2 a img{
-	border:none;
-}
-#main{
-	/* The main container */
-	margin:15px auto;
-	text-align:center;
-	width:948px;
-	position:relative;
-}
-
-/*Termina el slide*/
 
