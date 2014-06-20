@@ -506,6 +506,11 @@ background-repeat:repeat-x;-- */
     -webkit-border-bottom-left-radius:4px;
 }
 
+.departa {
+    margin: 3px 2px 3px -1px;
+    position: absolute;
+}
+
 #id_cooperativa, #id_fecha, #id_departamento, #id_municipio,
 #id_comunidad, #id_socio, #id_sexo, #id_dueno,#id_desde, #id_tecnologia, #id_certificacion{
     width:200px;

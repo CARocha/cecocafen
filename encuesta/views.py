@@ -27,11 +27,11 @@ def _queryset_filtrado(request):
     '''metodo para obtener el queryset de encuesta 
     segun los filtros del formulario que son pasados
     por la variable de sesion'''
-    anio = int(request.session['fecha'])
+    #anio = int(request.session['fecha'])
     #diccionario de parametros del queryset
     params = {}
     if 'fecha' in request.session:
-        params['fecha__year'] = anio
+        params['year__in'] = request.session['fecha']
 
         if 'departamento' in request.session:
             #incluye municipio y comunidad

@@ -9,8 +9,14 @@ CHOICE_OPCION_F = (('','----'),(1,'Si'),(2,'No'))
 CHOICE_DESDE_F = (('','----'),(1,"Menos de 5 año"),(2,"Mas de 5 años"))
 CHOICE_DUENO_F = (('','----'),(1,"Hombre"),(2,"Mujer"),(3,"Mancomunado"),(4,"Parientes"),(5,"Colectivo"),(6,"No hay"))
 
+def fecha_choice():
+    years = []
+    for en in Encuesta.objects.order_by('year').values_list('year', flat=True):
+        years.append((en,en))
+    return list(set(years))
+
 class CecocafenForm(forms.Form):
-    fecha = forms.ChoiceField(choices=ANOS_CHOICES)
+    fecha = forms.MultipleChoiceField(choices=fecha_choice())
     departamento = forms.ModelChoiceField(queryset=Departamento.objects.all(), 
             required=False, empty_label="Todos los Departamentos")
     municipio = forms.CharField(widget = forms.Select, required=False)

@@ -1031,6 +1031,13 @@ class Encuesta(models.Model):
     mental = generic.GenericRelation(Mental)
     educacion_jovenes = generic.GenericRelation(EducacionJovenes)
     jovenes = generic.GenericRelation(Jovenes)
+
+    #campos ocultos para querys
+    year = models.IntegerField(editable=False)
+    
+    def save(self):
+        self.year = self.fecha.year
+        super(Encuesta, self).save()
     
     def __unicode__(self):
         return self.datos.all()[0].nombre

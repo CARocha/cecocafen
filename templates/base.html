@@ -8,6 +8,35 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script type='text/javascript' src='{{MEDIA_URL}}js/tablesort.js'></script>	
     <script type='text/javascript' src='{{MEDIA_URL}}js/jquery.metadata.js'></script>
+    <!-- nuevo 2014 solicitud falguni -->
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js" type="text/javascript"></script>
+    <link type="text/css" rel="stylesheet"  href="{{MEDIA_URL}}css/jquery.multiselect.css" >
+    <script src="{{MEDIA_URL}}js/jquery.multiselect.min.js" type="text/javascript"></script>
+    <!-- cierra nuevo 2014 -->
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#id_fecha").multiselect({
+            noneSelectedText: 'Fecha',
+            selectedText: 'Fecha',
+            checkAllText: 'Todos',
+            uncheckAllText: 'Quitar todos',
+            minWidth: 200,
+            beforeclose: function(event, ui){
+                var selectos = $("#id_fecha").multiselect("getChecked").map(function(){
+                    //console.log(this.value)
+                    return this.value;
+                }).get();
+                
+            }
+        });
+                
+            
+        });
+    </script>
+
 	{%block extra_header%}{%endblock%}
 </head>
 <body>
@@ -62,7 +91,7 @@
                                 
                                 {%if num_familias%}<span class="variables_filtro"><b>Familias</b><br>{{num_familias}}</span>{%endif%}
                                 {%comment%}{%if request.session.cooperativa%}<span class="variables_filtro"><b>Cooperativa</b><br>{{session.cooperativa}}</span>{%endif%}{%endcomment%}
-                                {%if request.session.fecha%}<span class="variables_filtro"><b>Año</b><br>{{request.session.fecha}}</span>{%endif%}
+                                {%if request.session.fecha%}<span class="variables_filtro"><b>Año</b><br>{% for b in request.session.fecha %} {{b}}, {%endfor%}</span>{%endif%}
                                 {%if request.session.departamento%}<span class="variables_filtro"><b>Departamento</b><br>{{request.session.departamento}}</span>{%endif%}
                                 {%if request.session.municipio.nombre%}<span class="variables_filtro"><b>Municipio</b><br>{{request.session.municipio.nombre}}</span>{%endif%}
                                 {%if request.session.comunidad.nombre%}<span class="variables_filtro"><b>Comunidad</b><br>{{request.session.comunidad.nombre}}</span>{%endif%}
