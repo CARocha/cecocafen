@@ -1824,3 +1824,112 @@ def get_comunidad(request, municipio):
     comunidades = Comunidad.objects.filter(municipio = municipio )
     lista = [(comunidad.id, comunidad.nombre) for comunidad in comunidades]
     return HttpResponse(simplejson.dumps(lista), mimetype='application/javascript')
+
+# vista para la exportacion de los datos
+
+def volcar_xls(request, modelo):
+    
+    encuestas = _queryset_filtrado(request)
+
+    ayuda = modelo
+    tiposexo = ''
+    PEnergia = ''
+    usotierra = ''
+    reforestacion = ''
+    animales = ''
+    cultivos = ''
+    manejo = ''
+    semilla = ''
+    rubro = ''
+    otrosingresos = ''
+    equipo = ''
+    herramienta = ''
+    transporte = ''
+    ahorro = ''
+    seguridad = ''
+    fenomeno = ''
+    riesgos = ''
+
+    resultados = []
+    
+    for encuesta in encuestas:
+        filas = []
+        try:
+            filas.append(encuesta.year)
+            filas.append(encuesta.datos.all()[0].nombre)
+            filas.append(encuesta.datos.all()[0].cedula)
+            filas.append(encuesta.datos.all()[0].get_sexo_display)
+            filas.append(encuesta.datos.all()[0].cooperativa)
+            filas.append(encuesta.datos.all()[0].nombre_conyugue)
+            filas.append(encuesta.datos.all()[0].cedula_conyugue)
+            filas.append(encuesta.datos.all()[0].nombre_finca)
+            filas.append(encuesta.datos.all()[0].comunidad.municipio.departamento)
+            filas.append(encuesta.datos.all()[0].comunidad.municipio)
+            filas.append(encuesta.datos.all()[0].comunidad)
+            filas.append(','.join(map(unicode, encuesta.datos.all()[0].tecnologia.all().values_list(u'nombre',flat=True))))
+            filas.append(','.join(map(unicode, encuesta.datos.all()[0].certificacion.all().values_list(u'nombre',flat=True)))) 
+        except:
+            pass
+        if modelo == '1':
+            organizacion = encuesta.organizacion.all().count()
+            for obj in range(0,int(organizacion)):
+                try:
+                    filas.append(encuesta.organizacion.all()[obj].get_socio_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_desde_socio_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_socio_cooperativa_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_desde_socio_coop_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_hijos_socios_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_desde_hijo_display)
+                    filas.append(','.join(map(unicode, encuesta.organizacion.all()[obj].beneficio.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.organizacion.all()[obj].get_miembro_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_desde_miembro_display)
+                    filas.append(','.join(map(unicode, encuesta.organizacion.all()[obj].conformado.all().values_list(u'nombre',flat=True))))
+                    filas.append(','.join(map(unicode, encuesta.organizacion.all()[obj].conformarse.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.organizacion.all()[obj].get_miembro_trabajo_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_desde_trabajo_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_cargo_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_desde_cargo_display)
+                    filas.append(encuesta.organizacion.all()[obj].get_no_miembro_display)
+                    filas.append(','.join(map(unicode, encuesta.organizacion.all()[obj].quiero_miembro_junta.all().values_list(u'nombre',flat=True))))
+                except:
+                    pass
+        resultados.append(filas)
+
+    dict = {'resultados':resultados,'tiposexo':tiposexo, 'PEnergia':PEnergia, 
+            'usotierra':usotierra,'reforestacion':reforestacion, 
+            'animales':animales, 'cultivos':cultivos,
+            'manejo':manejo, 'semilla':semilla, 'rubro':rubro, 
+            'otrosingresos':otrosingresos, 'equipo':equipo, 'herramienta':herramienta,
+            'transporte':transporte, 'ahorro':ahorro, 'seguridad':seguridad,
+            'fenomeno':fenomeno, 'riesgos':riesgos, 'ayuda':ayuda}
+    return dict
+
+def spss_xls(request, modela):
+    varia = modela
+    dict = volcar_xls(request, modelo=varia)
+    return write_xls('encuesta/spss.html', dict, 'spss.xls')
+
+def write_xls(template_src, context_dict, filename):
+    response = render_to_response(template_src, context_dict)
+    response['Content-Disposition'] = 'attachment; filename='+filename
+    response['Content-Type'] = 'application/vnd.ms-excel'
+    response['Charset']='UTF-8'
+    return response 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

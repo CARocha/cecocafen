@@ -20,6 +20,7 @@ urlpatterns = patterns('encuesta.views',
     (r'^grafo/salud/(?P<tipo>\w+)/$', 'salud_grafos'), 
     (r'^grafo/cancer/(?P<id>\d+)/$', 'cancer_grafos'),
     (r'^grafo/mental/(?P<id>\d+)/$', 'mental_grafos'),
+    (r'^exportar/(?P<modela>\d+)/$', 'spss_xls'),
     (r'^(?P<vista>\w+)/$', '_get_view'),
    
 )
