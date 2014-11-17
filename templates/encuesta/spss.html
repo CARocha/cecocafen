@@ -46,19 +46,17 @@
             {% if ayuda == '2' %}
                 {% for obj in tiposexo %}
                     <th>Sexo</th>
-                    <th>Buena salud</th>
-                    <th>Salud delicada</th>
-                    <th>Enfermedades cronicas</th>
-                    <th>Visita centro de salud</th>
-                    <th>Visita medico privado</th>
-                    <th>Visita medico naturista</th>
-                    <th>Se automedica</th>
+                    <th>Número total</th>
+                    <th>Vive en casa</th>
+                    <th>Vive en la comunidad</th>
+                    <th>Vive fuera de la comunidad</th>
+                    <th>Razones de migracion</th>
                 {% endfor %}
             {% endif %}
             
             <!-- Energia-->
             {% if ayuda == '3' %}
-                {% for obj in  PEnergia%}
+                {% for obj in  campoCondi %}
                     <th>Preguntas</th>
                     <th>Respuestas</th>
                 {% endfor %}
@@ -66,73 +64,99 @@
             
             <!-- Cocina -->
             {% if ayuda == '4' %}
-                <th>Tipo cosina que utiliza</th>
+                <th>Parcela (tierra)</th>
+                <th>Cantidad de la parcela</th>
+                <th>Solar (dónde está la vivienda)</th>
+                <th>Cantidad del solar</th>
+                <th>Documento legal de la propiedad, a nombre de quien</th>
             {% endif %}
             
             <!-- agua -->
             {% if ayuda == '5' %}
-                <th>Fuente de agua</th>
-                <th>Trata el agua</th>
-                <th>Dias disponible</th>
-            {% endif %}
-            
-            <!-- Organizacion gremial -->
-            {% if ayuda == '6' %}
-                <th>Socio gremial</th>
-                <th>Desde cuando</th>
-                <th>Beneficio</th>
-                <th>Es miembro</th>
-                <th>Desde cuando</th>
-                <th>Recibio capacitación</th>
-                <th>Desde cuando</th>
-                <th>Miembro junta directiva</th>
-                <th>Asume cargo</th>
-            {% endif %}
-            
-            <!-- Organizaciones comunitarias -->
-            {% if ayuda == '7' %}
-                <th>Cuantas organizaciones comunitarias</th>
-                <th>Pertenece alguna de ellas</th>
-                <th>A cual</th>
-                <th>Beneficio de estar organizado</th>
-                <th>No esta organizado</th>
-            {% endif %}
-            
-            <!-- uso de tierra -->
-            {% if ayuda == '8' %}
                 {% for obj in  usotierra%}
                     <th>Tierra</th>
                     <th>Area</th>
                 {% endfor %}
             {% endif %}
             
-            <!-- Existencia de arboles -->
-            {% if ayuda == '9' %}
-                <th>Maderables</th>
-                <th>Cantidad</th>
-                <th>Forrajero</th>
-                <th>Cantidad</th>
-                <th>Energetico</th>
-                <th>Cantidad</th>
-                <th>Frutal</th>
-                <th>Cantidad</th>
-            {% endif %}
-            
             <!-- Reforestacion -->
-            {% if ayuda == '10' %}
-                {% for obj in reforestacion %}
+            {% if ayuda == '6' %}
+                {% for obj in reforestacion2 %}
                     <th>Reforestación</th>
                     <th>Cantidad</th>
                 {% endfor %}
             {% endif %}
             
+            <!-- Conservacion -->
+            {% if ayuda == '7' %}
+                <th>¿Qué utiliza para cocinar</th>
+                <th>Ha hecho alguna actividad para la conservación de los suelos y agua en su finca?</th>
+                <th>Cuales?</th>
+                <th>Cuanto</th>
+            {% endif %}
+            
+            <!-- uso de tierra -->
+            {% if ayuda == '8' %}
+                {% for obj in  abono2%}
+                    <th>Producto</th>
+                    <th>Respuesta</th>
+                    <th>Pulpa</th>
+                    <th>Estiercol</th>
+                    <th>Gallinaza</th>
+                    <th>Composta</th>
+                    <th>Lombrices</th>
+                    <th>Bocachi</th>
+                    <th>Foliar</th>
+                    <th>Abono Verde</th>
+                    <th>Hojas y rastrajos</th>
+                    <th>15-15-15</th>
+                    <th>20-20-20</th>
+                    <th>18-6-12-4</th>
+                    <th>Urea-Nitrato</th>
+
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Existencia de arboles -->
+            {% if ayuda == '9' %}
+                {% for obj in  compra2%}
+                    <th>Al año</th>
+                    <th>Pulpa</th>
+                    <th>Estiercol</th>
+                    <th>Gallinaza</th>
+                    <th>Composta</th>
+                    <th>Lombrices</th>
+                    <th>Bocachi</th>
+                    <th>Foliar Organico</th>
+                    <th>Unidad foliar organico</th>
+                    <th>Foliar Quimico</th>
+                    <th>Unidad foliar quimico</th>
+                    <th>Abono Verde en qq</th>
+                    <th>15-15-15</th>
+                    <th>20-20-20</th>
+                    <th>18-6-12-4</th>
+                    <th>Urea-Nitrato</th>
+                    
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Reforestacion -->
+            {% if ayuda == '10' %}
+                {% for obj in cultivos2 %}
+                    <th>Cultivo</th>
+                    <th>Producción</th>
+                    <th>Consumo</th>
+                    <th>Venta libre</th>
+                    <th>Venta organizada</th>
+                {% endfor %}
+            {% endif %}
+            
             <!-- Animales en la finca -->
             {% if ayuda == '11' %}
-                {% for obj in animales %}
+                {% for obj in animales2 %}
                     <th>Animales</th>
                     <th>Cantidad</th>
                     <th>Producción</th>
-                    <th>Total producción</th>
                     <th>Consumo</th>
                     <th>Venta libre</th>
                     <th>Venta organizada</th>
@@ -141,58 +165,24 @@
             
             <!-- cultivos en la finca -->
             {% if ayuda == '12' %}
-                {% for obj in cultivos %}
-                    <th>Cultivos</th>
-                    <th>Area</th>
-                    <th>Total</th>
-                    <th>Consumo</th>
-                    <th>Venta libre</th>
-                    <th>Venta organizada</th>
+                {% for obj in cultivos2 %}
+                    <th>Producto</th>
+                    <th>Responsable</th>
+                    <th>Cantidad almacenada qq/und</th>
+                    <th>Tipo de almacenaje</th>
                 {% endfor %}
             {% endif %}
             
             <!-- uso del manejo -->
             {% if ayuda == '13' %}
-                {% for obj in manejo %}
-                    <th>Uso del manejo</th>
-                    <th>Nivel</th>
-                    <th>Menor escala</th>
-                    <th>Mayor escala</th>
-                    <th>Volumen</th>
+                {% for obj in tipoproblema %}
+                    <th>Problema</th>
+                    <th>Solucion</th>
                 {% endfor %}
             {% endif %}
             
-            <!-- semilla -->
+            <!-- Ingreso familiar-->
             {% if ayuda == '14' %}
-                {% for obj in semilla %}
-                    <th>Semilla</th>
-                    <th>Origen</th>
-                {% endfor %}
-            {% endif %}
-            
-            <!-- suelo -->
-            {% if ayuda == '15' %}
-                <th>Textura del suelo</th>
-                <th>Profundidad</th>
-                <th>Lombrices</th>
-                <th>Dencidad</th>
-                <th>Pendientes</th>
-                <th>Drenaje</th>
-                <th>Materia organica</th>
-            {% endif %}
-            
-            <!-- manejo de suelo -->
-            {% if ayuda == '16' %}
-                <th>Como prepara el suelo</th>
-                <th>Tracción que utiliza</th>
-                <th>Analisis</th>
-                <th>Fertilizacion</th>
-                <th>Practica</th>
-                <th>Obra de conservacion</th>
-            {% endif %}
-            
-            <!-- ingreso familiar -->
-            {% if ayuda == '17' %}
                 {% for obj in rubro %}
                     <th>Tipo de rubro</th>
                     <th>Cantidad</th>
@@ -201,9 +191,10 @@
                     <th>Quien maneja negocio</th>  
                 {% endfor %}
             {% endif %}
-            <!-- Otros ingresos -->
-            {% if ayuda == '18' %}
-                {% for obj in otrosingresos %}
+            
+            <!-- suelo -->
+            {% if ayuda == '15' %}
+                {% for obj in otrosingresos2 %}
                     <th>Fuente otros ingresos</th>
                     <th>Tipo</th>
                     <th>Meses</th>
@@ -212,15 +203,27 @@
                 {% endfor %}
             {% endif %}
             
+            <!-- aporta en la finca -->
+            {% if ayuda == '16' %}
+                <th>¿Cuántas persona aportan con trabajo en la finca o económicamente?</th>
+            {% endif %}
+            
+            <!-- ingreso familiar -->
+            {% if ayuda == '17' %}
+                {% for obj in destinar2 %}
+                    <th>Servicio</th>
+                    <th>Cuanto</th> 
+                {% endfor %}
+            {% endif %}
             <!-- tipo de casa -->
-            {% if ayuda == '19' %}
-                <th>Tipo de casa</th>
-                <th>Piso</th>
-                <th>Techo</th>
+            {% if ayuda == '18' %}
+                    <th>Tipo casa</th>
+                    <th>Piso</th>
+                    <th>Techo</th>
             {% endif %}
             
             <!-- detalle de la casa -->
-            {% if ayuda == '20' %}
+            {% if ayuda == '19' %}
                 <th>Tamaño de casa</th>
                 <th>cuantos ambientes</th>
                 <th>Tiene letrina</th>
@@ -228,7 +231,7 @@
             {% endif %}
             
             <!-- propiedades -->
-            {% if ayuda == '21' %}
+            {% if ayuda == '20' %}
                 {% for obj in equipo %}
                     <th>Equipos</th>
                     <th>Cantidad</th>
@@ -238,7 +241,7 @@
             {% endif %}
             
             <!-- herramientas -->
-            {% if ayuda == '22' %}
+            {% if ayuda == '21' %}
                 {% for obj in herramienta %}
                     <th>Herramientas</th>
                     <th>Cantidad</th>
@@ -246,10 +249,21 @@
             {% endif %}
             
             <!-- transporte -->
-            {% if ayuda == '23' %}
-                {% for obj in transporte %}
+            {% if ayuda == '22' %}
+                {% for obj in transporte2 %}
                     <th>Transportes</th>
                     <th>Cantidad</th>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Seguridad -->
+             {% if ayuda == '23' %}
+                {% for obj in seguridad2 %}
+                    <th>Alimento</th>
+                    <th>Producen</th>
+                    <th>Compran</th>
+                    <th>Consumen verano</th>
+                    <th>Consumen invierno</th>
                 {% endfor %}
             {% endif %}
             
