@@ -266,56 +266,153 @@
                     <th>Consumen invierno</th>
                 {% endfor %}
             {% endif %}
+
+              <!-- consumen -->
+            {% if ayuda == '24' %}
+                <th>¿Qué porcentaje de alimentos básicos que consume compra?</th>
+                <th>¿Siente que en alguna ocasión no ha podido Cubrir sus necesidades básicas de alimentación?</th>
+                <th>Si la respuesta es si porque motivo</th>
+                <th>Meses</th>
+                <th>¿Qué hace cuando los precios del café bajan?</th>
+                <th>¿Por cuánto tiempo puede conseguir alimentos en ese sitio mientras dura la escasez?</th>
+                <th>¿Utiliza riego en sus parcelas o huerto familiar?</th>
+            {% endif %}
             
             <!-- ahorro -->
-            {% if ayuda == '24' %}
-                {% for obj in ahorro %}
-                    <th>Pregunta ahorro</th>
-                    <th>Respuesta</th>
-                {% endfor %}
+            {% if ayuda == '25' %}
+                {% for obj in escasez2 %}
+                    <th>¿Qué soluciones y practicas implementa en los tiempos de escasez?</th>
+                    <th>Si consigue alimentos en la epoca de escasez ¿Donde consigue alimentos en la epoca de escasez</th>
+                {% endfor %}   
             {% endif %}
             
             <!-- credito -->
-            {% if ayuda == '25' %}
-                <th>Recibe credito</th>
-                <th>Desde cuando</th>
-                <th>Quien le otorga credito</th>
-                <th>Para que ocupa el credito</th>
-                <th>Satisfacción</th>
-                <th>Esta al dia con su credito</th>
+            {% if ayuda == '26' %}
+                {% for obj in produccionmaiz %}
+                    <th>Producto</th>
+                    <th>2007 en meses</th>
+                    <th>2008 en meses</th>
+                    <th>2009 en meses</th>
+                    <th>2010 en meses</th>
+                {% endfor %} 
             {% endif %}
             
             <!-- seguridad alimentaria -->
-            {% if ayuda == '26' %}
-                {% for obj in seguridad %}
-                    <th>Alimento</th>
-                    <th>Producen</th>
-                    <th>Compran</th>
-                    <th>Consumen verano</th>
-                    <th>Consumen invierno</th>
+            {% if ayuda == '27' %}
+                {% for obj in riego2 %}
+                    <th>Lugar</th>
+                    <th>Inundacion</th>
+                    <th>Aspersion</th>
+                    <th>Goteo</th>
+                    <th>Regadera</th>
+                    <th>Panada</th>
+                    <th>Manguera</th>
                 {% endfor %}
             {% endif %}
             
             <!-- vulnerable -->
-            {% if ayuda == '27' %}
-                {% for obj in fenomeno %}
-                    <th>Motivo vulnerable</th>
-                    <th>Respuestas</th>
+            {% if ayuda == '28' %}
+                {% for obj in fuente %}
+                    <th>Fuente</th>
+                    <th>Cantidad</th>
+                    <th>La distancia de la fuente de la casa en VARAS</th>
+                    <th>Disponibilidad de agua en tiempo</th>
+                    <th>Calidad del agua</th>
                 {% endfor %}
             {% endif %}
             
-            <!-- riesgos -->
-            {% if ayuda == '28' %}
-                {% for obj in riesgos %}
-                    <th>Riesgos preguntas</th>
-                    <th>Respuestas</th>
+            <!-- ahorro -->
+            {% if ayuda == '29' %}
+                {% for obj in fuente %}
+                    <th>Tiene ahorro en efectivo</th>
+                    <th>Tiene ahorro en joyeria</th>
+                    <th>Desde cuando ahorra</th>
+                    <th>Ahorra a nombre de quien</th>
+                    <th>Posee una cuenta de ahorro</th>
+                    <th>¿Si no tiene ahorro, está interesado en ahorrar en una cuenta de ahorro</th>
+                    <th>Donde prefereria hacer su ahorro</th>
+                    <th>Porque?</th>
                 {% endfor %}
             {% endif %}
-            <!-- tenencia -->
-            {% if ayuda == '29' %}
-                <th>Tenencia parcel</th>
-                <th>Tenecia solar</th>
-                <th>Dueño</th>
+
+              <!-- credito -->
+            {% if ayuda == '30' %}
+                    <th>Recibe Crédito</th>
+                    <th>Desde cuando</th>
+                    <th>De quien recibe crédito</th>
+                    <th>Para que ocupa el crédito</th>
+                    <th>Satisfacción de la demanda de crédito</th>
+                    <th>Esta al dia con su Crédito</th>
+            {% endif %}
+
+            <!-- salud -->
+            {% if ayuda == '31' %}
+                    <th>Donde realiza sus necesidades usted y su familia?</th>
+                    <th>Le da un tratamiento a los desechos humanos?</th>
+                    <th>Cada cuanto hace limpieza alredor de su vivienda?</th>
+                    <th>De que manera se deshacen de la basura?</th>
+                    <th>Que hace con los envases de agroquímicos?</th>
+            {% endif %}
+
+              <!-- enfermedad -->
+            {% if ayuda == '32' %}
+                {% for obj in enfermedades %}
+                    <th>Qué enfermedades crónicas padece usted o los miembros de su núcleo familiar?</th>
+                    <th>Socio ó socias</th>
+                    <th>Hijos ó Hijas</th>
+                    <th>Compañero ó compañera</th>
+                {% endfor %}     
+            {% endif %}
+
+              <!-- cancer -->
+            {% if ayuda == '33' %}
+                {% for obj in pcancer %}
+                    <th>Pregunta</th>
+                    <th>Respuesta</th>
+                    <th>Cual?</th>
+                {% endfor %}     
+            {% endif %}
+
+              <!-- mental -->
+            {% if ayuda == '34' %}
+                {% for obj in pmental %}
+                    <th>Pregunta</th>
+                    <th>Respuesta</th>
+                {% endfor %}     
+            {% endif %}
+
+             <!-- educacion jovenes -->
+            {% if ayuda == '35' %}
+                {% for obj in edu_jovenes %}
+                    <th>Persona</th>
+                    <th>Numero total</th>
+                    <th># No sabe leer</th>
+                    <th># primaria incompleta</th>
+                    <th># primaria completa</th>
+                    <th># secundaria incompleta</th>
+                    <th># secundaria completa</th>
+                    <th># Técnica o universitaria</th>
+                    <th># estudiando actualmente</th>
+                    <th># estudiando actualmente con beca</th>
+                {% endfor %}     
+            {% endif %}
+
+            <!-- jovenes -->
+            {% if ayuda == '36' %}
+                    <th>Soy socio o socia</th>
+                    <th>Desde Cuando</th>
+                    <th>Es promotor de su cooperativa?</th>
+                    <th>Beneficios obtenidos</th>
+                    <th>Es miembro del consejo de administracion</th>
+                    <th>Desde Cuando</th>
+                    <th>El consejo Admon actual esta conformado por</th>
+                    <th>El consejo de admón debe conformarse por</th>
+                    <th>Es miembro/a de las comisiones de trabajo</th>
+                    <th>Desde Cuando</th>
+                    <th>He recibido capacitación para desempeñar mi cargo</th>
+                    <th>Desde Cuando</th>
+                    <th>Si no es miembro de ninguna estructura, estaria interesado en asumir un cargo</th>
+                    <th>Quiero ser miembro del consejo admin o comisión</th>
             {% endif %}
             
         </tr>

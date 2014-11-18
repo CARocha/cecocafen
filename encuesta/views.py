@@ -1848,10 +1848,18 @@ def volcar_xls(request, modelo):
     equipo = Equipos.objects.all()
     herramienta = NombreHerramienta.objects.all()
     transporte2 = NombreTransporte.objects.all()
-    ahorro = ''
+    escasez2 = CHOICE_ESCASEZ
+    ahorro2 = CHOICE_AHORRO
     seguridad2 = Alimentos.objects.all()
     fenomeno = ''
     riesgos = ''
+    produccionmaiz = CHOICE_MAIZ
+    riego2 = CHOICE_RIEGO
+    fuente = CHOICE_FUENTE_AGUA
+    enfermedades = CHOICE_ENFERMEDADES
+    pcancer = PreguntaCancer.objects.all()
+    pmental = PreguntaMental.objects.all()
+    edu_jovenes = CHOICE_JOVEN_EDUCACION
 
     resultados = []
     
@@ -2132,14 +2140,173 @@ def volcar_xls(request, modelo):
                     filas.append(encuesta.seguridad.all()[obj].get_consumen_invierno_display)
                 except:
                     pass
+        if modelo == '24':
+            consume = encuesta.consume.all().count()
+            for obj in range(0,int(consume)):
+                try:
+                    filas.append(encuesta.consume.all()[obj].get_preg1_display)
+                    filas.append(encuesta.consume.all()[obj].get_preg2_display)
+                    filas.append(encuesta.consume.all()[obj].get_preg3_display)
+                    filas.append(','.join(map(unicode, encuesta.consume.all()[obj].preg4.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.consume.all()[obj].get_preg5_display)
+                    filas.append(encuesta.consume.all()[obj].get_preg7_display)
+                    filas.append(encuesta.consume.all()[obj].get_preg8_display)
+                except:
+                    pass
+        if modelo == '25':
+            escasez = encuesta.escasez.all().count()
+            for obj in range(0,int(escasez)):
+                try:
+                    filas.append(','.join(map(unicode, encuesta.escasez.all()[obj].preg1.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.escasez.all()[obj].get_preg2_display)
+                except:
+                    pass
+        if modelo == '26':
+            produccion_maiz = encuesta.produccion_maiz.all().count()
+            for obj in range(0,int(produccion_maiz)):
+                try:
+                    filas.append(encuesta.produccion_maiz.all()[obj].get_producto_display)
+                    filas.append(encuesta.produccion_maiz.all()[obj].siete)
+                    filas.append(encuesta.produccion_maiz.all()[obj].ocho)
+                    filas.append(encuesta.produccion_maiz.all()[obj].nueve)
+                    filas.append(encuesta.produccion_maiz.all()[obj].diez)
+                except:
+                    pass
+        if modelo == '27':
+            riego = encuesta.riego.all().count()
+            for obj in range(0,int(riego)):
+                try:
+                    filas.append(encuesta.riego.all()[obj].get_lugar_display)
+                    filas.append(encuesta.riego.all()[obj].get_inundacion_display)
+                    filas.append(encuesta.riego.all()[obj].get_aspersion_display)
+                    filas.append(encuesta.riego.all()[obj].get_goteo_display)
+                    filas.append(encuesta.riego.all()[obj].get_regadera_display)
+                    filas.append(encuesta.riego.all()[obj].get_panada_display)
+                    filas.append(encuesta.riego.all()[obj].get_manguera_display)
+                except:
+                    pass
+        if modelo == '28':
+            agua = encuesta.agua.all().count()
+            for obj in range(0,int(agua)):
+                try:
+                    filas.append(encuesta.agua.all()[obj].get_fuente_display)
+                    filas.append(encuesta.agua.all()[obj].cantidad)
+                    filas.append(encuesta.agua.all()[obj].distancia)
+                    filas.append(encuesta.agua.all()[obj].get_diponibilidad_display)
+                    filas.append(encuesta.agua.all()[obj].get_calidad_display)
+                except:
+                    pass
+        if modelo == '29':
+            ahorro = encuesta.ahorro.all().count()
+            for obj in range(0,int(ahorro)):
+                try:
+                    filas.append(encuesta.ahorro.all()[obj].get_tiene_efectivo_display)
+                    filas.append(encuesta.ahorro.all()[obj].get_tiene_joya_display)
+                    filas.append(encuesta.ahorro.all()[obj].get_desde_ahorra_display)
+                    filas.append(encuesta.ahorro.all()[obj].get_nombre_ahorro_display)
+                    filas.append(encuesta.ahorro.all()[obj].get_posee_ahorro_display)
+                    filas.append(encuesta.ahorro.all()[obj].get_interes_ahorro_display)
+                    filas.append(','.join(map(unicode, encuesta.ahorro.all()[obj].donde.all().values_list(u'nombre',flat=True))))
+                    filas.append(','.join(map(unicode, encuesta.ahorro.all()[obj].porque.all().values_list(u'nombre',flat=True))))
+                except:
+                    pass
+        if modelo == '30':
+            credito = encuesta.credito.all().count()
+            for obj in range(0,int(credito)):
+                try:
+                    filas.append(encuesta.credito.all()[obj].get_recibe_display)
+                    filas.append(encuesta.credito.all()[obj].get_desde_display)
+                    filas.append(','.join(map(unicode, encuesta.credito.all()[obj].quien_credito.all().values_list(u'nombre',flat=True))))
+                    filas.append(','.join(map(unicode, encuesta.credito.all()[obj].ocupa_credito.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.credito.all()[obj].get_satisfaccion_display)
+                    filas.append(encuesta.credito.all()[obj].get_dia_display)
+                except:
+                    pass
+        if modelo == '31':
+            salud = encuesta.salud.all().count()
+            for obj in range(0,int(salud)):
+                try:
+                    filas.append(encuesta.salud.all()[obj].get_donde_display)
+                    filas.append(','.join(map(unicode, encuesta.salud.all()[obj].tratamiento.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.salud.all()[obj].get_limpieza_display)
+                    filas.append(encuesta.salud.all()[obj].get_deshacer_display)
+                    filas.append(','.join(map(unicode, encuesta.salud.all()[obj].agroquimico.all().values_list(u'nombre',flat=True))))
+                except:
+                    pass
+        if modelo == '32':
+            enfermedad = encuesta.enfermedad.all().count()
+            for obj in range(0,int(enfermedad)):
+                try:
+                    filas.append(encuesta.enfermedad.all()[obj].get_enfermedad_display)
+                    filas.append(encuesta.enfermedad.all()[obj].get_socia_display)
+                    filas.append(encuesta.enfermedad.all()[obj].get_hijo_display)
+                    filas.append(encuesta.enfermedad.all()[obj].get_companero_display)
+                except:
+                    pass
+        if modelo == '33':
+            cancer = encuesta.cancer.all().count()
+            for obj in range(0,int(cancer)):
+                try:
+                    filas.append(encuesta.cancer.all()[obj].preguntas)
+                    filas.append(encuesta.cancer.all()[obj].resp)
+                    filas.append(encuesta.cancer.all()[obj].cual)
+                except:
+                    pass
+        if modelo == '34':
+            mental = encuesta.mental.all().count()
+            for obj in range(0,int(mental)):
+                try:
+                    filas.append(encuesta.mental.all()[obj].pregunta)
+                    filas.append(encuesta.mental.all()[obj].get_respuesta_display)
+                except:
+                    pass
+        if modelo == '35':
+            educacion_jovenes = encuesta.educacion_jovenes.all().count()
+            for obj in range(0,int(educacion_jovenes)):
+                try:
+                    filas.append(encuesta.educacion_jovenes.all()[obj].get_persona_display)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].n_total)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].no_leer)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].pri_incompleta)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].pri_completa)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].secu_incompleta)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].secu_completa)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].tecnico)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].actualmente)
+                    filas.append(encuesta.educacion_jovenes.all()[obj].beca)
+                except:
+                    pass
+        if modelo == '36':
+            jovenes = encuesta.jovenes.all().count()
+            for obj in range(0,int(jovenes)):
+                try:
+                    filas.append(encuesta.jovenes.all()[obj].get_socio_display)
+                    filas.append(encuesta.jovenes.all()[obj].get_desde_socio_display)
+                    filas.append(encuesta.jovenes.all()[obj].get_promotor_display)
+                    filas.append(','.join(map(unicode, encuesta.jovenes.all()[obj].beneficio.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.jovenes.all()[obj].get_miembro_display)
+                    filas.append(encuesta.jovenes.all()[obj].get_desde_miembro_display)
+                    filas.append(','.join(map(unicode, encuesta.jovenes.all()[obj].conformado.all().values_list(u'nombre',flat=True))))
+                    filas.append(','.join(map(unicode, encuesta.jovenes.all()[obj].conformarse.all().values_list(u'nombre',flat=True))))
+                    filas.append(encuesta.jovenes.all()[obj].get_miembro_trabajo_display)
+                    filas.append(encuesta.jovenes.all()[obj].get_desde_miembro_trabajo_display)
+                    filas.append(encuesta.jovenes.all()[obj].get_cargo_display)
+                    filas.append(encuesta.jovenes.all()[obj].get_desde_cargo_display)
+                    filas.append(encuesta.jovenes.all()[obj].get_no_miembro_display)
+                    filas.append(','.join(map(unicode, encuesta.jovenes.all()[obj].quiero_miembro_junta.all().values_list(u'nombre',flat=True))))
+                except:
+                    pass
         resultados.append(filas)
 
     dict = {'resultados':resultados,'tiposexo':tiposexo, 'campoCondi':campoCondi, 
             'usotierra':usotierra,'reforestacion2':reforestacion2,'abono2':abono2, 
-            'animales2':animales2, 'cultivos2':cultivos2,'compra2':compra2,
+            'animales2':animales2, 'cultivos2':cultivos2,'compra2':compra2,'fuente':fuente,
+            'escasez2':escasez2,'produccionmaiz':produccionmaiz,'riego2':riego2,
             'destinar2':destinar2, 'rubro':rubro,'tipoproblema':tipoproblema, 
             'otrosingresos2':otrosingresos2, 'equipo':equipo, 'herramienta':herramienta,
-            'transporte2':transporte2, 'ahorro':ahorro, 'seguridad2':seguridad2,
+            'transporte2':transporte2, 'ahorro2':ahorro2, 'seguridad2':seguridad2,
+            'enfermedades':enfermedades,'pcancer':pcancer,'pmental':pmental,
+            'edu_jovenes':edu_jovenes,
             'fenomeno':fenomeno, 'riesgos':riesgos, 'ayuda':ayuda}
     return dict
 
